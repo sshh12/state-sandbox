@@ -1,10 +1,11 @@
 STATE_TEMPLATE = '''
 <!--
+- Follow the template exactly. Filling in {values}, keeping text outside of brackets, and replacing ...s.
+- You are expected to fill out all the fields in the template and keep all default attributes
 - You can format numbers as like: 123, ~123 million, etc. Do not use a percentage unless specified.
 - All monetary amounts should be in USD
-- For certain policies, descriptions, and values the answer may be "N/A due to..."
+- Certain policies, descriptions, and values the answer may be "N/A due to..."
 - Use "subgroups" to identify variance among specific sub-populations
-- You are expected to fill out all the fields in the template and keep all default attributes
 - Do not use *italic* or **bold**
 -->
 
@@ -12,14 +13,12 @@ STATE_TEMPLATE = '''
 ## Basic Information
 - Country Name: {NationName}
 - Government Type: {GovernmentType}
-- Head of State/Government: {LeaderNameandTitle}
-- Capital City: {CapitalCity}
+- Head of State/Government: {LeaderNameandTitle} <!-- role or group title, not name -->
 - Total Population: {AbsoluteNumber}
 - Currency: {CurrencyName} ({CurrencyCode})
 - Land Area: {Areainsqkm}
-- National Holidays: {ListOfHolidays}
 
-# 2. Demographics
+# 2. Demographics, Health, and Crime
 ## Population Distribution
 ### Age Groups
 - 0-4 years: {AbsoluteNumber}
@@ -37,6 +36,9 @@ STATE_TEMPLATE = '''
 
 ### Sexuality Composition
 - Heterosexual: {Percentage}
+- Lesbian/Gay: {Percentage}
+- Bisexual: {Percentage}
+- Transgender: {Percentage}
 - {Sexuality ...}: {Percentage}
 ...
 
@@ -53,9 +55,9 @@ STATE_TEMPLATE = '''
 - Below Poverty Line: {Percentage}
 
 ### Ethnic Composition
-- {Ethnic Group A}: {Percentage}
-- {Ethnic ...}: {Percentage}
+- {EthnicGroup ...}: {Percentage}
 ...
+- Two or more races: {Percentage}
 - Others: {Percentage}
 
 ### Language Composition
@@ -68,32 +70,98 @@ STATE_TEMPLATE = '''
 ...
 - Unaffiliated/No Religion: {Percentage}
 
-## Life Expectancy
-- Average Life Expectancy at Birth: {NumberofYears}
-- Male Life Expectancy: {NumberofYears}
-- Female Life Expectancy: {NumberofYears}
+### Population Growth
+- Overall Population Growth Rate: {Percentage} per year
+- Subgroup Population Growth Rate
+  - {Subgroup ...} Population Growth Rate: {Percentage} per year
+  ...
+
+### Migration
+- Net Migration Rate: {Number} per 1,000 population
+- Immigration: {DetailedDescription} immigrants annually
+- Emigration: {DetailedDescription} emigrants annually
+
+## Standard of Living
+- Gallup World Happiness Score: {Value} out of 10
+- Access to Improved Water Sources: {Percentage}
+- Access to Improved Sanitation: {Percentage}
+- Access to Electricity: {Percentage}
+- Human Development Index (HDI): {Value}
+
+## Education
+- Education System: {DetailedDescription}
+- Adult Literacy Rate: {Percentage}
+- Average Years of Schooling: {NumberofYears} years
+- Gender Parity Index in Education: {Value}
+- Subgroup Literacy Rates
+  - {Subgroup ...} Literacy Rate: {Percentage}
+  ...
+
+## Health
+### Health System
+- Health System: {DetailedDescription}
+- Health Insurance: {DetailedDescription}
+- Health Care Accessibility: {DetailedDescription}
+- Health Care Costs: {DetailedDescription}
+
+### Life Expectancy
+- Average Life Expectancy at Birth: {NumberofYears} years
+- Male Life Expectancy: {NumberofYears} years
+- Female Life Expectancy: {NumberofYears} years
+- Subgroup Life Expectancy
+  - {Subgroup ...} Life Expectancy: {NumberofYears} years
+  ...
+
+### Diseases (Living)
+- Obesity: {Number} in 100,000 population
+- Mental Health: {Number} in 100,000 population
+- {DiseaseName}: {Number} in 100,000 population
+...
+
+### Causes of Death
+- Heart Disease: {Percentage} of deaths
+- Cancer: {Percentage} of deaths
+- Stroke: {Percentage} of deaths
+- Diabetes: {Percentage} of deaths
+- Accidents: {Percentage} of deaths
+- Suicide: {Percentage} of deaths
+- {Cause ...}: {Percentage} of deaths
+...
+- Other Causes: {Percentage} of deaths
+
+### Health Indicators
 - Infant Mortality Rate: {Number} per 1,000 live births
 - Total Fertility Rate: {Number} children per woman
 - Gross Reproduction Rate: {Number} female children per woman
-- Subgroup Life Expectancy
-  - {Subgroup ...} Life Expectancy: {NumberofYears}
+- Maternal Mortality Rate: {Number} per 100,000 live births
+- Child Mortality Rate: {Number} per 1,000 live births
+- Physician Density: {Number} per 1,000 population
+- Hospital Bed Density: {Number} per 1,000 population
+
+## Crime
+- Overall Crime Rate: {Number} per 100,000 population
+- Crime Composition:
+  - Homicide Rate: {Number} per 100,000 population
+  - Assault Rate: {Number} per 100,000 population
+  - Sexual Violence Rate: {Number} per 100,000 population
+  - Burglary Rate: {Number} per 100,000 population
+  - Theft Rate: {Number} per 100,000 population
+  - Fraud Rate: {Number} per 100,000 population
+  - Drug-Related Crime Rate: {Number} per 100,000 population
+  - {CrimeType ...} Rate: {Number} per 100,000 population
   ...
 
-## Population Growth
-- Overall Population Growth Rate: {PercentagePerYear}
-- Subgroup Population Growth Rate
-  - {Subgroup ...} Population Growth Rate: {PercentagePerYear}
-  ...
-
-## Migration
-- Net Migration Rate: {Number} per 1,000 population
-- Immigration: {DetailedDescription}
-- Emigration: {DetailedDescription}
+## Equality
+- Gender Inequality Index (GII): {Value} out of 1.0
+- Female Labor Force Participation Rate: {Percentage}
+- Racial/Ethnic Wage Gap: {DetailedDescription}
+- Social Mobility Index: {Value} out of 100
+- LGBTQ+ Legal Equality Index: {Value} out of 100
 
 # 3. Economy
 ## Economic Indicators
 - Gross Domestic Product (GDP in USD): {TotalAmountInUSD}
-- GDP Growth Rate: {PercentagePerYear}
+- GDP Growth Rate: {Percentage} per year
 - Credit Ratings:
   - Standard & Poor's: {RatingLetters}
   - Moody's: {RatingLetters}
@@ -102,18 +170,49 @@ STATE_TEMPLATE = '''
 - Inflation Rate: {Percentage}
 - Poverty Rate: {Percentage}
 - Gini Coefficient: {Value} out of 1.0
+- Average Income: {TotalAmountInUSD}
+- Average Disposable Income: {TotalAmountInUSD}
 
 ## Sector Contributions to GDP
+- Agriculture: {Percentage} of GDP
+- Industry: {Percentage} of GDP
+- Services: {Percentage} of GDP
+- Manufacturing: {Percentage} of GDP
+- Construction: {Percentage} of GDP
+- Mining and Quarrying: {Percentage} of GDP
+- Financial Services: {Percentage} of GDP
+- Real Estate: {Percentage} of GDP
+- Information and Communications: {Percentage} of GDP
+- Transportation and Storage: {Percentage} of GDP
+- Wholesale and Retail Trade: {Percentage} of GDP
+- Tourism and Hospitality: {Percentage} of GDP
 - {Sector/Industry ...}: {Percentage} of GDP
 ...
 
+## Industry Ownership
+- Private Sector: {Percentage} of GDP
+- State-Owned Enterprises (SOEs): {Percentage} of GDP
+- Mixed Ownership: {Percentage} of GDP
+- Public-Private Partnerships (PPPs): {Percentage} of GDP
+
+## Key Industries
+### Leading Industries by GDP Output
+- {Industry ...}: {Percentage} of GDP
+...
+
+### Employment by Industry
+- {Industry ...}: {Percentage} of workforce
+...
+
 ## Government Budget
-### Revenue & Expenditure
+### Revenue
 - Total Revenue: {TotalAmountInUSD}
-  - Tax Review From {Category}: {TotalAmountInUSD}
+  - Tax Revenue From {Category}: {TotalAmountInUSD}
   ...
-  - Non-Tax Review From {Category}: {TotalAmountInUSD}
+  - Non-Tax Revenue From {Category}: {TotalAmountInUSD}
   ...
+
+### Expenditure
 - Total Expenditure: {TotalAmountInUSD}
   - Healthcare Expenditure: {TotalAmountInUSD}
   - Education Expenditure: {TotalAmountInUSD}
@@ -185,186 +284,62 @@ STATE_TEMPLATE = '''
   ...
 
 ### Security Threats
+- Terrorism: {DetailedDescription}
+- Cybersecurity Threats: {DetailedDescription}
 - {ThreatType/Group ...}: {DetailedDescription}
 ...
 
-# 5. Government Policies
-## Political Policies
-- Government Structure: {DetailedDescription}
-- Subgroups
-  - {Branch/Subgroup ...}: {DetailedDescriptionOfRuleAndPowers}
-  ...
-- Parties: {Ruling PartyName(s), Opposition PartyName(s)}
-- Electoral System: {DetailedDescription}
+# 5. Media and Culture
+## Media Landscape
+- Press Freedom Index: {Value} out of 100
+- Media Ownership: {DetailedDescription}
 
-### Civil Liberties and Political Rights
-- Corruption Perception Index (CPI): {Value} out of 100
-- Freedom of Speech and Press: {StatusDescription}
-- Freedom of {FreedomType}: {StatusDescription}
+### Major Media Outlets <!-- avoid mentioning proper nouns -->
+- {MediaType ...}: {DetailedDescription}
 ...
 
-## Economic Policies
-### Fiscal Policy
-- Taxation Policies: {DetailedDescription}
-- Government Spending Priorities: {MajorSectors}
-- {PolicyType ...}: {DetailedDescription}
+### Digital Media Metrics
+- Digital Divide Index - Infrastructure: {Value} out of 100
+- Digital Divide Index - Socioeconomic: {Value} out of 100
+- Social Media Usage: {Percentage}
+
+## Cultural Identity
+### Cultural Values
+- Traditional Values: {DetailedDescription}
+- Predominant Social Norms: {DetailedDescription}
+
+### Sports and Recreation
+- {Sport/Activity ...}: {DetailedDescription}
 ...
 
-### Monetary Policy
-- Inflation Targets: {DetailedDescription}
-- {PolicyType ...}: {DetailedDescription}
+## Cultural Influence
+- Soft Power Index: {Value} of 100
+- International Cultural Centers: {AbsoluteNumber}
+- Cultural Exchange Programs: {DetailedDescription}
+
+## Cultural Events
+- National Holidays: {DetailedDescription}
+- {Event ...}: {DetailedDescription}
 ...
 
-### Labor Market Policies
-- Minimum Wage: {ValueOrStatusDescription}
-- {PolicyType ...}: {DetailedDescription}
-...
-
-### Trade Policies
-- Tariffs and Quotas: {DetailedDescription}
-- {PolicyType ...}: {DetailedDescription}
-...
-
-### Investment Policies
-- Domestic Investment Incentives: {DetailedDescription}
-- {PolicyType ...}: {DetailedDescription}
-...
-
-## Social Policies
-### Education System
-- Structure: {DetailedDescription}
-- Key Initiatives: {ListOfInitiatives}
-- {PolicyType ...}: {DetailedDescription}
-...
-
-### Healthcare System
-- System: {DetailedDescription}
-- Healthcare Budget: {Percentage} of GDP
-- Public Health Initiatives: {ListOfInitiatives}
-- {PolicyType ...}: {DetailedDescription}
-...
-
-### Social Welfare Programs
-- Unemployment Assistance: {DetailedDescription}
-- Pension Systems: {DetailedDescription}
-- Social Security Nets: {DetailedDescription}
-- {PolicyType ...}: {DetailedDescription}
-...
-
-### Housing Policies
-- Urban Development Plans: {DetailedDescription}
-- {PolicyType ...}: {DetailedDescription}
-...
-
-## Environmental Policies
-### Climate
-- International Agreements: {DetailedDescription}
-- National Emission Targets: {DetailedDescription}
-- Renewable Energy Targets: {DetailedDescription}
-- {PolicyType ...}: {DetailedDescription}
-...
-
-### Pollution Control Measures
-- Industrial Emissions Regulations: {DetailedDescription}
-- Waste Management Policies: {DetailedDescription}
-- {PolicyType ...}: {DetailedDescription}
-...
-
-### Conservation
-- {PolicyType ...}: {DetailedDescription}
-...
-
-## Foreign Policies
-### Diplomatic Relations
-- Alliances and Memberships: {DetailedDescription}
-
-### Defense and Security Policies
-- {PolicyType ...}: {DetailedDescription}
-...
-
-### Immigration Policies
-- Visa Requirements: {DetailedDescription}
-- {PolicyType ...}: {DetailedDescription}
-...
-
-# 6. Social Indicators
-## Education Indicators
-- Adult Literacy Rate: {Percentage}
-- Average Years of Schooling: {NumberofYears}
-- Gender Parity Index in Education: {Value}
-- Overall Literacy Rate: {Percentage}
-- Subgroup Literacy Rates
-  - {Subgroup ...} Literacy Rate: {Percentage}
-  ...
-
-## Health Indicators
-- Maternal Mortality Rate: {Number} per 100,000 live births
-- Child Mortality Rate: {Number} per 1,000 live births
-- Physician Density: {Number} per 1,000 population
-- Hospital Bed Density: {Number} per 1,000 population
-
-### Prevalence of Diseases
-- {DiseaseName}: {Number} per 100,000 population
-...
-
-## Standard of Living
-- Access to Improved Water Sources: {Percentage}
-- Access to Improved Sanitation: {Percentage}
-- Access to Electricity: {Percentage}
-- Human Development Index (HDI): {Value}
-
-## Crime and Safety
-- Overall Crime Rate: {Number} per 100,000 population
-
-### Crime Composition
-- {CrimeType ...}: {Number} per 100,000 population
-...
-
-## Gender Equality
-- Gender Inequality Index (GII): {Value} out of 1.0
-- Female Labor Force Participation Rate: {Percentage}
-
-# 7. Health and Causes of Death
-## Leading Causes of Death
-- {Cause ...}: {Percentage} of deaths
-...
-- Other Causes: {Percentage}
-
-## Health Challenges
-- Epidemics/Pandemics: {CurrentStatus}
-- Lifestyle Diseases: {DetailedDescriptionAndPrevalence}
-- Mental Health Issues: {DetailedDescriptionAndPrevalence}
-- Healthcare Accessibility: {SubGroupDisparities}
-
-# 7. Industry Ownership and GDP Breakdown
-## Industry Ownership
-- Private Sector: {Percentage} of GDP
-- State-Owned Enterprises (SOEs): {Percentage} of GDP
-- Mixed Ownership: {Percentage} of GDP
-- Public-Private Partnerships (PPPs): {Percentage} of GDP
-
-## Key Industries
-### Leading Industries by GDP Output
-- {Industry ...}: {Percentage} of GDP
-...
-
-### Employment by Industry
-- {Industry ...}: {Percentage} of workforce
-...
-
-# 8. Infrastructure and Technology
-## Transportation Infrastructure
-- Road Network: {StatusAndDetailedDescription}
-- Railways: {StatusAndDetailedDescription}
-- Airports: {StatusAndDetailedDescription}
-- Ports and Harbors: {StatusAndDetailedDescription}
-- {InfrastructureType ...}: {StatusAndDetailedDescription}
+# 6. Infrastructure and Technology
+## Transportation Infrastructure <!-- avoid mentioning proper nouns -->
+- Road Network: {DetailedDescription}
+- Public Transport: {DetailedDescription}
+- Railways: {DetailedDescription}
+- Airports: {DetailedDescription}
+- Ports and Harbors: {DetailedDescription}
+- {InfrastructureType ...}: {DetailedDescription}
 ...
 
 ## Energy Infrastructure
 - Total Electricity Generation: {Megawatts}
-- Electricity Generation Breakdown
-  - {EnergySource ...}: {Megawatts}
+  - Natural Gas: {Percentage}
+  - Renewable Energy: {Percentage}
+  - Nuclear Energy: {Percentage}
+  - Coal: {Percentage}
+  - Hydroelectric: {Percentage}
+  - {EnergySource ...}: {Percentage}
   ...
 
 ## Telecommunications
@@ -376,15 +351,114 @@ STATE_TEMPLATE = '''
 ## Technology and Innovation
 - R&D Expenditure: {Percentage} of GDP
 - Patents Filed Annually: {AbsoluteNumber}
-- Space Program: {DetailedDescription}
 
-# 9. Public Opinion and Citizen Sentiment
+### Technologies
+- Artificial Intelligence: {DetailedDescription}
+- Quantum Computing: {DetailedDescription}
+- Robotics: {DetailedDescription}
+- Space Program: {DetailedDescription}
+- Biotechnology: {DetailedDescription}
+- {Technology ...}: {DetailedDescription}
+...
+
+# 7. Government Policies <!-- all types should have at least 2 policies -->
+### Political Policies
+- Government Structure: {DetailedDescription}
+  - {Branch/Subgroup ...}: {DetailedDescriptionOfRuleAndPowers}
+  ...
+- Parties: {Ruling PartyName(s), Opposition PartyName(s)}
+- Electoral System: {DetailedDescription}
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Civil Liberties and Political Rights Policies
+- Corruption Perception Index (CPI): {Value} out of 100
+- Freedoms
+  - Freedom of Speech and Press: {StatusDescription}
+  - Freedom of {FreedomType}: {StatusDescription}
+  ...
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Fiscal Policies <!-- e.g. tax rates, government spending priorities -->
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Monetary Policies <!-- e.g. inflation targets, interest rates -->
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Labor Market Policies <!-- e.g. minimum wage, unemployment benefits -->
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Trade Policies <!-- e.g. tariffs, trade agreements -->
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Investment Policies <!-- e.g. domestic investment incentives, foreign investment regulations -->
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Education Policies <!-- e.g. school systems, educational reforms -->
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Healthcare Policies
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Social Welfare Policies
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Housing Policies
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Media Policies
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Cultural Policies
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Climate Policies
+- International Agreements: {DetailedDescription}
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Pollution Control Policies
+- Industrial Emissions Regulations: {DetailedDescription}
+- Waste Management: {DetailedDescription}
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Conservation Policies <!-- e.g. conservation laws, environmental regulations -->
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Diplomatic Policies <!-- e.g. alliances, memberships, foreign policy -->
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Defense, Military, and Security Policies
+- {PolicyType ...}: {DetailedDescription}
+...
+
+### Immigration Policies <!-- e.g. visa requirements, immigration laws -->
+- {PolicyType ...}: {DetailedDescription}
+...
+
+# 8. Public Opinion and Citizen Sentiment
 ## Top Concerns Among Citizens
 - {Concern ...}: {Percentage}
 ...
 
 ## Latest Polling Data
 - Optimistic Perception of Economic Future: {Percentage}
+- Direction of Country: {Percentage} believe country is on right track
 - Overall Government Approval Rating: {Percentage}
 - Institution Approval Ratings  
   - {Institution ...} Approval Rating: {Percentage}
