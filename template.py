@@ -3,22 +3,24 @@ STATE_TEMPLATE = '''
 - Follow the template exactly. Filling in {values}, keeping text outside of brackets, and replacing ...s.
 - You are expected to fill out all the fields in the template and keep all default attributes
 - You can format numbers as like: 123, ~123 million, etc. Do not use a percentage unless specified.
+- You can format percentages as like: 12%, ~12%, < 0.1%, etc.
 - All monetary amounts should be in USD
-- Certain policies, descriptions, and values the answer may be "N/A due to..."
+- Certain policies, descriptions, and values the answer may be "N/A due to...". For metrics that should exist, but you don't know, use your best guess.
 - Use "subgroups" to identify variance among specific sub-populations
-- Do not use *italic* or **bold**
+- Do not use *italic* or **bold**. 
+- Do not add nested lists or headings not specified in the template.
 -->
 
 # 1. Nation Overview
 ## Basic Information
 - Country Name: {NationName}
 - Government Type: {GovernmentType}
-- Head of State/Government: {LeaderNameandTitle} <!-- role or group title, not name -->
+- Head of State/Government: {Title} <!-- role or group title, not name -->
 - Total Population: {AbsoluteNumber}
 - Currency: {CurrencyName} ({CurrencyCode})
-- Land Area: {Areainsqkm}
+- Land Area: {Area} sq km
 
-# 2. Demographics, Health, and Crime
+# 2. Demographics
 ## Population Distribution
 ### Age Groups
 - 0-4 years: {AbsoluteNumber}
@@ -34,12 +36,12 @@ STATE_TEMPLATE = '''
 - Female: {Percentage}
 - Other: {Percentage}
 
-### Sexuality Composition
+### Sexuality Composition <!-- reported by census -->
 - Heterosexual: {Percentage}
 - Lesbian/Gay: {Percentage}
 - Bisexual: {Percentage}
 - Transgender: {Percentage}
-- {Sexuality ...}: {Percentage}
+- {Sexuality}: {Percentage}
 ...
 
 ### Urban vs. Rural
@@ -54,32 +56,44 @@ STATE_TEMPLATE = '''
 - Working Class: {Percentage}
 - Below Poverty Line: {Percentage}
 
+### Education Composition
+- No Schooling: {Percentage}
+- Some Primary Education: {Percentage} <!-- e.g. elementary school -->
+- Primary Education Complete: {Percentage}
+- Some Secondary Education: {Percentage} <!-- e.g. high school -->
+- Secondary Education Complete: {Percentage}
+- Some Tertiary Education: {Percentage} <!-- e.g. college -->
+- Tertiary Education Complete: {Percentage}
+- PhD or Masters: {Percentage}
+
 ### Ethnic Composition
-- {EthnicGroup ...}: {Percentage}
+- {EthnicGroup}: {Percentage}
 ...
 - Two or more races: {Percentage}
 - Others: {Percentage}
 
 ### Language Composition
-- {Language ...}: {Percentage}
+- {Language}: {Percentage}
 ...
 - Multilingual: {Percentage}
 
 ### Religious Composition
-- {Religion ...}: {Percentage}
+- {Religion}: {Percentage}
 ...
 - Unaffiliated/No Religion: {Percentage}
 
 ### Population Growth
 - Overall Population Growth Rate: {Percentage} per year
-- Subgroup Population Growth Rate
-  - {Subgroup ...} Population Growth Rate: {Percentage} per year
-  ...
+- Ethnic Population Growth: {DetailedDescription}
+- Religious Population Growth: {DetailedDescription}
 
 ### Migration
-- Net Migration Rate: {Number} per 1,000 population
-- Immigration: {DetailedDescription} immigrants annually
-- Emigration: {DetailedDescription} emigrants annually
+- Immigration: {DetailedDescription}
+- Immigration Sentiment: {DetailedDescription} <!-- e.g. how do citizens feel about immigrants -->
+- Immigration Totals: {Number} immigrants annually
+- Emigration: {DetailedDescription}
+- Emigration Sentiment: {DetailedDescription} <!-- e.g. how do citizens feel about emigrants -->
+- Emigration Totals: {Number} emigrants annually
 
 ## Standard of Living
 - Gallup World Happiness Score: {Value} out of 10
@@ -90,31 +104,44 @@ STATE_TEMPLATE = '''
 
 ## Education
 - Education System: {DetailedDescription}
-- Adult Literacy Rate: {Percentage}
-- Average Years of Schooling: {NumberofYears} years
-- Gender Parity Index in Education: {Value}
-- Subgroup Literacy Rates
-  - {Subgroup ...} Literacy Rate: {Percentage}
+  - {EducationLevel}: {DetailedDescription}
   ...
+- Adult Literacy Rate: {Percentage}
+- Average Years of Schooling: {Value} years
+- Gender Parity Index in Education: {Value}
+- Ethnic Literacy: {DetailedDescription} <!-- relationship between literacy and ethnicity -->
 
-## Health
-### Health System
+## Equality
+- Gender Inequality Index (GII): {Value} out of 1.0
+- Female Labor Force Participation Rate: {Percentage}
+- Racial/Ethnic Wage Gap: {DetailedDescription}
+- Social Mobility Index: {Value} out of 100
+- LGBTQ+ Legal Equality Index: {Value} out of 100
+
+### Social Challenges <!-- e.g. ethnic tensions, religious tensions, etc. -->
+- {SocialChallenge}: {DetailedDescription}
+...
+
+# 3. Health & Crime
+## Health System
 - Health System: {DetailedDescription}
-- Health Insurance: {DetailedDescription}
-- Health Care Accessibility: {DetailedDescription}
-- Health Care Costs: {DetailedDescription}
+- Health Insurance: {DetailedDescription} <!-- e.g. private, public, mixed, etc. -->
+- Health Care Accessibility: {DetailedDescription} <!-- e.g. costs, wait times, etc. -->
 
 ### Life Expectancy
-- Average Life Expectancy at Birth: {NumberofYears} years
-- Male Life Expectancy: {NumberofYears} years
-- Female Life Expectancy: {NumberofYears} years
-- Subgroup Life Expectancy
-  - {Subgroup ...} Life Expectancy: {NumberofYears} years
-  ...
+- Average Life Expectancy at Birth: {Value} years
+- Male Life Expectancy: {Value} years
+- Female Life Expectancy: {Value} years
+- Ethnic Life Expectancy: {DetailedDescription} <!-- relationship between life expectancy and ethnicity -->
 
-### Diseases (Living)
+### Diseases <!-- for living diseases -->
 - Obesity: {Number} in 100,000 population
 - Mental Health: {Number} in 100,000 population
+- Diabetes: {Number} in 100,000 population
+- Hypertension: {Number} in 100,000 population
+- Asthma: {Number} in 100,000 population
+- Heart Disease: {Number} in 100,000 population
+- Cancer: {Number} in 100,000 population
 - {DiseaseName}: {Number} in 100,000 population
 ...
 
@@ -125,7 +152,7 @@ STATE_TEMPLATE = '''
 - Diabetes: {Percentage} of deaths
 - Accidents: {Percentage} of deaths
 - Suicide: {Percentage} of deaths
-- {Cause ...}: {Percentage} of deaths
+- {CauseOfDeath}: {Percentage} of deaths
 ...
 - Other Causes: {Percentage} of deaths
 
@@ -138,9 +165,8 @@ STATE_TEMPLATE = '''
 - Physician Density: {Number} per 1,000 population
 - Hospital Bed Density: {Number} per 1,000 population
 
-## Crime
+## Crime Statistics
 - Overall Crime Rate: {Number} per 100,000 population
-- Crime Composition:
   - Homicide Rate: {Number} per 100,000 population
   - Assault Rate: {Number} per 100,000 population
   - Sexual Violence Rate: {Number} per 100,000 population
@@ -148,17 +174,15 @@ STATE_TEMPLATE = '''
   - Theft Rate: {Number} per 100,000 population
   - Fraud Rate: {Number} per 100,000 population
   - Drug-Related Crime Rate: {Number} per 100,000 population
-  - {CrimeType ...} Rate: {Number} per 100,000 population
+  - {CrimeType} Rate: {Number} per 100,000 population
   ...
+- Corruption Perception Index (CPI): {Value} out of 100
 
-## Equality
-- Gender Inequality Index (GII): {Value} out of 1.0
-- Female Labor Force Participation Rate: {Percentage}
-- Racial/Ethnic Wage Gap: {DetailedDescription}
-- Social Mobility Index: {Value} out of 100
-- LGBTQ+ Legal Equality Index: {Value} out of 100
+## Crime Challenges <!-- e.g. hate crimes, gun violence, drug violence, etc. -->
+- {CrimeChallenge}: {DetailedDescription}
+...
 
-# 3. Economy
+# 5. Economy
 ## Economic Indicators
 - Gross Domestic Product (GDP in USD): {TotalAmountInUSD}
 - GDP Growth Rate: {Percentage} per year
@@ -167,27 +191,11 @@ STATE_TEMPLATE = '''
   - Moody's: {RatingLetters}
   - Fitch: {RatingLetters}
 - Unemployment Rate: {Percentage}
-- Inflation Rate: {Percentage}
 - Poverty Rate: {Percentage}
+- Inflation Rate (Annualized): {Percentage}
 - Gini Coefficient: {Value} out of 1.0
 - Average Income: {TotalAmountInUSD}
-- Average Disposable Income: {TotalAmountInUSD}
-
-## Sector Contributions to GDP
-- Agriculture: {Percentage} of GDP
-- Industry: {Percentage} of GDP
-- Services: {Percentage} of GDP
-- Manufacturing: {Percentage} of GDP
-- Construction: {Percentage} of GDP
-- Mining and Quarrying: {Percentage} of GDP
-- Financial Services: {Percentage} of GDP
-- Real Estate: {Percentage} of GDP
-- Information and Communications: {Percentage} of GDP
-- Transportation and Storage: {Percentage} of GDP
-- Wholesale and Retail Trade: {Percentage} of GDP
-- Tourism and Hospitality: {Percentage} of GDP
-- {Sector/Industry ...}: {Percentage} of GDP
-...
+- Public Economic Sentiment: {DetailedDescription}
 
 ## Industry Ownership
 - Private Sector: {Percentage} of GDP
@@ -195,28 +203,80 @@ STATE_TEMPLATE = '''
 - Mixed Ownership: {Percentage} of GDP
 - Public-Private Partnerships (PPPs): {Percentage} of GDP
 
-## Key Industries
-### Leading Industries by GDP Output
-- {Industry ...}: {Percentage} of GDP
+## Sectors
+### Industries  <!-- e.g. for each sector describe industries and specializations within it, some sectors may be nearly nonexistent -->
+- Agriculture: {DetailedDescription}
+- Services: {DetailedDescription}
+- Manufacturing: {DetailedDescription}
+- Construction: {DetailedDescription}
+- Mining: {DetailedDescription}
+- Financial Services: {DetailedDescription}
+- Real Estate: {DetailedDescription}
+- Technology: {DetailedDescription}
+- Transportation: {DetailedDescription}
+- Wholesale and Retail Trade: {DetailedDescription}
+- Tourism and Hospitality: {DetailedDescription}
+- {Sector}: {DetailedDescription}
 ...
 
-### Employment by Industry
-- {Industry ...}: {Percentage} of workforce
+### Sector Contributions to GDP
+- Agriculture: {Percentage} of GDP
+- Services: {Percentage} of GDP
+- Manufacturing: {Percentage} of GDP
+- Construction: {Percentage} of GDP
+- Mining: {Percentage} of GDP
+- Financial Services: {Percentage} of GDP
+- Real Estate: {Percentage} of GDP
+- Technology: {Percentage} of GDP
+- Transportation: {Percentage} of GDP
+- Wholesale and Retail Trade: {Percentage} of GDP
+- Tourism and Hospitality: {Percentage} of GDP
+- {Sector}: {Percentage} of GDP
+...
+
+### Employment by Sector
+- Agriculture: {Percentage} of workforce
+- Services: {Percentage} of workforce
+- Manufacturing: {Percentage} of workforce
+- Construction: {Percentage} of workforce
+- Mining: {Percentage} of workforce
+- Financial Services: {Percentage} of workforce
+- Real Estate: {Percentage} of workforce
+- Technology: {Percentage} of workforce
+- Transportation: {Percentage} of workforce
+- Wholesale and Retail Trade: {Percentage} of workforce
+- Tourism and Hospitality: {Percentage} of workforce
+- {Sector}: {Percentage} of workforce
+...
+
+## Economic Challenges <!-- e.g. unemployment, inflation,etc. -->
+- {EconomicChallenge}: {DetailedDescription}
 ...
 
 ## Government Budget
 ### Revenue
-- Total Revenue: {TotalAmountInUSD}
-  - Tax Revenue From {Category}: {TotalAmountInUSD}
-  ...
-  - Non-Tax Revenue From {Category}: {TotalAmountInUSD}
-  ...
+- Total Revenue: {TotalAmountInUSD} <!-- note that some of these could be zero -->
+  - Income Tax: {Percentage}
+  - Corporate Tax: {Percentage}
+  - Sales Tax/VAT: {Percentage} 
+  - Property Tax: {Percentage}
+  - Capital Gains Tax: {Percentage}
+  - Import/Export Duties: {Percentage}
+  - Social Security Contributions: {Percentage}
+  - Excise Tax: {Percentage}
+  - Estate/Inheritance Tax: {Percentage}
+  - Non-Tax Revenue from State-Owned Enterprises: {Percentage}
+  - Non-Tax Revenue from Natural Resources: {Percentage}
+  - Non-Tax Revenue from Government Services: {Percentage}
+  - Non-Tax Revenue from Fines and Penalties: {Percentage}
+  - Non-Tax Revenue from Investment Income: {Percentage}
+  - Other Revenue Sources: {Percentage}
 
 ### Expenditure
-- Total Expenditure: {TotalAmountInUSD}
+- Total Expenditure: {TotalAmountInUSD} <!-- note that some of these could be zero -->
   - Healthcare Expenditure: {TotalAmountInUSD}
   - Education Expenditure: {TotalAmountInUSD}
-  - Defense Expenditure: {TotalAmountInUSD}
+  - Defense and Military Expenditure: {TotalAmountInUSD}
   - Infrastructure Expenditure: {TotalAmountInUSD}
   - Social Welfare Expenditure: {TotalAmountInUSD}
   - Environmental Protection Expenditure: {TotalAmountInUSD}
@@ -224,92 +284,109 @@ STATE_TEMPLATE = '''
   - Housing and Urban Development Expenditure: {TotalAmountInUSD}
   - Agriculture and Rural Development Expenditure: {TotalAmountInUSD}
   - Debt Service (Interest Payments) Expenditure: {TotalAmountInUSD}
-  - {Category ...}: {TotalAmountInUSD}
+  - {ExpenditureCategory}: {TotalAmountInUSD}
   ...
 - National Debt: {TotalAmountInUSD}
 
 ## Trade
 - Total Exports: {TotalAmountInUSD}
-  - Exports from {Category}: {TotalAmountInUSD}
+  - Exports from {Sector}: {Percentage}
   ...
+  - Other Exports: {Percentage}
 - Total Imports: {TotalAmountInUSD}
-  - Imports from {Category}: {TotalAmountInUSD}
+  - Imports for {Sector}: {Percentage}
   ...
+  - Other Imports: {Percentage}
 
 ### Main Trading Partners
 - Export Partners
-  - {Country ...}: {Percentage}
+  - {Country}: {Percentage}
   ...
+  - Other Export Partners: {Percentage}
 - Import Partners
-  - {Country ...}: {Percentage}
+  - {Country}: {Percentage}
   ...
+  - Other Import Partners: {Percentage}
 
-## Currency Exchange Rate
-- {LocalCurrency}/USD = {ExchangeRate} ({Fixed}, {Floating}, {Pegged}) <!-- must include USD -->
-- {LocalCurrency}/{ForeignCurrency} = {ExchangeRate} ({Fixed}, {Floating}, {Pegged})
-...
+## Exchange Rate <!-- only for USD -->
+- {LocalCurrency}/USD = {ExchangeRate}
 
-# 4. Military
-## Structure
-- Military Structure: {DetailedDescription}
-- Military Budget: {Percentage} of GDP
-
+# 6. Military
 ### Military Organization
-- {Subgroup/BranchName ...}: {DetailedDescription}
-...
+- Military Structure: {DetailedDescription}
+  - {SubgroupOrBranchName}: {DetailedDescription}
+  ...
+- Public Military Sentiment: {DetailedDescription}
 
 ## Capabilities
-### Personnel
-- {Personnel/Subgroup ...}: {AbsoluteNumber}
+### Personnel <!-- e.g. active duty, reserve, national guard, etc. -->
+- {PersonnelType}: {AbsoluteNumber}
 ...
 
-### Equipment
+### Equipment <!-- Be sure to include the {AbsoluteNumber} for each equipment type, for some this may be zero -->
 - Air Force Equipment
-  - {EquipmentType ...}: {AbsoluteNumber}
+  - {EquipmentType}: {AbsoluteNumber}
   ...
 - Naval Equipment
-  - {EquipmentType ...}: {AbsoluteNumber}
+  - Aircraft Carriers: {AbsoluteNumber}
+  - Nuclear Submarines: {AbsoluteNumber}
+  - {EquipmentType}: {AbsoluteNumber}
   ...
 - Ground Forces Equipment
-  - {EquipmentType ...}: {AbsoluteNumber}
+  - {EquipmentType}: {AbsoluteNumber}
   ...
 - Strategic Forces
-  - {EquipmentType ...}: {AbsoluteNumber}
+  - Nuclear ICMBs: {AbsoluteNumber}
+  - {EquipmentType}: {AbsoluteNumber}
   ...
 - Cyber and Electronic Warfare
-  - {EquipmentType ...}: {AbsoluteNumber}
+  - {EquipmentType}: {AbsoluteNumber}
   ...
 - Space Assets
-  - {EquipmentType ...}: {AbsoluteNumber}
+  - Military Satellites: {AbsoluteNumber}
+  - {EquipmentType}: {AbsoluteNumber}
   ...
 
 ### Security Threats
 - Terrorism: {DetailedDescription}
 - Cybersecurity Threats: {DetailedDescription}
-- {ThreatType/Group ...}: {DetailedDescription}
+- {ThreatTypeOrGroup}: {DetailedDescription}
 ...
 
-# 5. Media and Culture
+# 7. Media
 ## Media Landscape
 - Press Freedom Index: {Value} out of 100
 - Media Ownership: {DetailedDescription}
 
-### Major Media Outlets <!-- avoid mentioning proper nouns -->
-- {MediaType ...}: {DetailedDescription}
+### Major Media Outlets <!-- avoid mentioning proper nouns, just types -->
+- {MediaType}: {DetailedDescription}
 ...
 
-### Digital Media Metrics
+### Media Coverage <!-- e.g. coverage of issues, % of media time spent on issues -->
+- {MediaIssue}: {Percentage}
+...
+
+### Digital Media
 - Digital Divide Index - Infrastructure: {Value} out of 100
 - Digital Divide Index - Socioeconomic: {Value} out of 100
 - Social Media Usage: {Percentage}
 
+# 8. Culture
 ## Cultural Identity
 ### Cultural Values
 - Traditional Values: {DetailedDescription}
-- Predominant Social Norms: {DetailedDescription}
+- Family Values: {DetailedDescription}
+- Work Ethics: {DetailedDescription}
+- Gender Roles: {DetailedDescription}
+- Individualism vs Collectivism: {DetailedDescription}
+- Religious Values: {DetailedDescription}
+
+### Cultural Challenges
+- {CulturalChallenge}: {DetailedDescription}
+...
 
 ### Sports and Recreation
-- {Sport/Activity ...}: {DetailedDescription}
+- {SportOrActivity}: {DetailedDescription}
 ...
 
 ## Cultural Influence
@@ -318,18 +395,19 @@ STATE_TEMPLATE = '''
 - Cultural Exchange Programs: {DetailedDescription}
 
 ## Cultural Events
-- National Holidays: {DetailedDescription}
-- {Event ...}: {DetailedDescription}
-...
+- National Holidays: {AbsoluteNumber}
+- Religious Holidays: {AbsoluteNumber}
+- Memorial Days: {AbsoluteNumber}
+- Cultural Festivals: {AbsoluteNumber}
 
-# 6. Infrastructure and Technology
+# 9. Infrastructure and Technology
 ## Transportation Infrastructure <!-- avoid mentioning proper nouns -->
 - Road Network: {DetailedDescription}
 - Public Transport: {DetailedDescription}
 - Railways: {DetailedDescription}
 - Airports: {DetailedDescription}
 - Ports and Harbors: {DetailedDescription}
-- {InfrastructureType ...}: {DetailedDescription}
+- {InfrastructureType}: {DetailedDescription}
 ...
 
 ## Energy Infrastructure
@@ -339,18 +417,17 @@ STATE_TEMPLATE = '''
   - Nuclear Energy: {Percentage}
   - Coal: {Percentage}
   - Hydroelectric: {Percentage}
-  - {EnergySource ...}: {Percentage}
+  - {EnergySource}: {Percentage}
   ...
 
 ## Telecommunications
-- Internet Penetration Rate: {Percentage}
+- Internet Penetration Rate: {Number} per 100 inhabitants
 - Broadband Subscriptions: {Number} per 100 inhabitants
 - Mobile Phone Subscriptions: {Number} per 100 inhabitants
 - Highspeed Internet Access: {Number} per 100 inhabitants
 
 ## Technology and Innovation
 - R&D Expenditure: {Percentage} of GDP
-- Patents Filed Annually: {AbsoluteNumber}
 
 ### Technologies
 - Artificial Intelligence: {DetailedDescription}
@@ -358,109 +435,119 @@ STATE_TEMPLATE = '''
 - Robotics: {DetailedDescription}
 - Space Program: {DetailedDescription}
 - Biotechnology: {DetailedDescription}
-- {Technology ...}: {DetailedDescription}
+- {Technology}: {DetailedDescription}
 ...
 
-# 7. Government Policies <!-- all types should have at least 2 policies -->
-### Political Policies
+### Infrastructure Challenges <!-- e.g. infrastructure decay, lack of infrastructure, etc. -->
+- {InfrastructureChallenge}: {DetailedDescription}
+...
+
+# 10. Government 
+## Government Structure
 - Government Structure: {DetailedDescription}
-  - {Branch/Subgroup ...}: {DetailedDescriptionOfRuleAndPowers}
-  ...
-- Parties: {Ruling PartyName(s), Opposition PartyName(s)}
+- Key Governing Documents: {DetailedDescription} <!-- what they are and what they are about -->
+- Political Parties: {DetailedDescription}
 - Electoral System: {DetailedDescription}
-- {PolicyType ...}: {DetailedDescription}
+
+## Government Powers
+- {GovernmentBranchOrRole}: {DetailedDescription} <!-- be detailed about what they can and cannot do -->
 ...
 
-### Civil Liberties and Political Rights Policies
-- Corruption Perception Index (CPI): {Value} out of 100
-- Freedoms
-  - Freedom of Speech and Press: {StatusDescription}
-  - Freedom of {FreedomType}: {StatusDescription}
-  ...
-- {PolicyType ...}: {DetailedDescription}
+## Policies <!-- all policy types should have at least 3 policies -->
+
+### Civil Liberties and Political Rights Policies <!-- e.g. freedom or restriction of speech, press, assembly, religion -->
+- {PolicyType}: {DetailedDescription}
 ...
 
 ### Fiscal Policies <!-- e.g. tax rates, government spending priorities -->
-- {PolicyType ...}: {DetailedDescription}
+- {PolicyType}: {DetailedDescription}
 ...
 
 ### Monetary Policies <!-- e.g. inflation targets, interest rates -->
-- {PolicyType ...}: {DetailedDescription}
+- {PolicyType}: {DetailedDescription}
 ...
 
 ### Labor Market Policies <!-- e.g. minimum wage, unemployment benefits -->
-- {PolicyType ...}: {DetailedDescription}
+- {PolicyType}: {DetailedDescription}
 ...
 
 ### Trade Policies <!-- e.g. tariffs, trade agreements -->
-- {PolicyType ...}: {DetailedDescription}
+- {PolicyType}: {DetailedDescription}
 ...
 
 ### Investment Policies <!-- e.g. domestic investment incentives, foreign investment regulations -->
-- {PolicyType ...}: {DetailedDescription}
+- {PolicyType}: {DetailedDescription}
 ...
 
 ### Education Policies <!-- e.g. school systems, educational reforms -->
-- {PolicyType ...}: {DetailedDescription}
+- {PolicyType}: {DetailedDescription}
 ...
 
-### Healthcare Policies
-- {PolicyType ...}: {DetailedDescription}
+### Healthcare Policies <!-- e.g. healthcare systems, healthcare reforms -->
+- {PolicyType}: {DetailedDescription}
 ...
 
-### Social Welfare Policies
-- {PolicyType ...}: {DetailedDescription}
+### Drug and Substance Control Policies <!-- e.g. drug laws, substance abuse policies -->
+- {PolicyType}: {DetailedDescription}
 ...
 
-### Housing Policies
-- {PolicyType ...}: {DetailedDescription}
+### Criminal Justice and Law Enforcement Policies <!-- e.g. police forces, prisons, courts -->
+- {PolicyType}: {DetailedDescription}
 ...
 
-### Media Policies
-- {PolicyType ...}: {DetailedDescription}
+### Social Welfare Policies <!-- e.g. social security systems, social welfare programs -->
+- {PolicyType}: {DetailedDescription}
 ...
 
-### Cultural Policies
-- {PolicyType ...}: {DetailedDescription}
+### Housing Policies <!-- e.g. housing policies, housing reforms -->
+- {PolicyType}: {DetailedDescription}
 ...
 
-### Climate Policies
-- International Agreements: {DetailedDescription}
-- {PolicyType ...}: {DetailedDescription}
+### Media Policies <!-- e.g. media regulations, media ownership -->
+- {PolicyType}: {DetailedDescription}
 ...
 
-### Pollution Control Policies
-- Industrial Emissions Regulations: {DetailedDescription}
-- Waste Management: {DetailedDescription}
-- {PolicyType ...}: {DetailedDescription}
+### Cultural Policies <!-- e.g. cultural policies, cultural reforms -->
+- {PolicyType}: {DetailedDescription}
+...
+
+### Climate Policies <!-- e.g. international agreements, carbon pricing -->
+- {PolicyType}: {DetailedDescription}
+...
+
+### Pollution Control Policies <!-- e.g. industrial emissions regulations, waste management -->
+- {PolicyType}: {DetailedDescription}
 ...
 
 ### Conservation Policies <!-- e.g. conservation laws, environmental regulations -->
-- {PolicyType ...}: {DetailedDescription}
+- {PolicyType}: {DetailedDescription}
 ...
 
 ### Diplomatic Policies <!-- e.g. alliances, memberships, foreign policy -->
-- {PolicyType ...}: {DetailedDescription}
+- {PolicyType}: {DetailedDescription}
 ...
 
-### Defense, Military, and Security Policies
-- {PolicyType ...}: {DetailedDescription}
+### Defense, Military, and Security Policies <!-- e.g. defense budgets, military alliances, security policies, drafts -->
+- {PolicyType}: {DetailedDescription}
 ...
 
 ### Immigration Policies <!-- e.g. visa requirements, immigration laws -->
-- {PolicyType ...}: {DetailedDescription}
+- {PolicyType}: {DetailedDescription}
 ...
 
-# 8. Public Opinion and Citizen Sentiment
+# 11. Public Opinion
 ## Top Concerns Among Citizens
-- {Concern ...}: {Percentage}
+- {Concern}: {Percentage}
 ...
+
+## Political Participation
+- Age-related Participation: {DetailedDescription}
+- Gender-related Participation: {DetailedDescription}
+- Ethnic-related Participation: {DetailedDescription}
+- Religious-related Participation: {DetailedDescription}
 
 ## Latest Polling Data
 - Optimistic Perception of Economic Future: {Percentage}
 - Direction of Country: {Percentage} believe country is on right track
 - Overall Government Approval Rating: {Percentage}
-- Institution Approval Ratings  
-  - {Institution ...} Approval Rating: {Percentage}
-  ...
 '''
