@@ -1,14 +1,15 @@
 STATE_TEMPLATE = '''
 <!--
 - Follow the template exactly. Filling in {values}, keeping text outside of brackets, and replacing ...s.
-- You are expected to fill out all the fields in the template and keep all default attributes
-- You can format numbers as like: 123, ~123 million, etc. Do not use a percentage unless specified.
-- You can format percentages as like: 12%, ~12%, < 0.1%, etc.
-- All monetary amounts should be in USD
+- You are expected to fill out ALL the fields in the template and keep ALL default attributes.
+- Format {Number} and {Value} like: 123, ~123 million, etc. Do not use a percentage or relative values.
+- Format {Percentage} like: 12%, ~12%, < 0.1%, etc. You should include a percentage sign.
+- Format {DetailedDescription} with 1-3 concise sentences. Use technical terms.
+- Format {TotalAmountInUSD} monetary amounts in USD.
 - Certain policies, descriptions, and values the answer may be "N/A due to...". For metrics that should exist, but you don't know, use your best guess.
-- Use "subgroups" to identify variance among specific sub-populations
 - Do not use *italic* or **bold**. 
 - Do not add nested lists or headings not specified in the template.
+- Do not include <!-- comments --> in the final output but use them as key guidance.
 -->
 
 # 1. Nation Overview
@@ -16,27 +17,27 @@ STATE_TEMPLATE = '''
 - Country Name: {NationName}
 - Government Type: {GovernmentType}
 - Head of State/Government: {Title} <!-- role or group title, not name -->
-- Total Population: {AbsoluteNumber}
+- Total Population: {Number} people
 - Currency: {CurrencyName} ({CurrencyCode})
-- Land Area: {Area} sq km
+- Land Area: {Number} sq km
 
 # 2. Demographics
 ## Population Distribution
 ### Age Groups
-- 0-4 years: {AbsoluteNumber}
-- 5-17 years: {AbsoluteNumber}
-- 18-24 years: {AbsoluteNumber}
-- 25-44 years: {AbsoluteNumber}
-- 45-64 years: {AbsoluteNumber}
-- 65-74 years: {AbsoluteNumber}
-- 75+ years: {AbsoluteNumber}
+- 0-4 years: {Number}
+- 5-17 years: {Number}
+- 18-24 years: {Number}
+- 25-44 years: {Number}
+- 45-64 years: {Number}
+- 65-74 years: {Number}
+- 75+ years: {Number}
 
 ### Gender Composition
 - Male: {Percentage}
 - Female: {Percentage}
 - Other: {Percentage}
 
-### Sexuality Composition <!-- reported by census -->
+### Sexuality Composition
 - Heterosexual: {Percentage}
 - Lesbian/Gay: {Percentage}
 - Bisexual: {Percentage}
@@ -84,8 +85,9 @@ STATE_TEMPLATE = '''
 
 ### Population Growth
 - Overall Population Growth Rate: {Percentage} per year
-- Ethnic Population Growth: {DetailedDescription}
+- Ethnic Population Growth: {DetailedDescription} <!-- e.g. how growth is distributed among ethnic groups -->
 - Religious Population Growth: {DetailedDescription}
+- Economic Class Population Growth: {DetailedDescription}
 
 ### Migration
 - Immigration: {DetailedDescription}
@@ -118,7 +120,7 @@ STATE_TEMPLATE = '''
 - Social Mobility Index: {Value} out of 100
 - LGBTQ+ Legal Equality Index: {Value} out of 100
 
-### Social Challenges <!-- e.g. ethnic tensions, religious tensions, etc. -->
+### Social Challenges <!-- e.g. ethnic tensions, discrimination, etc. -->
 - {SocialChallenge}: {DetailedDescription}
 ...
 
@@ -134,7 +136,7 @@ STATE_TEMPLATE = '''
 - Female Life Expectancy: {Value} years
 - Ethnic Life Expectancy: {DetailedDescription} <!-- relationship between life expectancy and ethnicity -->
 
-### Diseases <!-- for living diseases -->
+### Diseases
 - Obesity: {Number} in 100,000 population
 - Mental Health: {Number} in 100,000 population
 - Diabetes: {Number} in 100,000 population
@@ -165,6 +167,10 @@ STATE_TEMPLATE = '''
 - Physician Density: {Number} per 1,000 population
 - Hospital Bed Density: {Number} per 1,000 population
 
+## Health Challenges <!-- e.g. high healthcare costs, pandemics, etc. -->
+- {HealthChallenge}: {DetailedDescription}
+...
+
 ## Crime Statistics
 - Overall Crime Rate: {Number} per 100,000 population
   - Homicide Rate: {Number} per 100,000 population
@@ -182,7 +188,7 @@ STATE_TEMPLATE = '''
 - {CrimeChallenge}: {DetailedDescription}
 ...
 
-# 5. Economy
+# 4. Economy
 ## Economic Indicators
 - Gross Domestic Product (GDP in USD): {TotalAmountInUSD}
 - GDP Growth Rate: {Percentage} per year
@@ -194,10 +200,11 @@ STATE_TEMPLATE = '''
 - Poverty Rate: {Percentage}
 - Inflation Rate (Annualized): {Percentage}
 - Gini Coefficient: {Value} out of 1.0
-- Average Income: {TotalAmountInUSD}
+- Average Income: {TotalAmountInUSD} per person
+- Economic Trends: {DetailedDescription} <!-- e.g. economic growth, recession, etc. -->
 - Public Economic Sentiment: {DetailedDescription}
 
-## Industry Ownership
+## Industry Ownership <!-- some of these may be zero -->
 - Private Sector: {Percentage} of GDP
 - State-Owned Enterprises (SOEs): {Percentage} of GDP
 - Mixed Ownership: {Percentage} of GDP
@@ -274,27 +281,27 @@ STATE_TEMPLATE = '''
 
 ### Expenditure
 - Total Expenditure: {TotalAmountInUSD} <!-- note that some of these could be zero -->
-  - Healthcare Expenditure: {TotalAmountInUSD}
-  - Education Expenditure: {TotalAmountInUSD}
-  - Defense and Military Expenditure: {TotalAmountInUSD}
-  - Infrastructure Expenditure: {TotalAmountInUSD}
-  - Social Welfare Expenditure: {TotalAmountInUSD}
-  - Environmental Protection Expenditure: {TotalAmountInUSD}
-  - Public Safety and Law Enforcement Expenditure: {TotalAmountInUSD}
-  - Housing and Urban Development Expenditure: {TotalAmountInUSD}
-  - Agriculture and Rural Development Expenditure: {TotalAmountInUSD}
-  - Debt Service (Interest Payments) Expenditure: {TotalAmountInUSD}
-  - {ExpenditureCategory}: {TotalAmountInUSD}
+  - Healthcare Expenditure: {Percentage}
+  - Education Expenditure: {Percentage}
+  - Defense and Military Expenditure: {Percentage}
+  - Infrastructure Expenditure: {Percentage}
+  - Social Welfare Expenditure: {Percentage}
+  - Environmental Protection Expenditure: {Percentage}
+  - Public Safety and Law Enforcement Expenditure: {Percentage}
+  - Housing and Urban Development Expenditure: {Percentage}
+  - Agriculture and Rural Development Expenditure: {Percentage}
+  - Debt Service (Interest Payments) Expenditure: {Percentage}
+  - {ExpenditureCategory}: {Percentage}
   ...
 - National Debt: {TotalAmountInUSD}
 
-## Trade
+## Trade <!-- good types include electronics, rare metals, grain, oil, etc. at least 5 imports and 5 exports -->
 - Total Exports: {TotalAmountInUSD}
-  - Exports from {Sector}: {Percentage}
+  - Exports of {GoodType}: {Percentage}
   ...
   - Other Exports: {Percentage}
 - Total Imports: {TotalAmountInUSD}
-  - Imports for {Sector}: {Percentage}
+  - Imports for {GoodType}: {Percentage}
   ...
   - Other Imports: {Percentage}
 
@@ -311,7 +318,7 @@ STATE_TEMPLATE = '''
 ## Exchange Rate <!-- only for USD -->
 - {LocalCurrency}/USD = {ExchangeRate}
 
-# 6. Military
+# 5. Military
 ### Military Organization
 - Military Structure: {DetailedDescription}
   - {SubgroupOrBranchName}: {DetailedDescription}
@@ -320,40 +327,46 @@ STATE_TEMPLATE = '''
 
 ## Capabilities
 ### Personnel <!-- e.g. active duty, reserve, national guard, etc. -->
-- {PersonnelType}: {AbsoluteNumber}
+- {PersonnelType}: {Number}
 ...
 
-### Equipment <!-- Be sure to include the {AbsoluteNumber} for each equipment type, for some this may be zero -->
+### Equipment <!-- Be sure to include the {Number} for each equipment type, for some this may be zero. Every group should have at least 5 equipment types. -->
 - Air Force Equipment
-  - {EquipmentType}: {AbsoluteNumber}
+  - Fighter Jets: {Number}
+  - Stealth Bombers: {Number}
+  - UAVs: {Number}
+  - {EquipmentType}: {Number}
   ...
 - Naval Equipment
-  - Aircraft Carriers: {AbsoluteNumber}
-  - Nuclear Submarines: {AbsoluteNumber}
-  - {EquipmentType}: {AbsoluteNumber}
+  - Aircraft Carriers: {Number}
+  - Nuclear Submarines: {Number}
+  - Destroyers: {Number}
+  - {EquipmentType}: {Number}
   ...
 - Ground Forces Equipment
-  - {EquipmentType}: {AbsoluteNumber}
+  - Tanks: {Number}
+  - Artillery Systems: {Number}
+  - {EquipmentType}: {Number}
   ...
 - Strategic Forces
-  - Nuclear ICMBs: {AbsoluteNumber}
-  - {EquipmentType}: {AbsoluteNumber}
+  - Nuclear ICMBs: {Number}
+  - Ballistic Missiles: {Number}
+  - {EquipmentType}: {Number}
   ...
 - Cyber and Electronic Warfare
-  - {EquipmentType}: {AbsoluteNumber}
+  - Cyber Defense Specialists: {Number}
+  - {EquipmentType}: {Number}
   ...
 - Space Assets
-  - Military Satellites: {AbsoluteNumber}
-  - {EquipmentType}: {AbsoluteNumber}
+  - Reconnaissance Satellites: {Number}
+  - {EquipmentType}: {Number}
   ...
 
-### Security Threats
-- Terrorism: {DetailedDescription}
-- Cybersecurity Threats: {DetailedDescription}
+### Security Challenges <!-- e.g. terrorism, cyber threats, organized crime, etc. Include risk level and detailed description. At least 3. -->
 - {ThreatTypeOrGroup}: {DetailedDescription}
 ...
 
-# 7. Media
+# 6. Media
 ## Media Landscape
 - Press Freedom Index: {Value} out of 100
 - Media Ownership: {DetailedDescription}
@@ -371,7 +384,7 @@ STATE_TEMPLATE = '''
 - Digital Divide Index - Socioeconomic: {Value} out of 100
 - Social Media Usage: {Percentage}
 
-# 8. Culture
+# 7. Culture
 ## Cultural Identity
 ### Cultural Values
 - Traditional Values: {DetailedDescription}
@@ -381,26 +394,22 @@ STATE_TEMPLATE = '''
 - Individualism vs Collectivism: {DetailedDescription}
 - Religious Values: {DetailedDescription}
 
-### Cultural Challenges
-- {CulturalChallenge}: {DetailedDescription}
-...
-
 ### Sports and Recreation
 - {SportOrActivity}: {DetailedDescription}
 ...
 
 ## Cultural Influence
 - Soft Power Index: {Value} of 100
-- International Cultural Centers: {AbsoluteNumber}
+- International Cultural Centers: {Number}
 - Cultural Exchange Programs: {DetailedDescription}
 
 ## Cultural Events
-- National Holidays: {AbsoluteNumber}
-- Religious Holidays: {AbsoluteNumber}
-- Memorial Days: {AbsoluteNumber}
-- Cultural Festivals: {AbsoluteNumber}
+- National Holidays: {Number}
+- Religious Holidays: {Number}
+- Memorial Days: {Number}
+- Cultural Festivals: {Number}
 
-# 9. Infrastructure and Technology
+# 8. Infrastructure and Technology
 ## Transportation Infrastructure <!-- avoid mentioning proper nouns -->
 - Road Network: {DetailedDescription}
 - Public Transport: {DetailedDescription}
@@ -442,7 +451,7 @@ STATE_TEMPLATE = '''
 - {InfrastructureChallenge}: {DetailedDescription}
 ...
 
-# 10. Government 
+# 9. Government 
 ## Government Structure
 - Government Structure: {DetailedDescription}
 - Key Governing Documents: {DetailedDescription} <!-- what they are and what they are about -->
@@ -453,7 +462,7 @@ STATE_TEMPLATE = '''
 - {GovernmentBranchOrRole}: {DetailedDescription} <!-- be detailed about what they can and cannot do -->
 ...
 
-## Policies <!-- all policy types should have at least 3 policies -->
+## Policies <!-- all policy types should have at least 4 policies -->
 
 ### Civil Liberties and Political Rights Policies <!-- e.g. freedom or restriction of speech, press, assembly, religion -->
 - {PolicyType}: {DetailedDescription}
@@ -535,7 +544,7 @@ STATE_TEMPLATE = '''
 - {PolicyType}: {DetailedDescription}
 ...
 
-# 11. Public Opinion
+# 10. Public Opinion
 ## Top Concerns Among Citizens
 - {Concern}: {Percentage}
 ...
@@ -549,5 +558,5 @@ STATE_TEMPLATE = '''
 ## Latest Polling Data
 - Optimistic Perception of Economic Future: {Percentage}
 - Direction of Country: {Percentage} believe country is on right track
-- Overall Government Approval Rating: {Percentage}
+- Overall Head of State/Government Approval Rating: {Percentage}
 '''
