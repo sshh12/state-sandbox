@@ -1,9 +1,9 @@
 STATE_TEMPLATE = '''
 <!--
-- You can format {AbsoluteNumber}s as: 123, ~123 million, ~123B (DO NOT include percentages)
+- You can format numbers as like: 123, ~123 million, etc. Do not use a percentage unless specified.
 - All monetary amounts should be in USD
-- For certain policies or descriptions the answer may be "N/A due to..."
-- Use "subgroups" to identify variance among specific populations
+- For certain policies, descriptions, and values the answer may be "N/A due to..."
+- Use "subgroups" to identify variance among specific sub-populations
 - You are expected to fill out all the fields in the template and keep all default attributes
 - Do not use *italic* or **bold**
 -->
@@ -87,7 +87,8 @@ STATE_TEMPLATE = '''
 
 ## Migration
 - Net Migration Rate: {Number} per 1,000 population
-- Refugee Population: {AbsoluteNumber}
+- Immigration: {DetailedDescription}
+- Emigration: {DetailedDescription}
 
 # 3. Economy
 ## Economic Indicators
@@ -103,7 +104,6 @@ STATE_TEMPLATE = '''
 - Gini Coefficient: {Value} out of 1.0
 
 ## Sector Contributions to GDP
-- Agriculture: {Percentage} of GDP
 - {Sector/Industry ...}: {Percentage} of GDP
 ...
 
@@ -111,21 +111,31 @@ STATE_TEMPLATE = '''
 ### Revenue & Expenditure
 - Total Revenue: {TotalAmountInUSD}
   - Tax Review From {Category}: {TotalAmountInUSD}
+  ...
   - Non-Tax Review From {Category}: {TotalAmountInUSD}
-...
+  ...
 - Total Expenditure: {TotalAmountInUSD}
-  - Expenditure on {Category}: {TotalAmountInUSD}
-...
-- Budget Surplus/Deficit: {TotalAmountInUSD}
+  - Healthcare Expenditure: {TotalAmountInUSD}
+  - Education Expenditure: {TotalAmountInUSD}
+  - Defense Expenditure: {TotalAmountInUSD}
+  - Infrastructure Expenditure: {TotalAmountInUSD}
+  - Social Welfare Expenditure: {TotalAmountInUSD}
+  - Environmental Protection Expenditure: {TotalAmountInUSD}
+  - Public Safety and Law Enforcement Expenditure: {TotalAmountInUSD}
+  - Housing and Urban Development Expenditure: {TotalAmountInUSD}
+  - Agriculture and Rural Development Expenditure: {TotalAmountInUSD}
+  - Debt Service (Interest Payments) Expenditure: {TotalAmountInUSD}
+  - {Category ...}: {TotalAmountInUSD}
+  ...
 - National Debt: {TotalAmountInUSD}
 
 ## Trade
 - Total Exports: {TotalAmountInUSD}
   - Exports from {Category}: {TotalAmountInUSD}
-...
+  ...
 - Total Imports: {TotalAmountInUSD}
   - Imports from {Category}: {TotalAmountInUSD}
-...
+  ...
 
 ### Main Trading Partners
 - Export Partners
@@ -136,7 +146,7 @@ STATE_TEMPLATE = '''
   ...
 
 ## Currency Exchange Rate
-- {LocalCurrency}/USD = {ExchangeRate} ({Fixed}, {Floating}, {Pegged})
+- {LocalCurrency}/USD = {ExchangeRate} ({Fixed}, {Floating}, {Pegged}) <!-- must include USD -->
 - {LocalCurrency}/{ForeignCurrency} = {ExchangeRate} ({Fixed}, {Floating}, {Pegged})
 ...
 
@@ -145,18 +155,34 @@ STATE_TEMPLATE = '''
 - Military Structure: {DetailedDescription}
 - Military Budget: {Percentage} of GDP
 
-### Military Branches
-- {BranchName}: {DetailedDescription}
+### Military Organization
+- {Subgroup/BranchName ...}: {DetailedDescription}
 ...
 
 ## Capabilities
 ### Personnel
-- {Personnel Type ....}: {DetailedDescription}
+- {Personnel/Subgroup ...}: {AbsoluteNumber}
 ...
 
 ### Equipment
-- {EquipmentType ...}: {DetailedDescription}
-...
+- Air Force Equipment
+  - {EquipmentType ...}: {AbsoluteNumber}
+  ...
+- Naval Equipment
+  - {EquipmentType ...}: {AbsoluteNumber}
+  ...
+- Ground Forces Equipment
+  - {EquipmentType ...}: {AbsoluteNumber}
+  ...
+- Strategic Forces
+  - {EquipmentType ...}: {AbsoluteNumber}
+  ...
+- Cyber and Electronic Warfare
+  - {EquipmentType ...}: {AbsoluteNumber}
+  ...
+- Space Assets
+  - {EquipmentType ...}: {AbsoluteNumber}
+  ...
 
 ### Security Threats
 - {ThreatType/Group ...}: {DetailedDescription}
@@ -165,7 +191,7 @@ STATE_TEMPLATE = '''
 # 5. Government Policies
 ## Political Policies
 - Government Structure: {DetailedDescription}
-- Branches
+- Subgroups
   - {Branch/Subgroup ...}: {DetailedDescriptionOfRuleAndPowers}
   ...
 - Parties: {Ruling PartyName(s), Opposition PartyName(s)}
@@ -232,7 +258,7 @@ STATE_TEMPLATE = '''
 
 ## Environmental Policies
 ### Climate
-- International Agreements: {ListOfAgreements}
+- International Agreements: {DetailedDescription}
 - National Emission Targets: {DetailedDescription}
 - Renewable Energy Targets: {DetailedDescription}
 - {PolicyType ...}: {DetailedDescription}
@@ -278,7 +304,7 @@ STATE_TEMPLATE = '''
 - Hospital Bed Density: {Number} per 1,000 population
 
 ### Prevalence of Diseases
-- {DiseaseName}: {Percentage}
+- {DiseaseName}: {Number} per 100,000 population
 ...
 
 ## Standard of Living
@@ -337,15 +363,15 @@ STATE_TEMPLATE = '''
 
 ## Energy Infrastructure
 - Total Electricity Generation: {Megawatts}
-
-### Electricity Generation Breakdown
-- Electricity Generation By {EnergySource ...}: {Megawatts}
-...
+- Electricity Generation Breakdown
+  - {EnergySource ...}: {Megawatts}
+  ...
 
 ## Telecommunications
 - Internet Penetration Rate: {Percentage}
 - Broadband Subscriptions: {Number} per 100 inhabitants
 - Mobile Phone Subscriptions: {Number} per 100 inhabitants
+- Highspeed Internet Access: {Number} per 100 inhabitants
 
 ## Technology and Innovation
 - R&D Expenditure: {Percentage} of GDP
