@@ -72,6 +72,9 @@ STATE_TEMPLATE = '''
 - Average Life Expectancy at Birth: {NumberofYears}
 - Male Life Expectancy: {NumberofYears}
 - Female Life Expectancy: {NumberofYears}
+- Infant Mortality Rate: {Number} per 1,000 live births
+- Total Fertility Rate: {Number} children per woman
+- Gross Reproduction Rate: {Number} female children per woman
 - Subgroup Life Expectancy
   - {Subgroup ...} Life Expectancy: {NumberofYears}
   ...
@@ -90,6 +93,10 @@ STATE_TEMPLATE = '''
 ## Economic Indicators
 - Gross Domestic Product (GDP in USD): {TotalAmountInUSD}
 - GDP Growth Rate: {PercentagePerYear}
+- Credit Ratings:
+  - Standard & Poor's: {RatingLetters}
+  - Moody's: {RatingLetters}
+  - Fitch: {RatingLetters}
 - Unemployment Rate: {Percentage}
 - Inflation Rate: {Percentage}
 - Poverty Rate: {Percentage}
@@ -224,7 +231,7 @@ STATE_TEMPLATE = '''
 ...
 
 ## Environmental Policies
-### Climate Change
+### Climate
 - International Agreements: {ListOfAgreements}
 - National Emission Targets: {DetailedDescription}
 - Renewable Energy Targets: {DetailedDescription}
@@ -267,6 +274,8 @@ STATE_TEMPLATE = '''
 ## Health Indicators
 - Maternal Mortality Rate: {Number} per 100,000 live births
 - Child Mortality Rate: {Number} per 1,000 live births
+- Physician Density: {Number} per 1,000 population
+- Hospital Bed Density: {Number} per 1,000 population
 
 ### Prevalence of Diseases
 - {DiseaseName}: {Percentage}
@@ -348,7 +357,7 @@ STATE_TEMPLATE = '''
 - {Concern ...}: {Percentage}
 ...
 
-## Recent Polling Data
+## Latest Polling Data
 - Optimistic Perception of Economic Future: {Percentage}
 - Overall Government Approval Rating: {Percentage}
 - Institution Approval Ratings  
