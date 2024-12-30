@@ -5,6 +5,7 @@ STATE_TEMPLATE = '''
 - For certain policies or descriptions the answer may be "N/A due to..."
 - Use "subgroups" to identify variance among specific populations
 - You are expected to fill out all the fields in the template and keep all default attributes
+- Do not use *italic* or **bold**
 -->
 
 # 1. Nation Overview
@@ -16,17 +17,18 @@ STATE_TEMPLATE = '''
 - Total Population: {AbsoluteNumber}
 - Currency: {CurrencyName} ({CurrencyCode})
 - Land Area: {Areainsqkm}
+- National Holidays: {ListOfHolidays}
 
 # 2. Demographics
 ## Population Distribution
 ### Age Groups
-- 0-4 years (Pre-school): {AbsoluteNumber}
-- 5-17 years (School-age): {AbsoluteNumber}
-- 18-24 years (Higher Education/Early Career): {AbsoluteNumber}
-- 25-44 years (Early/Mid Career): {AbsoluteNumber}
-- 45-64 years (Late Career): {AbsoluteNumber}
-- 65-74 years (Early Retirement): {AbsoluteNumber}
-- 75+ years (Late Retirement): {AbsoluteNumber}
+- 0-4 years: {AbsoluteNumber}
+- 5-17 years: {AbsoluteNumber}
+- 18-24 years: {AbsoluteNumber}
+- 25-44 years: {AbsoluteNumber}
+- 45-64 years: {AbsoluteNumber}
+- 65-74 years: {AbsoluteNumber}
+- 75+ years: {AbsoluteNumber}
 
 ### Gender Composition
 - Male: {Percentage}
@@ -56,8 +58,12 @@ STATE_TEMPLATE = '''
 ...
 - Others: {Percentage}
 
+### Language Composition
+- {Language ...}: {Percentage}
+...
+- Multilingual: {Percentage}
+
 ### Religious Composition
-- {Religion A}: {Percentage}
 - {Religion ...}: {Percentage}
 ...
 - Unaffiliated/No Religion: {Percentage}
@@ -76,6 +82,10 @@ STATE_TEMPLATE = '''
   - {Subgroup ...} Population Growth Rate: {PercentagePerYear}
   ...
 
+## Migration
+- Net Migration Rate: {Number} per 1,000 population
+- Refugee Population: {AbsoluteNumber}
+
 # 3. Economy
 ## Economic Indicators
 - Gross Domestic Product (GDP in USD): {TotalAmountInUSD}
@@ -83,7 +93,7 @@ STATE_TEMPLATE = '''
 - Unemployment Rate: {Percentage}
 - Inflation Rate: {Percentage}
 - Poverty Rate: {Percentage}
-- Gini Coefficient: {Value}
+- Gini Coefficient: {Value} out of 1.0
 
 ## Sector Contributions to GDP
 - Agriculture: {Percentage} of GDP
@@ -123,9 +133,32 @@ STATE_TEMPLATE = '''
 - {LocalCurrency}/{ForeignCurrency} = {ExchangeRate} ({Fixed}, {Floating}, {Pegged})
 ...
 
-# 4. Government Policies
+# 4. Military
+## Structure
+- Military Structure: {DetailedDescription}
+- Military Budget: {Percentage} of GDP
+
+### Military Branches
+- {BranchName}: {DetailedDescription}
+...
+
+## Capabilities
+### Personnel
+- {Personnel Type ....}: {DetailedDescription}
+...
+
+### Equipment
+- {EquipmentType ...}: {DetailedDescription}
+...
+
+### Security Threats
+- {ThreatType/Group ...}: {DetailedDescription}
+...
+
+# 5. Government Policies
 ## Political Policies
 - Government Structure: {DetailedDescription}
+- Branches
   - {Branch/Subgroup ...}: {DetailedDescriptionOfRuleAndPowers}
   ...
 - Parties: {Ruling PartyName(s), Opposition PartyName(s)}
@@ -173,7 +206,7 @@ STATE_TEMPLATE = '''
 
 ### Healthcare System
 - System: {DetailedDescription}
-- Healthcare Spending: {TotalAmountInUSD}
+- Healthcare Budget: {Percentage} of GDP
 - Public Health Initiatives: {ListOfInitiatives}
 - {PolicyType ...}: {DetailedDescription}
 ...
@@ -213,8 +246,6 @@ STATE_TEMPLATE = '''
 - Alliances and Memberships: {DetailedDescription}
 
 ### Defense and Security Policies
-- Defense Budget: {TotalAmountInUSD}
-- Military Structure: {DetailedDescription}
 - {PolicyType ...}: {DetailedDescription}
 ...
 
@@ -223,7 +254,7 @@ STATE_TEMPLATE = '''
 - {PolicyType ...}: {DetailedDescription}
 ...
 
-# 5. Social Indicators
+# 6. Social Indicators
 ## Education Indicators
 - Adult Literacy Rate: {Percentage}
 - Average Years of Schooling: {NumberofYears}
@@ -258,7 +289,7 @@ STATE_TEMPLATE = '''
 - Gender Inequality Index (GII): {Value} out of 1.0
 - Female Labor Force Participation Rate: {Percentage}
 
-# 6. Health and Causes of Death
+# 7. Health and Causes of Death
 ## Leading Causes of Death
 - {Cause ...}: {Percentage} of deaths
 ...
@@ -308,8 +339,9 @@ STATE_TEMPLATE = '''
 - Mobile Phone Subscriptions: {Number} per 100 inhabitants
 
 ## Technology and Innovation
-- R&D Expenditure: {TotalAmountInUSD}
+- R&D Expenditure: {Percentage} of GDP
 - Patents Filed Annually: {AbsoluteNumber}
+- Space Program: {DetailedDescription}
 
 # 9. Public Opinion and Citizen Sentiment
 ## Top Concerns Among Citizens
