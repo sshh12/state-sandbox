@@ -191,7 +191,7 @@ STATE_TEMPLATE = '''
 # 4. Economy
 ## Economic Indicators
 - Gross Domestic Product (GDP in USD): {TotalAmountInUSD}
-- GDP Growth Rate: {Percentage} per year
+- GDP Growth Rate (Annualized): {Percentage} per year
 - Credit Ratings:
   - Standard & Poor's: {RatingLetters}
   - Moody's: {RatingLetters}
