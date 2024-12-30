@@ -2,7 +2,7 @@ STATE_TEMPLATE = '''
 <!--
 - Follow the template exactly. Filling in {values}, keeping text outside of brackets, and replacing ...s.
 - You are expected to fill out ALL the fields in the template and keep ALL default attributes.
-- Format {Number} and {Value} like: 123, ~123 million, etc. Do not use a percentage or relative values.
+- Format {Number} like: 123, ~123 million, 0.12, etc. Do not use a percentage or relative values.
 - Format {Percentage} like: 12%, ~12%, < 0.1%, etc. You should include a percentage sign.
 - Format {DetailedDescription} with 1-3 concise sentences. Use technical terms.
 - Format {TotalAmountInUSD} monetary amounts in USD.
@@ -98,27 +98,27 @@ STATE_TEMPLATE = '''
 - Emigration Totals: {Number} emigrants annually
 
 ## Standard of Living
-- Gallup World Happiness Score: {Value} out of 10
+- Gallup World Happiness Score: {Number} out of 10
 - Access to Improved Water Sources: {Percentage}
 - Access to Improved Sanitation: {Percentage}
 - Access to Electricity: {Percentage}
-- Human Development Index (HDI): {Value}
+- Human Development Index (HDI): {Number}
 
 ## Education
 - Education System: {DetailedDescription}
   - {EducationLevel}: {DetailedDescription}
   ...
 - Adult Literacy Rate: {Percentage}
-- Average Years of Schooling: {Value} years
-- Gender Parity Index in Education: {Value}
+- Average Years of Schooling: {Number} years
+- Gender Parity Index in Education: {Number}
 - Ethnic Literacy: {DetailedDescription} <!-- relationship between literacy and ethnicity -->
 
 ## Equality
-- Gender Inequality Index (GII): {Value} out of 1.0
+- Gender Inequality Index (GII): {Number} out of 1.0
 - Female Labor Force Participation Rate: {Percentage}
 - Racial/Ethnic Wage Gap: {DetailedDescription}
-- Social Mobility Index: {Value} out of 100
-- LGBTQ+ Legal Equality Index: {Value} out of 100
+- Social Mobility Index: {Number} out of 100
+- LGBTQ+ Legal Equality Index: {Number} out of 100
 
 ### Social Challenges <!-- e.g. ethnic tensions, discrimination, etc. -->
 - {SocialChallenge}: {DetailedDescription}
@@ -131,9 +131,9 @@ STATE_TEMPLATE = '''
 - Health Care Accessibility: {DetailedDescription} <!-- e.g. costs, wait times, etc. -->
 
 ### Life Expectancy
-- Average Life Expectancy at Birth: {Value} years
-- Male Life Expectancy: {Value} years
-- Female Life Expectancy: {Value} years
+- Average Life Expectancy at Birth: {Number} years
+- Male Life Expectancy: {Number} years
+- Female Life Expectancy: {Number} years
 - Ethnic Life Expectancy: {DetailedDescription} <!-- relationship between life expectancy and ethnicity -->
 
 ### Diseases
@@ -182,7 +182,7 @@ STATE_TEMPLATE = '''
   - Drug-Related Crime Rate: {Number} per 100,000 population
   - {CrimeType} Rate: {Number} per 100,000 population
   ...
-- Corruption Perception Index (CPI): {Value} out of 100
+- Corruption Perception Index (CPI): {Number} out of 100
 
 ## Crime Challenges <!-- e.g. hate crimes, gun violence, drug violence, etc. -->
 - {CrimeChallenge}: {DetailedDescription}
@@ -199,7 +199,7 @@ STATE_TEMPLATE = '''
 - Unemployment Rate: {Percentage}
 - Poverty Rate: {Percentage}
 - Inflation Rate (Annualized): {Percentage}
-- Gini Coefficient: {Value} out of 1.0
+- Gini Coefficient: {Number} out of 1.0
 - Average Income: {TotalAmountInUSD} per person
 - Economic Trends: {DetailedDescription} <!-- e.g. economic growth, recession, etc. -->
 - Public Economic Sentiment: {DetailedDescription}
@@ -368,7 +368,7 @@ STATE_TEMPLATE = '''
 
 # 6. Media
 ## Media Landscape
-- Press Freedom Index: {Value} out of 100
+- Press Freedom Index: {Number} out of 100
 - Media Ownership: {DetailedDescription}
 
 ### Major Media Outlets <!-- avoid mentioning proper nouns, just types -->
@@ -380,8 +380,8 @@ STATE_TEMPLATE = '''
 ...
 
 ### Digital Media
-- Digital Divide Index - Infrastructure: {Value} out of 100
-- Digital Divide Index - Socioeconomic: {Value} out of 100
+- Digital Divide Index - Infrastructure: {Number} out of 100
+- Digital Divide Index - Socioeconomic: {Number} out of 100
 - Social Media Usage: {Percentage}
 
 # 7. Culture
@@ -399,7 +399,7 @@ STATE_TEMPLATE = '''
 ...
 
 ## Cultural Influence
-- Soft Power Index: {Value} of 100
+- Soft Power Index: {Number} of 100
 - International Cultural Centers: {Number}
 - Cultural Exchange Programs: {DetailedDescription}
 
