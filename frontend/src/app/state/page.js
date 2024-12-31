@@ -42,12 +42,19 @@ export default function StatePage({ stateId }) {
         </div>
 
         <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            <TabsTrigger value="reports">Reports</TabsTrigger>
-            <TabsTrigger value="notifications">Notifications</TabsTrigger>
-          </TabsList>
+          <div className="border-b overflow-x-auto">
+            <TabsList className="inline-flex min-w-full h-10">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="people">People</TabsTrigger>
+              <TabsTrigger value="health">Health</TabsTrigger>
+              <TabsTrigger value="economy">Economy</TabsTrigger>
+              <TabsTrigger value="government">Government</TabsTrigger>
+              <TabsTrigger value="military">Military</TabsTrigger>
+              <TabsTrigger value="culture">Culture</TabsTrigger>
+              <TabsTrigger value="geography">Geography</TabsTrigger>
+              <TabsTrigger value="infrastructure">Infrastructure</TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="overview" className="space-y-4">
             <OverviewPage snapshots={snapshots} latest={latest} />
