@@ -11,10 +11,9 @@ import {
 } from '@/components/ui/select';
 
 const links = [
-  { name: 'Overview', href: '/dashboard' },
-  { name: 'Customers', href: '/dashboard/customers' },
-  { name: 'Products', href: '/dashboard/products' },
-  { name: 'Settings', href: '/dashboard/settings' },
+  { name: 'States', href: '/states' },
+  { name: 'Leaderboard', href: '/leaderboard' },
+  { name: 'Profile', href: '/profile' },
 ];
 
 export function DashboardNav() {

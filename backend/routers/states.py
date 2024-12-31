@@ -7,6 +7,7 @@ from db.models import State, StateSnapshot, User
 from routers.schemas import StateResponse, CreateStateRequest, StateSnapshotResponse
 from routers.auth import get_current_user_from_token
 from model.actions import generate_state
+from model.parsing import parse_state
 
 router = APIRouter(prefix="/api/states", tags=["states"])
 
@@ -42,6 +43,9 @@ async def create_state(
             date=date, name=request.name, questions=questions
         ),
     )
+    parsed_state = parse_state(state_snapshot.markdown_state)
+    full_name = parsed_state["1. State Overview"]["Basic Information"]["Country Name"]
+    state.name = full_name
     db.add(state_snapshot)
     db.commit()
     db.refresh(state)
@@ -55,4 +59,6 @@ async def get_state_snapshots(
     db: Session = Depends(get_db),
 ):
     snapshots = db.query(StateSnapshot).filter(StateSnapshot.state_id == state_id).all()
+    for snapshot in snapshots:
+        snapshot.json_state = parse_state(snapshot.markdown_state)
     return snapshots

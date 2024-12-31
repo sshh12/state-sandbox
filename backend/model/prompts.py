@@ -375,7 +375,7 @@ STATE_TEMPLATE = """
 - Reconnaissance Satellites: {Number}
 - Communication Satellites: {Number}
 
-### Top Defense Challenges <!-- e.g. terrorism, cyber threats, organized crime, etc. Include risk level and detailed description. At least 2. -->
+## Top Defense Challenges <!-- e.g. terrorism, cyber threats, organized crime, etc. Include risk level and detailed description. At least 2. -->
 - {Challenge}: {DetailedDescription}
 ...
 

@@ -1,0 +1,17 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
+export function Table({ data }) {
+  console.log(data);
+  return (
+    <div className="space-y-8">
+      {data.map((item) => (
+        <div className="flex items-center">
+          <div className="space-y-1">
+            <p className="text-sm font-medium leading-none">{item.key}</p>
+          </div>
+          <div className="ml-auto font-medium">{item.raw}</div>
+        </div>
+      ))}
+    </div>
+  );
+}

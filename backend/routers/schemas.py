@@ -46,6 +46,7 @@ class StateSnapshotResponse(BaseModel):
     id: int
     date: str
     markdown_state: str
+    json_state: dict
     state_id: int
 
     class Config:
