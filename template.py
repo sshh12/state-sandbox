@@ -62,7 +62,7 @@ STATE_TEMPLATE = '''
 - Primary Education Complete: {Percentage} <!-- e.g. elementary school -->
 - Secondary Education Complete: {Percentage} <!-- e.g. high school -->
 - Tertiary Education Complete: {Percentage} <!-- e.g. college -->
-- PhD or Masters: {Percentage}
+- Graduate Degree Complete: {Percentage} <!-- e.g. PhD, Masters, etc. -->
 
 ### Ethnic Composition
 - {EthnicGroup}: {Percentage}
@@ -79,6 +79,12 @@ STATE_TEMPLATE = '''
 - {Religion}: {Percentage}
 ...
 - Unaffiliated/No Religion: {Percentage}
+
+### Housing Composition
+- Owned: {Percentage}
+- Rented: {Percentage}
+- Homeless: {Percentage}
+- Other: {Percentage}
 
 ### Population Growth
 - Overall Population Growth Rate: {Percentage} per year
@@ -137,6 +143,7 @@ STATE_TEMPLATE = '''
 - Accessibility
 - Waiting times
 - Specialized services
+- Technological capabilities
 - Quality -->
 
 ## Life Expectancy
@@ -184,39 +191,39 @@ STATE_TEMPLATE = '''
 # 5. Crime
 ## Justice System
 <!-- describe the justice system in detail, including:
-- The role and responsibilities of the courts
-- Law enforcement
-- Prisons -->
+- The role, organization, and responsibilities of the courts
+- The role, organization, and responsibilities of law enforcement
+- The role, organization, and responsibilities of the prisons
+- Funding -->
 
 ## Crime Metrics
-- Homicide Rate: {Number} per 100,000 population
-- Assault Rate: {Number} per 100,000 population
-- Sexual Violence Rate: {Number} per 100,000 population
-- Burglary Rate: {Number} per 100,000 population
-- Theft Rate: {Number} per 100,000 population
-- Fraud Rate: {Number} per 100,000 population
-- Drug-Related Crime Rate: {Number} per 100,000 population
-- {CrimeType} Rate: {Number} per 100,000 population
-...
+- Population Incarcerated: {Percentage}
+- Prison Capacity: {Percentage}
+- Gun Ownership Rate: {Percentage}
+- Violent Crimes: {Number} per 100,000 population
+- Property Crimes: {Number} per 100,000 population
+- Financial Crimes: {Number} per 100,000 population
+- Drug-Related Crimes: {Number} per 100,000 population
+- Cybercrime: {Number} per 100,000 population
+- Sexual Crimes: {Number} per 100,000 population
+- Organized Crime: {Number} per 100,000 population
+- Public Order Crimes: {Number} per 100,000 population
+- White-Collar Crimes: {Number} per 100,000 population
+- State/Political Crimes: {Number} per 100,000 population
 
-## Top Crime Challenges
-- {CrimeChallenge}: {DetailedDescription}
+## Top Crime Challenges <!-- e.g. high crime rates, drug trafficking, etc. Severity and detailed description. At least 2. -->
+- {Challenge}: {DetailedDescription}
 ...
 
 # 6. Economy
 ## Economic System
 <!-- describe the economic system in detail, including:
 - The role and responsibilities of the government, the private sector, and the market 
+- Compare and contrast to socialist/communist/free-market/etc. systems
 - The role of the central bank (if any) -->
 
-## Industry Ownership <!-- some of these may be zero -->
-- Private Sector: {Percentage} of GDP
-- State-Owned Enterprises (SOEs): {Percentage} of GDP
-- Mixed Ownership: {Percentage} of GDP
-- Public-Private Partnerships (PPPs): {Percentage} of GDP
-
 ## Sectors
-### Industries  <!-- e.g. for each sector describe industries and specializations within it, some sectors may be nearly nonexistent -->
+### Industries  <!-- e.g. for each sector describe industries, ownership, and specializations within it, some sectors may be nearly nonexistent -->
 - Agriculture: {DetailedDescription}
 - Services: {DetailedDescription}
 - Manufacturing: {DetailedDescription}
@@ -263,7 +270,7 @@ STATE_TEMPLATE = '''
 
 ## Government Budget
 ### Revenue
-- Total Revenue: {TotalAmountInUSD} 
+- Total Annual Revenue: {TotalAmountInUSD} 
   - Income Tax: {Percentage} <!-- note that some of these could be zero -->
   - Corporate Tax: {Percentage}
   - Sales Tax/VAT: {Percentage} 
@@ -281,7 +288,7 @@ STATE_TEMPLATE = '''
   - Other Revenue Sources: {Percentage}
 
 ### Expenditure
-- Total Expenditure: {TotalAmountInUSD} 
+- Total Annual Expenditure: {TotalAmountInUSD} 
   - Healthcare Expenditure: {Percentage} <!-- note that some of these could be zero -->
   - Education Expenditure: {Percentage}
   - Defense and Military Expenditure: {Percentage}
@@ -322,7 +329,7 @@ STATE_TEMPLATE = '''
 - Fitch: {RatingLetters}
 
 ## Economic Metrics
-- Gross Domestic Product (GDP in USD): {TotalAmountInUSD}
+- Gross Domestic Product (GDP): {TotalAmountInUSD}
 - GDP Growth Rate: {Percentage} per year
 - Unemployment Rate: {Percentage}
 - Labor Force Participation Rate: {Percentage} <!-- % people ages 15 or older who are employed or seeking work -->
@@ -330,8 +337,7 @@ STATE_TEMPLATE = '''
 - Inflation Rate: {Percentage}
 - Gini Coefficient: {Number} out of 1.0
 - Average Income: {TotalAmountInUSD} per person
-- Public Economic Sentiment: {DetailedDescription}
-- Exchange Rate: {LocalCurrency}/USD = {ExchangeRate}
+- Exchange Rate ({LocalCurrency}/USD): {ExchangeRate}
 - Population with Optimistic Perception of Economic Future: {Percentage}
 
 ## Top Economic Challenges <!-- e.g. unemployment, inflation, etc. Severity and detailed description. At least 2. -->
@@ -340,10 +346,13 @@ STATE_TEMPLATE = '''
 
 # 7. Military and Defense
 ## Military System
-<!-- describe the military system in detail in markdown, including:
-- The structure, branches, and capabilities -->
+<!-- describe the military system in detail, including:
+- The structure and branches
+- Nuclear capabilities
+- Technological capabilities
+- Sources of equipment (e.g. domestically produced, foreign-made, etc.) -->
 
-## Military Metrics
+## Military Metrics <!-- some of these may be zero -->
 - Active Duty Personnel: {Number}
 - Reserve Personnel: {Number}
 - Fighter Jets: {Number}
@@ -371,7 +380,7 @@ STATE_TEMPLATE = '''
 ...
 
 # 8. Media
-## Media Outlets <!-- avoid mentioning proper nouns, just types -->
+## Media Outlets <!-- avoid mentioning proper nouns, just types. Include state vs private ownership. -->
 - {MediaType}: {DetailedDescription}
 ...
 
@@ -381,7 +390,6 @@ STATE_TEMPLATE = '''
 
 ## Media Metrics
 - Press Freedom Index: {Number} out of 100
-- Media Ownership: {DetailedDescription}
 - Digital Divide Index (Infrastructure): {Number} out of 100
 - Digital Divide Index (Socioeconomic): {Number} out of 100
 - Social Media Usage: {Percentage}
@@ -403,13 +411,39 @@ STATE_TEMPLATE = '''
 ## Cultural Metrics
 - Soft Power Index: {Number} of 100
 - International Cultural Centers: {Number}
-- Cultural Exchange Programs: {DetailedDescription}
 
 ## Top Cultural Challenges <!-- e.g. cultural preservation, cultural diversity, etc. Severity and detailed description. At least 2. -->
 - {Challenge}: {DetailedDescription}
 ...
 
-# 10. Infrastructure and Technology
+# 10. Geography and Environment
+## Geographic Features
+<!-- describe the geographic features in detail, including:
+- mountains, rivers, lakes, deserts, forests, etc.
+- level of pollution
+- infrastructure/population near coastlines
+- natural resources (and scarcity) -->
+
+## Natural Resource Production <!-- some of these may be zero -->
+- Oil and Gas: {Number} barrels of oil equivalent per day
+- Coal: {Number} tons per day
+- Precious Metals (Gold/Silver): {Number} ounces per day
+- Industrial Metals (Copper/Iron): {Number} tons per day
+- Strategic Metals (Uranium/Rare Earth): {Number} tons per day
+- {Resource}: {Number} tons per day
+...
+
+## Environmental Metrics
+- CO2 Emissions: {Number} metric tons per capita
+- Particulate Matter (PM2.5): {Number} μg/m3
+- Air Quality Index: {Number} out of 500
+- Number of Endangered Species: {Number}
+
+## Top Environmental Challenges <!-- e.g. deforestation, pollution, etc. Severity and detailed description. At least 2. -->
+- {Challenge}: {DetailedDescription}
+...
+
+# 11. Infrastructure and Technology
 ## Transportation Infrastructure
 <!-- describe the transportation infrastructure in detail, including:
 - Status, quality, and quantity of roads, public transport, railways, airports, ports and harbors. -->
@@ -434,8 +468,8 @@ STATE_TEMPLATE = '''
 
 ## Infrastucture Metrics
 - Total Electricity Generation: {Megawatts}
-- Mobile Phone Subscriptions: {Number} per 100 inhabitants
-- Highspeed Internet Access: {Number} per 100 inhabitants
+- Mobile Phone Subscriptions: {Percentage}
+- Highspeed Internet Access: {Percentage}
 - Roads: {Number} km
 - Railways: {Number} km
 - Airports: {Number}
@@ -445,7 +479,7 @@ STATE_TEMPLATE = '''
 - {Challenge}: {DetailedDescription}
 ...
 
-# 11. Government
+# 12. Government
 ## Government System
 <!-- describe the government system in detail, including:
 - The structure, branches, and powers for each. 
@@ -460,13 +494,13 @@ STATE_TEMPLATE = '''
 - Ethnic-related Participation: {DetailedDescription}
 - Religious-related Participation: {DetailedDescription}
 
-## Policies <!-- all policy types should have at least 4 policies -->
+## Policies <!-- all policy types should have at least 4 policies, can include both "good" and "bad" policies -->
 
 ### Civil Liberties and Political Rights Policies <!-- e.g. freedom or restriction of speech, press, assembly, religion -->
 - {PolicyType}: {DetailedDescription}
 ...
 
-### Fiscal Policies <!-- e.g. tax rates, government spending priorities -->
+### Fiscal & Labor Policies <!-- e.g. tax rates, minimum wage, unemployment benefits, government spending priorities -->
 - {PolicyType}: {DetailedDescription}
 ...
 
@@ -474,15 +508,7 @@ STATE_TEMPLATE = '''
 - {PolicyType}: {DetailedDescription}
 ...
 
-### Labor Market Policies <!-- e.g. minimum wage, unemployment benefits -->
-- {PolicyType}: {DetailedDescription}
-...
-
-### Trade Policies <!-- e.g. tariffs, trade agreements -->
-- {PolicyType}: {DetailedDescription}
-...
-
-### Investment Policies <!-- e.g. domestic investment incentives, foreign investment regulations -->
+### Trade & Investment Policies <!-- e.g. tariffs, trade agreements, domestic investment incentives, foreign investment regulations -->
 - {PolicyType}: {DetailedDescription}
 ...
 
@@ -494,15 +520,7 @@ STATE_TEMPLATE = '''
 - {PolicyType}: {DetailedDescription}
 ...
 
-### Drug and Substance Control Policies <!-- e.g. drug laws, substance abuse policies -->
-- {PolicyType}: {DetailedDescription}
-...
-
-### Criminal Justice and Law Enforcement Policies <!-- e.g. police forces, prisons, courts -->
-- {PolicyType}: {DetailedDescription}
-...
-
-### Social Welfare Policies <!-- e.g. social security systems, social welfare programs -->
+### Criminal Justice Policies <!-- e.g. police forces, prisons, courts, drug laws, substance abuse policies, etc. -->
 - {PolicyType}: {DetailedDescription}
 ...
 
@@ -514,19 +532,11 @@ STATE_TEMPLATE = '''
 - {PolicyType}: {DetailedDescription}
 ...
 
-### Cultural Policies <!-- e.g. cultural policies, cultural reforms -->
+### Social & Cultural Policies <!-- e.g. social security systems, social welfare programs, equality laws, cultural policies, cultural reforms -->
 - {PolicyType}: {DetailedDescription}
 ...
 
-### Climate Policies <!-- e.g. international agreements, carbon pricing -->
-- {PolicyType}: {DetailedDescription}
-...
-
-### Pollution Control Policies <!-- e.g. industrial emissions regulations, waste management -->
-- {PolicyType}: {DetailedDescription}
-...
-
-### Conservation Policies <!-- e.g. conservation laws, environmental regulations -->
+### Environmental Policies <!-- e.g. international agreements, carbon pricing, industrial emissions regulations, waste management, conservation laws -->
 - {PolicyType}: {DetailedDescription}
 ...
 
@@ -534,7 +544,7 @@ STATE_TEMPLATE = '''
 - {PolicyType}: {DetailedDescription}
 ...
 
-### Defense, Military, and Security Policies <!-- e.g. defense budgets, military alliances, security policies, drafts -->
+### Defense Policies <!-- e.g. defense budgets, military alliances, security policies, drafts -->
 - {PolicyType}: {DetailedDescription}
 ...
 
@@ -551,9 +561,13 @@ STATE_TEMPLATE = '''
 - {Challenge}: {DetailedDescription}
 ...
 
-# 12. Public Opinion
-## Top Concerns Among Citizens
+# 13. Public Opinion
+## Top Concerns Among Citizens <!-- At least 5 concerns -->
 - {Concern}: {Percentage}
+...
+
+## Recent Headlines <!-- At least 3 recent viral headlines -->
+- "{Headline}"
 ...
 '''.strip()
 
@@ -573,8 +587,8 @@ RANDOM_TEMPLATE = '''
 - Do not use *italic* or **bold**. 
 -->
 
-# Weather Events <!-- natural phenomena affecting environment/climate -->
-- {%} No notable weather events
+# Environmental Events <!-- natural phenomena affecting environment/climate -->
+- {%} No notable environmental events
 ...
 
 # Defense & Military Events <!-- military/security incidents or developments -->
@@ -593,8 +607,8 @@ RANDOM_TEMPLATE = '''
 - {%} No notable social events
 ...
 
-# Technological Events <!-- tech/scientific developments -->
-- {%} No notable technological events
+# Infrastructure & Technology Events <!-- tech/scientific developments -->
+- {%} No notable infrastructure/technology events
 ...
 
 # International Events <!-- foreign relations/global developments by OTHER nations -->
@@ -604,29 +618,35 @@ RANDOM_TEMPLATE = '''
 
 DIFF_EXECUTIVE_TEMPLATE = '''
 <!--
-- This is a report to state leadershipof the the changes in the <state> over the last month.
+- This is a report to state leadership on the changes to the <state> over the last month.
 - Do not add nested lists or headings not specified in the template.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
 - You should include what changes, why it changes, and notable metrics that will reflect the change.
 - Focus on the most important events, some might not be that important for the leadership.
-- Some sections may be empty if nothing relevant changed.
+- Some sections may be empty if nothing relevant changed. You can re-arrange the sections to focus on the most important updates.
 -->
 
 ### Executive Summary
 
-<!-- 1 - 2 sentence dense technical overview of what happened, address to the leadership of the <state> -->
+<!-- 1 - 2 sentence dense technical overview of what *important* happened, address to the leadership of the <state> -->
 
 1. **Economy**:
-  - <!-- *Title* -->: <!-- *Description* -->
+  - <!-- *Title* -->: <!-- Description -->
   - ...
 2. **Social & Cultural**:
-  - <!-- *Title* -->: <!-- *Description* -->
+  - <!-- *Title* -->: <!-- Description -->
   - ...
 3. **Health & Crime**:
-  - <!-- *Title* -->: <!-- *Description* -->
+  - <!-- *Title* -->: <!-- Description -->
   - ...
-4. **International Relations**:
-  - <!-- *Title* -->: <!-- *Description* -->
+4. **Defense & Military**:
+  - <!-- *Title* -->: <!-- Description -->
+  - ...
+5. **Infrastructure & Technology**:
+  - <!-- *Title* -->: <!-- Description -->
+  - ...
+5. **International Relations**:
+  - <!-- *Title* -->: <!-- Description -->
   - ...
 '''.strip()
 
