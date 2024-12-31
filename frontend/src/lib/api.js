@@ -1,13 +1,15 @@
 export const API_URL =
   process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
+const TOKEN_KEY = 'state-sandbox-token';
+
 class ApiClient {
   async _post(endpoint, data) {
     const res = await fetch(`${API_URL}${endpoint}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
       },
       body: JSON.stringify(data),
     });
@@ -23,7 +25,7 @@ class ApiClient {
   async _get(endpoint) {
     const res = await fetch(`${API_URL}${endpoint}`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
       },
     });
 
@@ -39,7 +41,7 @@ class ApiClient {
     const res = await fetch(`${API_URL}${endpoint}`, {
       method: 'DELETE',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
       },
     });
 
@@ -56,7 +58,7 @@ class ApiClient {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
       },
       body: JSON.stringify(data),
     });
@@ -77,7 +79,7 @@ class ApiClient {
 
     const searchParams = new URLSearchParams({
       ...params,
-      token: localStorage.getItem('token'),
+      token: localStorage.getItem(TOKEN_KEY),
     });
 
     const eventSource = new EventSource(
@@ -102,14 +104,18 @@ class ApiClient {
     });
   }
 
-  async createAccount(username) {
-    const data = await this._post('/api/auth/create', { username });
-    localStorage.setItem('token', data.token);
+  async createAccount() {
+    const data = await this._post('/api/auth/create', {});
+    localStorage.setItem(TOKEN_KEY, data.token);
     return data.user;
   }
 
   async getCurrentUser() {
     return this._get('/api/auth/me');
+  }
+
+  async getStates() {
+    return this._get('/api/states');
   }
 }
 

@@ -3,10 +3,11 @@ from fastapi.security import APIKeyHeader
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
+import uuid
 
 from db.database import get_db
 from db.models import User
-from routers.schemas import UserCreate, UserResponse, AuthResponse
+from routers.schemas import UserResponse, AuthResponse
 from config import JWT_SECRET_KEY, JWT_EXPIRATION_DAYS
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
@@ -33,22 +34,14 @@ async def get_current_user_from_token(
 
 
 @router.post("/create", response_model=AuthResponse)
-async def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    existing_user = db.query(User).filter(User.username == user.username).first()
-    if existing_user:
-        raise HTTPException(status_code=400, detail="User already exists")
-
-    # Start transaction
+async def create_user(db: Session = Depends(get_db)):
+    username = "ss-" + str(uuid.uuid4())[:8]
     try:
-        # Create user
-        new_user = User(username=user.username)
+        new_user = User(username=username)
         db.add(new_user)
-        db.flush()  # Flush to get the user ID
-
         db.commit()
         db.refresh(new_user)
 
-        # Generate token
         token = jwt.encode(
             {
                 "sub": new_user.username,

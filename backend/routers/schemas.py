@@ -7,12 +7,9 @@ class UserBase(BaseModel):
     username: str
 
 
-class UserCreate(UserBase):
-    pass
-
-
 class UserResponse(UserBase):
     id: int
+    username: str
     created_at: datetime
     updated_at: Optional[datetime]
 
@@ -23,3 +20,13 @@ class UserResponse(UserBase):
 class AuthResponse(BaseModel):
     user: UserResponse
     token: str
+
+
+class StateResponse(BaseModel):
+    id: int
+    name: str
+    created_at: datetime
+    updated_at: Optional[datetime]
+
+    class Config:
+        from_attributes = True
