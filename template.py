@@ -12,16 +12,16 @@ STATE_TEMPLATE = '''
 - Do not include <!-- comments --> in the final output but use them as key guidance.
 -->
 
-# 1. Nation Overview
+# 1. State Overview
 ## Basic Information
-- Country Name: {NationName}
+- Country Name: {StateName}
 - Government Type: {GovernmentType}
 - Head of State/Government: {Title} <!-- role or group title, not name -->
 - Total Population: {Number} people
 - Currency: {CurrencyName} ({CurrencyCode})
 - Land Area: {Number} sq km
 
-# 2. Demographics
+# 2. People
 ## Population Distribution
 ### Age Composition
 - 0-4 years: {Percentage}
@@ -45,7 +45,7 @@ STATE_TEMPLATE = '''
 - {Sexuality}: {Percentage}
 ...
 
-### Urban vs. Rural
+### Urban-Rural Composition
 - Urban Population: {Percentage}
 - Rural Population: {Percentage}
 
@@ -59,18 +59,15 @@ STATE_TEMPLATE = '''
 
 ### Education Composition
 - No Schooling: {Percentage}
-- Some Primary Education: {Percentage} <!-- e.g. elementary school -->
-- Primary Education Complete: {Percentage}
-- Some Secondary Education: {Percentage} <!-- e.g. high school -->
-- Secondary Education Complete: {Percentage}
-- Some Tertiary Education: {Percentage} <!-- e.g. college -->
-- Tertiary Education Complete: {Percentage}
+- Primary Education Complete: {Percentage} <!-- e.g. elementary school -->
+- Secondary Education Complete: {Percentage} <!-- e.g. high school -->
+- Tertiary Education Complete: {Percentage} <!-- e.g. college -->
 - PhD or Masters: {Percentage}
 
 ### Ethnic Composition
 - {EthnicGroup}: {Percentage}
 ...
-- Two or more races: {Percentage}
+- Two or more ethnicities: {Percentage}
 - Others: {Percentage}
 
 ### Language Composition
@@ -89,53 +86,66 @@ STATE_TEMPLATE = '''
 - Religious Population Growth: {DetailedDescription}
 - Economic Class Population Growth: {DetailedDescription}
 
-### Migration
-- Immigration: {DetailedDescription}
+## Migration
+- Immigration: {DetailedDescription} <!-- e.g. legal, illegal, etc. and from where -->
 - Immigration Sentiment: {DetailedDescription} <!-- e.g. how do citizens feel about immigrants -->
 - Immigration Totals: {Number} immigrants annually
 - Emigration: {DetailedDescription}
 - Emigration Sentiment: {DetailedDescription} <!-- e.g. how do citizens feel about emigrants -->
 - Emigration Totals: {Number} emigrants annually
 
-## Standard of Living
+## People Metrics
 - Gallup World Happiness Score: {Number} out of 10
 - Access to Improved Water Sources: {Percentage}
 - Access to Improved Sanitation: {Percentage}
 - Access to Electricity: {Percentage}
 - Human Development Index (HDI): {Number}
-
-## Education
-- Education System: {DetailedDescription}
-  - {EducationLevel}: {DetailedDescription}
-  ...
-- Adult Literacy Rate: {Percentage}
-- Average Years of Schooling: {Number} years
-- Gender Parity Index in Education: {Number}
-- Ethnic Literacy: {DetailedDescription} <!-- relationship between literacy and ethnicity -->
-
-## Equality
 - Gender Inequality Index (GII): {Number} out of 1.0
 - Female Labor Force Participation Rate: {Percentage}
-- Racial/Ethnic Wage Gap: {DetailedDescription}
 - Social Mobility Index: {Number} out of 100
 - LGBTQ+ Legal Equality Index: {Number} out of 100
 
-### Social Challenges <!-- e.g. ethnic tensions, discrimination, etc. Severity and detailed description. At least 2. -->
-- {SocialChallenge}: {DetailedDescription}
+## Top People Challenges <!-- e.g. discrimination, etc. Severity and detailed description. Avoid cultural challenges. At least 2. -->
+- {Challenge}: {DetailedDescription}
 ...
 
-# 3. Health & Crime
-## Health System
-- Health System: {DetailedDescription}
-- Health Insurance: {DetailedDescription} <!-- e.g. private, public, mixed, etc. -->
-- Health Care Accessibility: {DetailedDescription} <!-- e.g. costs, wait times, etc. -->
+# 3. Education
+## Education System
+<!-- describe the education system in detail, including:
+- Levels of education
+- Types of schools
+- Funding
+- Curriculum -->
 
-### Life Expectancy
+## Literacy
+- Adult Literacy Rate: {Percentage}
+- Ethnic Literacy: {DetailedDescription} <!-- relationship between literacy and ethnicity -->
+
+## Education Metrics
+- Average Years of Schooling: {Number} years
+- Gender Parity Index in Education: {Number}
+- University Enrollment Rate: {Percentage}
+- Primary Schools: {Number}
+- Secondary Schools: {Number}
+- Universities: {Number}
+
+# 4. Health
+## Health System
+<!-- describe the health system in detail, including:
+- Insurance
+- State involvement
+- Accessibility
+- Waiting times
+- Specialized services
+- Quality -->
+
+## Life Expectancy
 - Average Life Expectancy at Birth: {Number} years
 - Male Life Expectancy: {Number} years
 - Female Life Expectancy: {Number} years
 - Ethnic Life Expectancy: {DetailedDescription} <!-- relationship between life expectancy and ethnicity -->
 
+## Health Statistics
 ### Diseases
 - Obesity: {Number} in 100,000 population
 - Mental Health: {Number} in 100,000 population
@@ -158,7 +168,7 @@ STATE_TEMPLATE = '''
 ...
 - Other Causes: {Percentage}
 
-### Health Indicators
+## Health Metrics
 - Infant Mortality Rate: {Number} per 1,000 live births
 - Total Fertility Rate: {Number} children per woman
 - Gross Reproduction Rate: {Number} female children per woman
@@ -168,42 +178,36 @@ STATE_TEMPLATE = '''
 - Hospital Bed Density: {Number} per 1,000 population
 
 ## Top Health Challenges <!-- e.g. high healthcare costs, pandemics, etc. Severity and detailed description. At least 2. -->
-- {HealthChallenge}: {DetailedDescription}
+- {Challenge}: {DetailedDescription}
 ...
 
-## Crime Statistics
-- Overall Crime Rate: {Number} per 100,000 population
-  - Homicide Rate: {Number} per 100,000 population
-  - Assault Rate: {Number} per 100,000 population
-  - Sexual Violence Rate: {Number} per 100,000 population
-  - Burglary Rate: {Number} per 100,000 population
-  - Theft Rate: {Number} per 100,000 population
-  - Fraud Rate: {Number} per 100,000 population
-  - Drug-Related Crime Rate: {Number} per 100,000 population
-  - {CrimeType} Rate: {Number} per 100,000 population
-  ...
-- Corruption Perception Index (CPI): {Number} out of 100
+# 5. Crime
+## Justice System
+<!-- describe the justice system in detail, including:
+- The role and responsibilities of the courts
+- Law enforcement
+- Prisons -->
 
-## Top Crime Challenges <!-- e.g. hate crimes, gun violence, drug violence, etc. Severity and detailed description. At least 2. -->
+## Crime Metrics
+- Homicide Rate: {Number} per 100,000 population
+- Assault Rate: {Number} per 100,000 population
+- Sexual Violence Rate: {Number} per 100,000 population
+- Burglary Rate: {Number} per 100,000 population
+- Theft Rate: {Number} per 100,000 population
+- Fraud Rate: {Number} per 100,000 population
+- Drug-Related Crime Rate: {Number} per 100,000 population
+- {CrimeType} Rate: {Number} per 100,000 population
+...
+
+## Top Crime Challenges
 - {CrimeChallenge}: {DetailedDescription}
 ...
 
-# 4. Economy
-## Economic Indicators
-- Gross Domestic Product (GDP in USD): {TotalAmountInUSD}
-- GDP Growth Rate (Annualized): {Percentage} per year
-- Credit Ratings:
-  - Standard & Poor's: {RatingLetters}
-  - Moody's: {RatingLetters}
-  - Fitch: {RatingLetters}
-- Unemployment Rate: {Percentage}
-- Labor Force Participation Rate: {Percentage} <!-- % people ages 15 or older who are employed or seeking work -->
-- Poverty Rate: {Percentage}
-- Inflation Rate (Annualized): {Percentage}
-- Gini Coefficient: {Number} out of 1.0
-- Average Income: {TotalAmountInUSD} per person
-- Economic Trends: {DetailedDescription} <!-- e.g. economic growth, recession, etc. -->
-- Public Economic Sentiment: {DetailedDescription}
+# 6. Economy
+## Economic System
+<!-- describe the economic system in detail, including:
+- The role and responsibilities of the government, the private sector, and the market 
+- The role of the central bank (if any) -->
 
 ## Industry Ownership <!-- some of these may be zero -->
 - Private Sector: {Percentage} of GDP
@@ -257,14 +261,10 @@ STATE_TEMPLATE = '''
 - {Sector}: {Percentage}
 ...
 
-## Economic Challenges <!-- e.g. unemployment, inflation, etc. Severity and detailed description. At least 2. -->
-- {EconomicChallenge}: {DetailedDescription}
-...
-
 ## Government Budget
 ### Revenue
-- Total Revenue: {TotalAmountInUSD} <!-- note that some of these could be zero -->
-  - Income Tax: {Percentage}
+- Total Revenue: {TotalAmountInUSD} 
+  - Income Tax: {Percentage} <!-- note that some of these could be zero -->
   - Corporate Tax: {Percentage}
   - Sales Tax/VAT: {Percentage} 
   - Property Tax: {Percentage}
@@ -281,8 +281,8 @@ STATE_TEMPLATE = '''
   - Other Revenue Sources: {Percentage}
 
 ### Expenditure
-- Total Expenditure: {TotalAmountInUSD} <!-- note that some of these could be zero -->
-  - Healthcare Expenditure: {Percentage}
+- Total Expenditure: {TotalAmountInUSD} 
+  - Healthcare Expenditure: {Percentage} <!-- note that some of these could be zero -->
   - Education Expenditure: {Percentage}
   - Defense and Military Expenditure: {Percentage}
   - Infrastructure Expenditure: {Percentage}
@@ -294,9 +294,9 @@ STATE_TEMPLATE = '''
   - Debt Service (Interest Payments) Expenditure: {Percentage}
   - {ExpenditureCategory}: {Percentage}
   ...
-- National Debt: {TotalAmountInUSD}
 
 ## Trade <!-- good types include electronics, rare metals, grain, oil, etc. at least 5 imports and 5 exports -->
+### Imports and Exports
 - Total Exports: {TotalAmountInUSD}
   - Exports of {GoodType}: {Percentage}
   ...
@@ -306,7 +306,7 @@ STATE_TEMPLATE = '''
   ...
   - Other Imports: {Percentage}
 
-### Main Trading Partners
+### Trade Partners
 - Export Partners
   - {Country}: {Percentage}
   ...
@@ -316,71 +316,62 @@ STATE_TEMPLATE = '''
   ...
   - Other Import Partners: {Percentage}
 
-## Exchange Rate <!-- only for USD -->
-- {LocalCurrency}/USD = {ExchangeRate}
+## Credit Ratings
+- Standard & Poor's: {RatingLetters}
+- Moody's: {RatingLetters}
+- Fitch: {RatingLetters}
 
-# 5. Military
-### Military Organization
-- Military Structure: {DetailedDescription}
-  - {SubgroupOrBranchName}: {DetailedDescription}
-  ...
-- Public Military Sentiment: {DetailedDescription}
+## Economic Metrics
+- Gross Domestic Product (GDP in USD): {TotalAmountInUSD}
+- GDP Growth Rate: {Percentage} per year
+- Unemployment Rate: {Percentage}
+- Labor Force Participation Rate: {Percentage} <!-- % people ages 15 or older who are employed or seeking work -->
+- Poverty Rate: {Percentage}
+- Inflation Rate: {Percentage}
+- Gini Coefficient: {Number} out of 1.0
+- Average Income: {TotalAmountInUSD} per person
+- Public Economic Sentiment: {DetailedDescription}
+- Exchange Rate: {LocalCurrency}/USD = {ExchangeRate}
+- Population with Optimistic Perception of Economic Future: {Percentage}
 
-## Capabilities
-### Personnel <!-- e.g. active duty, reserve, national guard, etc. -->
-- {PersonnelType}: {Number}
+## Top Economic Challenges <!-- e.g. unemployment, inflation, etc. Severity and detailed description. At least 2. -->
+- {Challenge}: {DetailedDescription}
 ...
 
-### Equipment <!-- Be sure to include the {Number} for each equipment type, for some this may be zero. -->
-- Air Force Equipment
-  - Fighter Jets: {Number}
-  - Bombers: {Number}
-  - Stealth Bombers: {Number}
-  - UAVs: {Number}
-  - Helicopters: {Number}
-  - Transport Aircraft: {Number}
-  - {EquipmentType}: {Number}
-  ...
-- Naval Equipment
-  - Aircraft Carriers: {Number}
-  - Nuclear Submarines: {Number}
-  - Destroyers: {Number}
-  - Frigates: {Number}
-  - {EquipmentType}: {Number}
-  ...
-- Ground Forces Equipment
-  - Tanks: {Number}
-  - Artillery Systems: {Number}
-  - Infantry Fighting Vehicles: {Number}
-  - Armored Personnel Carriers: {Number}
-  - {EquipmentType}: {Number}
-  ...
-- Strategic Forces
-  - Nuclear ICMBs: {Number}
-  - Ballistic Missiles: {Number}
-  - Anti-Ballistic Missile Systems: {Number}
-  - {EquipmentType}: {Number}
-  ...
-- Cyber and Electronic Warfare
-  - Cyber Defense Specialists: {Number}
-  - {EquipmentType}: {Number}
-  ...
-- Space Assets
-  - Reconnaissance Satellites: {Number}
-  - Communication Satellites: {Number}
-  - {EquipmentType}: {Number}
-  ...
+# 7. Military and Defense
+## Military System
+<!-- describe the military system in detail in markdown, including:
+- The structure, branches, and capabilities -->
 
-### Security Challenges <!-- e.g. terrorism, cyber threats, organized crime, etc. Include risk level and detailed description. At least 2. -->
-- {ThreatTypeOrGroup}: {DetailedDescription}
+## Military Metrics
+- Active Duty Personnel: {Number}
+- Reserve Personnel: {Number}
+- Fighter Jets: {Number}
+- Bombers: {Number}
+- UAVs: {Number}
+- Helicopters: {Number}
+- Transport Aircraft: {Number}
+- Aircraft Carriers: {Number}
+- Nuclear Submarines: {Number}
+- Destroyers: {Number}
+- Frigates: {Number}
+- Tanks: {Number}
+- Artillery Systems: {Number}
+- Infantry Fighting Vehicles: {Number}
+- Armored Personnel Carriers: {Number}
+- Nuclear ICMBs: {Number}
+- Ballistic Missiles: {Number}
+- Anti-Ballistic Missile Systems: {Number}
+- Cyber Defense Specialists: {Number}
+- Reconnaissance Satellites: {Number}
+- Communication Satellites: {Number}
+
+### Top Defense Challenges <!-- e.g. terrorism, cyber threats, organized crime, etc. Include risk level and detailed description. At least 2. -->
+- {Challenge}: {DetailedDescription}
 ...
 
-# 6. Media
-## Media Landscape
-- Press Freedom Index: {Number} out of 100
-- Media Ownership: {DetailedDescription}
-
-### Major Media Outlets <!-- avoid mentioning proper nouns, just types -->
+# 8. Media
+## Media Outlets <!-- avoid mentioning proper nouns, just types -->
 - {MediaType}: {DetailedDescription}
 ...
 
@@ -388,12 +379,14 @@ STATE_TEMPLATE = '''
 - {MediaIssue}: {Percentage}
 ...
 
-### Digital Media
+## Media Metrics
+- Press Freedom Index: {Number} out of 100
+- Media Ownership: {DetailedDescription}
 - Digital Divide Index (Infrastructure): {Number} out of 100
 - Digital Divide Index (Socioeconomic): {Number} out of 100
 - Social Media Usage: {Percentage}
 
-# 7. Culture
+# 9. Culture
 ## Cultural Identity
 ### Cultural Values
 - Traditional Values: {DetailedDescription}
@@ -407,39 +400,30 @@ STATE_TEMPLATE = '''
 - {SportOrActivity}: {DetailedDescription}
 ...
 
-## Cultural Influence
+## Cultural Metrics
 - Soft Power Index: {Number} of 100
 - International Cultural Centers: {Number}
 - Cultural Exchange Programs: {DetailedDescription}
 
-# 8. Infrastructure and Technology
-## Transportation Infrastructure <!-- include status, quality, and quantity -->
-- Road Network: {DetailedDescription}
-- Public Transport: {DetailedDescription}
-- Railways: {DetailedDescription}
-- Airports: {DetailedDescription}
-- Ports and Harbors: {DetailedDescription}
-- {InfrastructureType}: {DetailedDescription}
+## Top Cultural Challenges <!-- e.g. cultural preservation, cultural diversity, etc. Severity and detailed description. At least 2. -->
+- {Challenge}: {DetailedDescription}
 ...
 
-## Energy Infrastructure
-- Total Electricity Generation: {Megawatts}
-  - Natural Gas: {Percentage}
-  - Renewable Energy: {Percentage}
-  - Nuclear Energy: {Percentage}
-  - Coal: {Percentage}
-  - Hydroelectric: {Percentage}
-  - {EnergySource}: {Percentage}
-  ...
+# 10. Infrastructure and Technology
+## Transportation Infrastructure
+<!-- describe the transportation infrastructure in detail, including:
+- Status, quality, and quantity of roads, public transport, railways, airports, ports and harbors. -->
 
-## Telecommunications
-- Mobile Phone Subscriptions: {Number} per 100 inhabitants
-- Highspeed Internet Access: {Number} per 100 inhabitants
+## Energy Sources
+- Natural Gas: {Percentage}
+- Renewable Energy: {Percentage}
+- Nuclear Energy: {Percentage}
+- Coal: {Percentage}
+- Hydroelectric: {Percentage}
+- {EnergySource}: {Percentage}
+...
 
-## Technology and Innovation
-- R&D Expenditure: {Percentage} of GDP
-
-### Technologies
+## Technologies
 - Artificial Intelligence: {DetailedDescription}
 - Quantum Computing: {DetailedDescription}
 - Robotics: {DetailedDescription}
@@ -448,21 +432,33 @@ STATE_TEMPLATE = '''
 - {Technology}: {DetailedDescription}
 ...
 
-### Infrastructure Challenges <!-- e.g. infrastructure decay, lack of infrastructure, etc. Severity and detailed description. At least 2. -->
-- {InfrastructureChallenge}: {DetailedDescription}
+## Infrastucture Metrics
+- Total Electricity Generation: {Megawatts}
+- Mobile Phone Subscriptions: {Number} per 100 inhabitants
+- Highspeed Internet Access: {Number} per 100 inhabitants
+- Roads: {Number} km
+- Railways: {Number} km
+- Airports: {Number}
+- Ports and Harbors: {Number}
+
+## Infrastructure Challenges <!-- e.g. infrastructure decay, lack of infrastructure, etc. Severity and detailed description. At least 2. -->
+- {Challenge}: {DetailedDescription}
 ...
 
-# 9. Government 
-## Government Structure
-- Government Structure: {DetailedDescription}
-- Key Governing Documents: {DetailedDescription} <!-- what they are and what they are about -->
-- Political Parties: {DetailedDescription}
-- Electoral System: {DetailedDescription} <!-- e.g. how elections are conducted (if any), who can vote, etc. -->
-- Citizenship: {DetailedDescription} <!-- e.g. how to become a citizen, requirements, etc. -->
+# 11. Government
+## Government System
+<!-- describe the government system in detail, including:
+- The structure, branches, and powers for each. 
+- Governing documents, 
+- Political parties, 
+- Electoral system, 
+- Citizenship process. -->
 
-## Government Powers
-- {GovernmentBranchOrRole}: {DetailedDescription} <!-- be detailed about what they can and cannot do -->
-...
+## Political Participation
+- Age-related Participation: {DetailedDescription}
+- Gender-related Participation: {DetailedDescription}
+- Ethnic-related Participation: {DetailedDescription}
+- Religious-related Participation: {DetailedDescription}
 
 ## Policies <!-- all policy types should have at least 4 policies -->
 
@@ -546,21 +542,19 @@ STATE_TEMPLATE = '''
 - {PolicyType}: {DetailedDescription}
 ...
 
-# 10. Public Opinion
+## Government Metrics
+- Corruption Perception Index (CPI): {Number} out of 100
+- Direction of Country: {Percentage} believe country is on right track
+- Overall Head of State/Government Approval Rating: {Percentage}
+
+## Top Government Challenges <!-- e.g. corruption, political instability, etc. Severity and detailed description. At least 2. -->
+- {Challenge}: {DetailedDescription}
+...
+
+# 12. Public Opinion
 ## Top Concerns Among Citizens
 - {Concern}: {Percentage}
 ...
-
-## Political Participation
-- Age-related Participation: {DetailedDescription}
-- Gender-related Participation: {DetailedDescription}
-- Ethnic-related Participation: {DetailedDescription}
-- Religious-related Participation: {DetailedDescription}
-
-## Latest Polling Data
-- Optimistic Perception of Economic Future: {Percentage}
-- Direction of Country: {Percentage} believe country is on right track
-- Overall Head of State/Government Approval Rating: {Percentage}
 '''.strip()
 
 RANDOM_TEMPLATE = '''
