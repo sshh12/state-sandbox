@@ -4,7 +4,7 @@ STATE_TEMPLATE = '''
 - You are expected to fill out ALL the fields in the template and keep ALL default attributes.
 - Format {Number} like: 123, ~123 million, 0.12, etc. Do not use a percentage or relative values.
 - Format {Percentage} like: 12%, ~12%, < 0.1%, etc. You should include a percentage sign.
-- Format {DetailedDescription} with 1-3 concise sentences. Use technical terms.
+- Format {DetailedDescription} with 1-3 concise sentences. Use technical terms and avoid filler words.
 - Format {TotalAmountInUSD} monetary amounts in USD.
 - Certain policies, descriptions, and values the answer may be "N/A due to...". For metrics that should exist, but you don't know, use your best guess.
 - Do not use *italic* or **bold**. 
@@ -120,7 +120,7 @@ STATE_TEMPLATE = '''
 - Social Mobility Index: {Number} out of 100
 - LGBTQ+ Legal Equality Index: {Number} out of 100
 
-### Social Challenges <!-- e.g. ethnic tensions, discrimination, etc. -->
+### Social Challenges <!-- e.g. ethnic tensions, discrimination, etc. Severity and detailed description. At least 2. -->
 - {SocialChallenge}: {DetailedDescription}
 ...
 
@@ -167,7 +167,7 @@ STATE_TEMPLATE = '''
 - Physician Density: {Number} per 1,000 population
 - Hospital Bed Density: {Number} per 1,000 population
 
-## Health Challenges <!-- e.g. high healthcare costs, pandemics, etc. -->
+## Top Health Challenges <!-- e.g. high healthcare costs, pandemics, etc. Severity and detailed description. At least 2. -->
 - {HealthChallenge}: {DetailedDescription}
 ...
 
@@ -184,7 +184,7 @@ STATE_TEMPLATE = '''
   ...
 - Corruption Perception Index (CPI): {Number} out of 100
 
-## Crime Challenges <!-- e.g. hate crimes, gun violence, drug violence, etc. -->
+## Top Crime Challenges <!-- e.g. hate crimes, gun violence, drug violence, etc. Severity and detailed description. At least 2. -->
 - {CrimeChallenge}: {DetailedDescription}
 ...
 
@@ -197,6 +197,7 @@ STATE_TEMPLATE = '''
   - Moody's: {RatingLetters}
   - Fitch: {RatingLetters}
 - Unemployment Rate: {Percentage}
+- Labor Force Participation Rate: {Percentage} <!-- % people ages 15 or older who are employed or seeking work -->
 - Poverty Rate: {Percentage}
 - Inflation Rate (Annualized): {Percentage}
 - Gini Coefficient: {Number} out of 1.0
@@ -227,36 +228,36 @@ STATE_TEMPLATE = '''
 ...
 
 ### Sector Contributions to GDP
-- Agriculture: {Percentage} of GDP
-- Services: {Percentage} of GDP
-- Manufacturing: {Percentage} of GDP
-- Construction: {Percentage} of GDP
-- Mining: {Percentage} of GDP
-- Financial Services: {Percentage} of GDP
-- Real Estate: {Percentage} of GDP
-- Technology: {Percentage} of GDP
-- Transportation: {Percentage} of GDP
-- Wholesale and Retail Trade: {Percentage} of GDP
-- Tourism and Hospitality: {Percentage} of GDP
-- {Sector}: {Percentage} of GDP
+- Agriculture: {Percentage} <!-- percentage of GDP -->
+- Services: {Percentage}
+- Manufacturing: {Percentage}
+- Construction: {Percentage}
+- Mining: {Percentage}
+- Financial Services: {Percentage}
+- Real Estate: {Percentage}
+- Technology: {Percentage}
+- Transportation: {Percentage}
+- Wholesale and Retail Trade: {Percentage}
+- Tourism and Hospitality: {Percentage}
+- {Sector}: {Percentage}
 ...
 
 ### Employment by Sector
-- Agriculture: {Percentage} of workforce
-- Services: {Percentage} of workforce
-- Manufacturing: {Percentage} of workforce
-- Construction: {Percentage} of workforce
-- Mining: {Percentage} of workforce
-- Financial Services: {Percentage} of workforce
-- Real Estate: {Percentage} of workforce
-- Technology: {Percentage} of workforce
-- Transportation: {Percentage} of workforce
-- Wholesale and Retail Trade: {Percentage} of workforce
-- Tourism and Hospitality: {Percentage} of workforce
-- {Sector}: {Percentage} of workforce
+- Agriculture: {Percentage} <!-- percentage of workforce -->
+- Services: {Percentage}
+- Manufacturing: {Percentage}
+- Construction: {Percentage}
+- Mining: {Percentage}
+- Financial Services: {Percentage}
+- Real Estate: {Percentage}
+- Technology: {Percentage}
+- Transportation: {Percentage}
+- Wholesale and Retail Trade: {Percentage}
+- Tourism and Hospitality: {Percentage}
+- {Sector}: {Percentage}
 ...
 
-## Economic Challenges <!-- e.g. unemployment, inflation,etc. -->
+## Economic Challenges <!-- e.g. unemployment, inflation, etc. Severity and detailed description. At least 2. -->
 - {EconomicChallenge}: {DetailedDescription}
 ...
 
@@ -330,27 +331,34 @@ STATE_TEMPLATE = '''
 - {PersonnelType}: {Number}
 ...
 
-### Equipment <!-- Be sure to include the {Number} for each equipment type, for some this may be zero. Every group should have at least 5 equipment types. -->
+### Equipment <!-- Be sure to include the {Number} for each equipment type, for some this may be zero. -->
 - Air Force Equipment
   - Fighter Jets: {Number}
+  - Bombers: {Number}
   - Stealth Bombers: {Number}
   - UAVs: {Number}
+  - Helicopters: {Number}
+  - Transport Aircraft: {Number}
   - {EquipmentType}: {Number}
   ...
 - Naval Equipment
   - Aircraft Carriers: {Number}
   - Nuclear Submarines: {Number}
   - Destroyers: {Number}
+  - Frigates: {Number}
   - {EquipmentType}: {Number}
   ...
 - Ground Forces Equipment
   - Tanks: {Number}
   - Artillery Systems: {Number}
+  - Infantry Fighting Vehicles: {Number}
+  - Armored Personnel Carriers: {Number}
   - {EquipmentType}: {Number}
   ...
 - Strategic Forces
   - Nuclear ICMBs: {Number}
   - Ballistic Missiles: {Number}
+  - Anti-Ballistic Missile Systems: {Number}
   - {EquipmentType}: {Number}
   ...
 - Cyber and Electronic Warfare
@@ -359,10 +367,11 @@ STATE_TEMPLATE = '''
   ...
 - Space Assets
   - Reconnaissance Satellites: {Number}
+  - Communication Satellites: {Number}
   - {EquipmentType}: {Number}
   ...
 
-### Security Challenges <!-- e.g. terrorism, cyber threats, organized crime, etc. Include risk level and detailed description. At least 3. -->
+### Security Challenges <!-- e.g. terrorism, cyber threats, organized crime, etc. Include risk level and detailed description. At least 2. -->
 - {ThreatTypeOrGroup}: {DetailedDescription}
 ...
 
@@ -380,8 +389,8 @@ STATE_TEMPLATE = '''
 ...
 
 ### Digital Media
-- Digital Divide Index - Infrastructure: {Number} out of 100
-- Digital Divide Index - Socioeconomic: {Number} out of 100
+- Digital Divide Index (Infrastructure): {Number} out of 100
+- Digital Divide Index (Socioeconomic): {Number} out of 100
 - Social Media Usage: {Percentage}
 
 # 7. Culture
@@ -389,10 +398,10 @@ STATE_TEMPLATE = '''
 ### Cultural Values
 - Traditional Values: {DetailedDescription}
 - Family Values: {DetailedDescription}
-- Work Ethics: {DetailedDescription}
-- Gender Roles: {DetailedDescription}
-- Individualism vs Collectivism: {DetailedDescription}
+- Work Values: {DetailedDescription}
+- Gender Values: {DetailedDescription}
 - Religious Values: {DetailedDescription}
+- Individualism vs Collectivism: {DetailedDescription}
 
 ### Sports and Recreation
 - {SportOrActivity}: {DetailedDescription}
@@ -410,7 +419,7 @@ STATE_TEMPLATE = '''
 - Cultural Festivals: {Number}
 
 # 8. Infrastructure and Technology
-## Transportation Infrastructure <!-- avoid mentioning proper nouns -->
+## Transportation Infrastructure <!-- include status, quality, and quantity -->
 - Road Network: {DetailedDescription}
 - Public Transport: {DetailedDescription}
 - Railways: {DetailedDescription}
@@ -430,8 +439,6 @@ STATE_TEMPLATE = '''
   ...
 
 ## Telecommunications
-- Internet Penetration Rate: {Number} per 100 inhabitants
-- Broadband Subscriptions: {Number} per 100 inhabitants
 - Mobile Phone Subscriptions: {Number} per 100 inhabitants
 - Highspeed Internet Access: {Number} per 100 inhabitants
 
@@ -447,7 +454,7 @@ STATE_TEMPLATE = '''
 - {Technology}: {DetailedDescription}
 ...
 
-### Infrastructure Challenges <!-- e.g. infrastructure decay, lack of infrastructure, etc. -->
+### Infrastructure Challenges <!-- e.g. infrastructure decay, lack of infrastructure, etc. Severity and detailed description. At least 2. -->
 - {InfrastructureChallenge}: {DetailedDescription}
 ...
 
@@ -456,7 +463,8 @@ STATE_TEMPLATE = '''
 - Government Structure: {DetailedDescription}
 - Key Governing Documents: {DetailedDescription} <!-- what they are and what they are about -->
 - Political Parties: {DetailedDescription}
-- Electoral System: {DetailedDescription}
+- Electoral System: {DetailedDescription} <!-- e.g. how elections are conducted (if any), who can vote, etc. -->
+- Citizenship: {DetailedDescription} <!-- e.g. how to become a citizen, requirements, etc. -->
 
 ## Government Powers
 - {GovernmentBranchOrRole}: {DetailedDescription} <!-- be detailed about what they can and cannot do -->
@@ -559,4 +567,48 @@ STATE_TEMPLATE = '''
 - Optimistic Perception of Economic Future: {Percentage}
 - Direction of Country: {Percentage} believe country is on right track
 - Overall Head of State/Government Approval Rating: {Percentage}
+'''
+
+RANDOM_TEMPLATE = '''
+<!--
+- Event categories must be mutually exclusive and must include a first no-event category.
+- Events can be good, bad, or mixed.
+- Probabilities and events should be influenced and personalized by the <state>.
+- Probabilities must be as real-world realistic as possible.
+- Include varients of events (e.g. Cat 1 Hurricane, Cat 2 Hurricane, etc.) or joint events (e.g. Hurricane + Earthquake).
+- Include at least 10 events per category.
+- Events should be UNRELATED to the government (no new policies, laws, etc.).
+- Events should be consise and unambiguous (no "... changes", it should state what the change is).
+- Events that last longer than a month should be stated as "starts" (or existing events "ends").
+- Do not add nested lists or headings not specified in the template.
+- Do not include <!-- comments --> in the final output but use them as key guidance.
+-->
+
+# Weather Events <!-- natural phenomena affecting environment/climate -->
+- {%} No notable events
+...
+
+# Defense & Military Events <!-- military/security incidents or developments -->
+- {%} No notable events
+...
+
+# Economic Events <!-- major financial/market/business developments -->
+- {%} No notable events
+...
+
+# Heath Events <!-- public health/medical developments -->
+- {%} No notable events
+...
+
+# Cultural & Social Events <!-- societal/cultural developments -->
+- {%} No notable events
+...
+
+# Technological Events <!-- tech/scientific developments -->
+- {%} No notable events
+...
+
+# International Events <!-- foreign relations/global developments by OTHER nations -->
+- {%} No notable events
+...
 '''
