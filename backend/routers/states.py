@@ -61,4 +61,5 @@ async def get_state_snapshots(
     snapshots = db.query(StateSnapshot).filter(StateSnapshot.state_id == state_id).all()
     for snapshot in snapshots:
         snapshot.json_state = parse_state(snapshot.markdown_state)
+        snapshot.json_state["date"] = snapshot.date
     return snapshots

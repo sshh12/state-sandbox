@@ -36,7 +36,17 @@ export default function StatePage({ stateId }) {
           </div>
           <div className="flex items-center space-x-2">
             <button className="bg-black text-white px-4 py-2 rounded-md">
-              Play
+              Play (
+              {latest?.date
+                ? new Date(latest.date + 'T00:00:00').toLocaleDateString(
+                    'en-US',
+                    {
+                      month: 'short',
+                      year: 'numeric',
+                    }
+                  )
+                : null}
+              )
             </button>
           </div>
         </div>

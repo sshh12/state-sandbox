@@ -8,7 +8,7 @@ RUN npm install --force
 
 COPY frontend/ .
 
-ENV NEXT_PUBLIC_API_URL=https://states.sshh.io
+ENV NEXT_PUBLIC_API_URL=https://state.sshh.io
 
 RUN npm run build
 
