@@ -1,6 +1,9 @@
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Overview } from '@/components/dashboard/overview';
 import { RecentSales } from '@/components/dashboard/recent-sales';
+import { DatePickerWithRange } from '@/components/ui/date-picker';
 
 export default function DashboardPage() {
   return (
@@ -8,9 +11,7 @@ export default function DashboardPage() {
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
         <div className="flex items-center space-x-2">
-          <div className="text-sm text-muted-foreground">
-            Jan 20, 2023 - Feb 09, 2023
-          </div>
+          <DatePickerWithRange />
           <button className="bg-black text-white px-4 py-2 rounded-md">
             Download
           </button>
