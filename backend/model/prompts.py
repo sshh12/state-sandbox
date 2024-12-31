@@ -1,4 +1,4 @@
-STATE_TEMPLATE = '''
+STATE_TEMPLATE = """
 <!--
 - Follow the template exactly. Filling in {values}, keeping text outside of brackets, and replacing ...s.
 - You are expected to fill out ALL the fields in the template and keep ALL default attributes.
@@ -569,9 +569,9 @@ STATE_TEMPLATE = '''
 ## Recent Headlines <!-- At least 3 recent viral headlines -->
 - "{Headline}"
 ...
-'''.strip()
+""".strip()
 
-RANDOM_TEMPLATE = '''
+RANDOM_TEMPLATE = """
 <!--
 - Event categories must be mutually exclusive and must include a first no-event category.
 - Events can be good, bad, or mixed.
@@ -614,9 +614,9 @@ RANDOM_TEMPLATE = '''
 # International Events <!-- foreign relations/global developments by OTHER nations -->
 - {%} No notable international events
 ...
-'''.strip()
+""".strip()
 
-DIFF_EXECUTIVE_TEMPLATE = '''
+DIFF_EXECUTIVE_TEMPLATE = """
 <!--
 - This is a report to state leadership on the changes to the <state> over the last month.
 - Do not add nested lists or headings not specified in the template.
@@ -648,9 +648,9 @@ DIFF_EXECUTIVE_TEMPLATE = '''
 5. **International Relations**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-'''.strip()
+""".strip()
 
-DIFF_TEMPLATE = '''
+DIFF_TEMPLATE = """
 <!--
 - Detailed line-by-line diff of the <state>. ALL items in <state> should be included.
 - Note both what changes and what didn't change. ALL changes should include at least a brief explanation.
@@ -666,4 +666,4 @@ Key: Value (no change) <!-- example of no change -->
 Key: (new) Value (due to ...) <!-- example of a new field that was added to a list -->
 (removed Key due to ...) <!-- example of a field that was removed from a list -->
 ...
-'''.strip()
+""".strip()

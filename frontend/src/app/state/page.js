@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Overview } from '@/components/dashboard/overview';
 import { RecentSales } from '@/components/dashboard/recent-sales';
@@ -11,8 +12,15 @@ import {
   DeviceUsageChart,
   DeviceDistributionChart,
 } from '@/components/dashboard/charts';
+import { api } from '@/lib/api';
 
 export default function StatePage({ stateId }) {
+  const [snapshots, setSnapshots] = useState([]);
+
+  useEffect(() => {
+    api.getStateSnapshots(stateId).then(setSnapshots);
+  }, [stateId]);
+
   return (
     <div className="flex flex-col min-h-screen">
       <DashboardNav />

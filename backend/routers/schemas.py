@@ -40,3 +40,13 @@ class QuestionInput(BaseModel):
 class CreateStateRequest(BaseModel):
     name: str
     questions: List[QuestionInput]
+
+
+class StateSnapshotResponse(BaseModel):
+    id: int
+    date: str
+    markdown_state: str
+    state_id: int
+
+    class Config:
+        from_attributes = True

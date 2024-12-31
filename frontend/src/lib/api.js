@@ -118,6 +118,10 @@ class ApiClient {
     return this._get('/api/states');
   }
 
+  async getStateSnapshots(stateId) {
+    return this._get(`/api/states/${stateId}/snapshots`);
+  }
+
   async createState(name, questions) {
     return this._post('/api/states', { name, questions });
   }

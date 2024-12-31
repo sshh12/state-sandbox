@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
-from pydantic import BaseModel
 
 from db.database import get_db
-from db.models import State, User
-from routers.schemas import StateResponse, CreateStateRequest
+from db.models import State, StateSnapshot, User
+from routers.schemas import StateResponse, CreateStateRequest, StateSnapshotResponse
 from routers.auth import get_current_user_from_token
+from model.actions import generate_state
 
 router = APIRouter(prefix="/api/states", tags=["states"])
 
@@ -26,17 +26,33 @@ async def create_state(
     current_user: User = Depends(get_current_user_from_token),
     db: Session = Depends(get_db),
 ):
-    print(f"Name: {request.name}")
-    print("Questions:")
-    for q in request.questions:
-        print(f"- {q.question}: {q.value}")
-
     state = State(
-        name="My Country",
+        name=request.name,
         user_id=current_user.id,
     )
     db.add(state)
+    db.flush()
+
+    date = "2022-01"
+    questions = [(q.question, q.value) for q in request.questions]
+    state_snapshot = StateSnapshot(
+        date=date,
+        state_id=state.id,
+        markdown_state=await generate_state(
+            date=date, name=request.name, questions=questions
+        ),
+    )
+    db.add(state_snapshot)
     db.commit()
     db.refresh(state)
 
     return state
+
+
+@router.get("/{state_id}/snapshots", response_model=List[StateSnapshotResponse])
+async def get_state_snapshots(
+    state_id: int,
+    db: Session = Depends(get_db),
+):
+    snapshots = db.query(StateSnapshot).filter(StateSnapshot.state_id == state_id).all()
+    return snapshots

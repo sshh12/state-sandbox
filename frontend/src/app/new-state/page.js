@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 
@@ -37,9 +37,34 @@ const ratingOptions = [
   },
 ];
 
+const loadingMessages = [
+  'Designing the flag...',
+  'Recruiting an army...',
+  'Establishing government...',
+  'Writing the constitution...',
+  'Building infrastructure...',
+  'Training diplomats...',
+  'Setting up the economy...',
+  'Founding the capital city...',
+  'Minting currency...',
+  'Creating national parks...',
+  'Composing national anthem...',
+  'Establishing time zones...',
+  'Drawing border lines...',
+  'Setting up postal service...',
+  'Designing official seals...',
+  'Planting national tree...',
+  'Choosing national bird...',
+  'Building parliament...',
+  'Training civil servants...',
+  'Establishing courts...',
+];
+
 export default function NewState() {
   const [ratings, setRatings] = useState({});
   const [countryName, setCountryName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
   const router = useRouter();
 
   const isFormValid = useMemo(() => {
@@ -49,10 +74,21 @@ export default function NewState() {
     );
   }, [countryName, ratings]);
 
+  useEffect(() => {
+    let interval;
+    if (isLoading) {
+      interval = setInterval(() => {
+        setLoadingMessageIndex((prev) => (prev + 1) % loadingMessages.length);
+      }, 3000); // Change message every 2 seconds
+    }
+    return () => clearInterval(interval);
+  }, [isLoading]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isFormValid) return;
 
+    setIsLoading(true);
     try {
       const questionData = questions.map((question, index) => ({
         question,
@@ -60,10 +96,11 @@ export default function NewState() {
       }));
 
       const state = await api.createState(countryName, questionData);
-      router.push(`/states/${state.id}`);
+      router.push(`/state/${state.id}`);
     } catch (error) {
       console.error('Failed to create state:', error);
-      // TODO: Add proper error handling UI
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -138,9 +175,9 @@ export default function NewState() {
                 'w-full h-11 mt-8',
                 !isFormValid && 'opacity-50 cursor-not-allowed'
               )}
-              disabled={!isFormValid}
+              disabled={!isFormValid || isLoading}
             >
-              Create
+              {isLoading ? loadingMessages[loadingMessageIndex] : 'Create'}
             </Button>
           </form>
         </div>

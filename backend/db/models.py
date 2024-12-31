@@ -28,5 +28,21 @@ class State(TimestampMixin, Base):
     name = Column(String, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
-    # Relationship to User
+    # Relationships
     user = relationship("User", back_populates="states")
+    snapshots = relationship("StateSnapshot", back_populates="state")
+
+
+class StateSnapshot(TimestampMixin, Base):
+    __tablename__ = "state_snapshots"
+
+    id = Column(Integer, primary_key=True, index=True)
+    date = Column(String, nullable=False)  # Format: YYYY-MM
+    state_id = Column(Integer, ForeignKey("states.id"), nullable=False)
+
+    markdown_state = Column(String, nullable=False)
+    markdown_random_events = Column(String, nullable=True)
+    markdown_delta = Column(String, nullable=True)
+
+    # Relationship to State
+    state = relationship("State", back_populates="snapshots")

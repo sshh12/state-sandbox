@@ -14,4 +14,9 @@ DB_POOL_RECYCLE = _int_env("DB_POOL_RECYCLE", 1800)  # 30 minutes in seconds
 
 # Secrets configuration
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", secrets.token_urlsafe(32))
-JWT_EXPIRATION_DAYS = _int_env("JWT_EXPIRATION_DAYS", 10_000)  # We don't have a sign back in feature
+JWT_EXPIRATION_DAYS = _int_env(
+    "JWT_EXPIRATION_DAYS", 10_000
+)  # We don't have a sign back in feature
+
+# OpenAI configuration
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
