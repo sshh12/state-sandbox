@@ -23,14 +23,14 @@ STATE_TEMPLATE = '''
 
 # 2. Demographics
 ## Population Distribution
-### Age Groups
-- 0-4 years: {Number}
-- 5-17 years: {Number}
-- 18-24 years: {Number}
-- 25-44 years: {Number}
-- 45-64 years: {Number}
-- 65-74 years: {Number}
-- 75+ years: {Number}
+### Age Composition
+- 0-4 years: {Percentage}
+- 5-17 years: {Percentage}
+- 18-24 years: {Percentage}
+- 25-44 years: {Percentage}
+- 45-64 years: {Percentage}
+- 65-74 years: {Percentage}
+- 75+ years: {Percentage}
 
 ### Gender Composition
 - Male: {Percentage}
@@ -148,15 +148,15 @@ STATE_TEMPLATE = '''
 ...
 
 ### Causes of Death
-- Heart Disease: {Percentage} of deaths
-- Cancer: {Percentage} of deaths
-- Stroke: {Percentage} of deaths
-- Diabetes: {Percentage} of deaths
-- Accidents: {Percentage} of deaths
-- Suicide: {Percentage} of deaths
-- {CauseOfDeath}: {Percentage} of deaths
+- Heart Disease: {Percentage} <!-- percentage of deaths -->
+- Cancer: {Percentage}
+- Stroke: {Percentage}
+- Diabetes: {Percentage}
+- Accidents: {Percentage}
+- Suicide: {Percentage}
+- {CauseOfDeath}: {Percentage}
 ...
-- Other Causes: {Percentage} of deaths
+- Other Causes: {Percentage}
 
 ### Health Indicators
 - Infant Mortality Rate: {Number} per 1,000 live births
@@ -412,12 +412,6 @@ STATE_TEMPLATE = '''
 - International Cultural Centers: {Number}
 - Cultural Exchange Programs: {DetailedDescription}
 
-## Cultural Events
-- National Holidays: {Number}
-- Religious Holidays: {Number}
-- Memorial Days: {Number}
-- Cultural Festivals: {Number}
-
 # 8. Infrastructure and Technology
 ## Transportation Infrastructure <!-- include status, quality, and quantity -->
 - Road Network: {DetailedDescription}
@@ -567,7 +561,7 @@ STATE_TEMPLATE = '''
 - Optimistic Perception of Economic Future: {Percentage}
 - Direction of Country: {Percentage} believe country is on right track
 - Overall Head of State/Government Approval Rating: {Percentage}
-'''
+'''.strip()
 
 RANDOM_TEMPLATE = '''
 <!--
@@ -582,33 +576,80 @@ RANDOM_TEMPLATE = '''
 - Events that last longer than a month should be stated as "starts" (or existing events "ends").
 - Do not add nested lists or headings not specified in the template.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
+- Do not use *italic* or **bold**. 
 -->
 
 # Weather Events <!-- natural phenomena affecting environment/climate -->
-- {%} No notable events
+- {%} No notable weather events
 ...
 
 # Defense & Military Events <!-- military/security incidents or developments -->
-- {%} No notable events
+- {%} No notable defense/military events
 ...
 
 # Economic Events <!-- major financial/market/business developments -->
-- {%} No notable events
+- {%} No notable economic events
 ...
 
 # Heath Events <!-- public health/medical developments -->
-- {%} No notable events
+- {%} No notable health events
 ...
 
 # Cultural & Social Events <!-- societal/cultural developments -->
-- {%} No notable events
+- {%} No notable social events
 ...
 
 # Technological Events <!-- tech/scientific developments -->
-- {%} No notable events
+- {%} No notable technological events
 ...
 
 # International Events <!-- foreign relations/global developments by OTHER nations -->
-- {%} No notable events
+- {%} No notable international events
 ...
-'''
+'''.strip()
+
+DIFF_EXECUTIVE_TEMPLATE = '''
+<!--
+- This is a report to state leadershipof the the changes in the <state> over the last month.
+- Do not add nested lists or headings not specified in the template.
+- Do not include <!-- comments --> in the final output but use them as key guidance.
+- You should include what changes, why it changes, and notable metrics that will reflect the change.
+- Focus on the most important events, some might not be that important for the leadership.
+- Some sections may be empty if nothing relevant changed.
+-->
+
+### Executive Summary
+
+<!-- 1 - 2 sentence dense technical overview of what happened, address to the leadership of the <state> -->
+
+1. **Economy**:
+  - <!-- *Title* -->: <!-- *Description* -->
+  - ...
+2. **Social & Cultural**:
+  - <!-- *Title* -->: <!-- *Description* -->
+  - ...
+3. **Health & Crime**:
+  - <!-- *Title* -->: <!-- *Description* -->
+  - ...
+4. **International Relations**:
+  - <!-- *Title* -->: <!-- *Description* -->
+  - ...
+'''.strip()
+
+DIFF_TEMPLATE = '''
+<!--
+- Detailed line-by-line diff of the <state>. ALL items in <state> should be included.
+- Note both what changes and what didn't change. ALL changes should include at least a brief explanation.
+- Be realistic about what could have changed and the amount of change
+- Use the same formatting/categories as the <state>.
+- Do not include <!-- comments --> in the final output but use them as key guidance.
+- Do not use *italic* or **bold**. 
+-->
+
+...# Topic <!-- for all the headers in the <state> -->
+Key: Value1 -> Value2 (due to ...) <!-- example of change with detailed explanation -->
+Key: Value (no change) <!-- example of no change -->
+Key: (new) Value (due to ...) <!-- example of a new field that was added to a list -->
+(removed Key due to ...) <!-- example of a field that was removed from a list -->
+...
+'''.strip()
