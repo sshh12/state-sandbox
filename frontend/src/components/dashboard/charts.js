@@ -11,6 +11,8 @@ import {
   ResponsiveContainer,
   Tooltip,
   Legend,
+  XAxis,
+  YAxis,
 } from 'recharts';
 
 const lineData = [
@@ -46,19 +48,33 @@ export function WebTrafficChart() {
   return (
     <ResponsiveContainer width="100%" height={350}>
       <LineChart data={lineData}>
+        <XAxis
+          dataKey="name"
+          stroke="#888888"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+        />
+        <YAxis
+          stroke="#888888"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+        />
         <Tooltip />
         <Legend />
         <Line
           type="monotone"
           dataKey="visits"
-          stroke="#8884d8"
+          stroke="#000000"
           strokeWidth={2}
           dot={false}
+          className="stroke-primary"
         />
         <Line
           type="monotone"
           dataKey="clicks"
-          stroke="#82ca9d"
+          stroke="#888888"
           strokeWidth={2}
           dot={false}
         />
@@ -71,28 +87,44 @@ export function DeviceUsageChart() {
   return (
     <ResponsiveContainer width="100%" height={350}>
       <AreaChart data={areaData}>
+        <XAxis
+          dataKey="name"
+          stroke="#888888"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+        />
+        <YAxis
+          stroke="#888888"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+        />
         <Tooltip />
         <Legend />
         <Area
           type="monotone"
           dataKey="mobile"
           stackId="1"
-          stroke="#8884d8"
-          fill="#8884d8"
+          stroke="#000000"
+          fill="#000000"
+          className="stroke-primary fill-primary"
         />
         <Area
           type="monotone"
           dataKey="desktop"
           stackId="1"
-          stroke="#82ca9d"
-          fill="#82ca9d"
+          stroke="#888888"
+          fill="#888888"
+          fillOpacity={0.7}
         />
         <Area
           type="monotone"
           dataKey="tablet"
           stackId="1"
-          stroke="#ffc658"
-          fill="#ffc658"
+          stroke="#e5e5e5"
+          fill="#e5e5e5"
+          fillOpacity={0.5}
         />
       </AreaChart>
     </ResponsiveContainer>
@@ -109,12 +141,21 @@ export function DeviceDistributionChart() {
           cy="50%"
           innerRadius={60}
           outerRadius={80}
-          fill="#8884d8"
+          fill="#000000"
           paddingAngle={5}
           dataKey="value"
+          className="fill-primary"
         >
           {pieData.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <Cell
+              key={`cell-${index}`}
+              fill={
+                index === 0
+                  ? '#000000'
+                  : `#888888${Math.floor((3 - index) * 0.3 * 255).toString(16)}`
+              }
+              className={index === 0 ? 'fill-primary' : ''}
+            />
           ))}
         </Pie>
         <Tooltip />
