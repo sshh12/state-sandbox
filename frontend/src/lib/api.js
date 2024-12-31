@@ -117,6 +117,10 @@ class ApiClient {
   async getStates() {
     return this._get('/api/states');
   }
+
+  async createState(name, questions) {
+    return this._post('/api/states', { name, questions });
+  }
 }
 
 // Export singleton instance

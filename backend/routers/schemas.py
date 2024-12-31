@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 
 class UserBase(BaseModel):
@@ -30,3 +30,13 @@ class StateResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class QuestionInput(BaseModel):
+    question: str
+    value: int
+
+
+class CreateStateRequest(BaseModel):
+    name: str
+    questions: List[QuestionInput]

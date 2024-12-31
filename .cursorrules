@@ -6,7 +6,7 @@ Frontend:
 - Use 'next/navigation' for all navigation/routing
 - Use frontend/src/lib/api.js for all API calls
 - Prefer shadcn/ui for components
-  - Use `npx shadcn@latest add` to add new components rather than manually creating them
+  - Use `npx shadcn@latest add ...` to add new components rather than manually creating them
 
 Backend:
 

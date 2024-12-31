@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Overview } from '@/components/dashboard/overview';
 import { RecentSales } from '@/components/dashboard/recent-sales';
 import { DatePickerWithRange } from '@/components/ui/date-picker';
-import { DashboardNav } from '@/components/dashboard/nav';
+import { DashboardNav } from '@/components/nav';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   WebTrafficChart,
@@ -12,7 +12,7 @@ import {
   DeviceDistributionChart,
 } from '@/components/dashboard/charts';
 
-export default function DashboardPage() {
+export default function StatePage({ stateId }) {
   return (
     <div className="flex flex-col min-h-screen">
       <DashboardNav />
