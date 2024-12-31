@@ -173,3 +173,6 @@ cython_debug/
 # repo
 env.sh
 env.bat
+.next/
+node_modules/
+!frontend/src/lib
