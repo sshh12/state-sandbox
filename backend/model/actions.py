@@ -30,7 +30,7 @@ async def generate_state_flag(state: str) -> str:
     prompt = f"""
 Given this fictional state, generate a flag for it. 
 
-Consider and reason on the relationship between the colors, symbols, and organization of the flag and the nature of the country.
+Consider and reason on the relationship between the colors, symbols, and organization of the flag and the nature and values of the country.
 
 <state>
 {state}
@@ -59,7 +59,7 @@ async def generate_state(date: str, name: str, questions: List[Tuple[str, int]])
     prompt = f"""
 Fill out the following template for a fictional country in {_format_month_date(date)}.
 
-Suggested Country Name: {name[:30]} (make it more realistic, e.g. Republic/Federation/Empire/Kingdom/Sultanate/Emirates/Commonwealth of, -ia/-istan/-onia, etc)
+Suggested Country Name: {repr(name[:30])} (make it more realistic, e.g. Republic/Federation/Empire/Kingdom/Sultanate/Emirates/Commonwealth of, -ia/-istan/-onia, etc)
 
 <state-template>
 {STATE_TEMPLATE}

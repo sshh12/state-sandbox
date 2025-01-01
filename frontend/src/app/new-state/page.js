@@ -123,7 +123,7 @@ export default function NewState() {
           <p className="text-muted-foreground mb-4">
             Your choices will influence the nation's policies, structure, and
             more. After creation, you will be able to change almost{' '}
-            <i>anything</i> by passing new policies.
+            <i>anything</i> by passing new laws and policies.
           </p>
           <p className="text-sm text-muted-foreground mb-8 italic">
             Disclaimer: States Sandbox is a Large Language Model-based
