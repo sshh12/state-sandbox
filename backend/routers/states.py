@@ -131,7 +131,7 @@ async def create_state_snapshot(
     current_date = datetime.strptime(latest_snapshot.date, "%Y-%m")
     next_date = current_date + relativedelta(months=1)
 
-    next_state, next_state_report = await generate_next_state(
+    diff, next_state, next_state_report, next_events = await generate_next_state(
         start_date=current_date,
         end_date=next_date,
         prev_state=latest_snapshot.markdown_state,
@@ -141,7 +141,9 @@ async def create_state_snapshot(
         date=next_date.strftime("%Y-%m"),
         state_id=state_id,
         markdown_state=next_state,
+        markdown_delta=diff,
         markdown_delta_report=next_state_report,
+        markdown_events=next_events,
     )
     db.add(state_snapshot)
     db.commit()

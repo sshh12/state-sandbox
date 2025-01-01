@@ -23,13 +23,9 @@ export function HelpDialog() {
           <DialogTitle>How to Play</DialogTitle>
           <DialogDescription>
             <div className="space-y-4 pt-4">
-              <p>Here's how to interact with the simulation:</p>
+              <p>Here's how to play States Sandbox:</p>
               <ul className="list-disc pl-4 space-y-2">
                 <li>Click Play to start the simulation</li>
-                <li>Use the controls to adjust simulation speed</li>
-                <li>
-                  View different aspects of your state using the tabs below
-                </li>
               </ul>
             </div>
           </DialogDescription>

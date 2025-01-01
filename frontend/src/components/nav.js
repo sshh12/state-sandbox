@@ -12,9 +12,9 @@ import {
 import { useUser } from '@/context/user-context';
 
 const links = [
-  { name: 'States', href: '/states' },
-  { name: 'Leaderboard', href: '/leaderboard' },
-  { name: 'Profile', href: '/profile' },
+  { name: 'States', href: '#' },
+  { name: 'Leaderboard', href: '#' },
+  { name: 'Profile', href: '#' },
 ];
 
 export function DashboardNav({ stateId }) {

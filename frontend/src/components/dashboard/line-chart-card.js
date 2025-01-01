@@ -42,7 +42,10 @@ export default function LineChartCard({
               fontSize={12}
               tickLine={false}
               axisLine={false}
-              domain={['auto', 'auto']}
+              domain={[
+                (dataMin) => dataMin * 0.95,
+                (dataMax) => dataMax * 1.05,
+              ]}
               allowDataOverflow={true}
               tickFormatter={formatNumber}
             />

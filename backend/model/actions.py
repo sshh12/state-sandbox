@@ -47,7 +47,9 @@ Consider and reason on the relationship between the colors, symbols, and organiz
 ```
 </example>
 
-Reply with the flag in an SVG codeblock.
+Reply with:
+(1) A brief summary of how the the states unique values, culture, and systems are will be represented in the flag.
+(2) The flag in an SVG codeblock.
 - You must make the width = 900 and height = 600
 """.strip()
     output = await provider.generate_fast_reasoning(prompt)
@@ -157,10 +159,11 @@ Reply with <format> within a markdown codeblock. Do not include xml tags.
 
 async def generate_next_state(
     start_date: datetime, end_date: datetime, prev_state: str, policy: str
-) -> Tuple[str, str]:
+) -> Tuple[str, str, str, str]:
     provider = OpenAIProvider()
     events = await generate_random_events(start_date, end_date, prev_state)
     events_str = "\n".join([f"- {e}" for e in events])
+    events_str = f"- Government Events: {policy if policy else 'None'}\n{events_str}"
     print(events_str)
     diff_prompt = f"""
 Given this fictional state and the following events between {start_date} and {end_date}, simulate the key changes that occur to the state.
@@ -170,7 +173,6 @@ Given this fictional state and the following events between {start_date} and {en
 </state>
 
 <events>
-{policy}
 {events_str}
 </events>
 
@@ -227,7 +229,7 @@ Reply with the new <state> in a markdown codeblock. Do not include xml tags.
     new_state_report = await generate_diff_report(
         start_date, end_date, prev_state, diff_output
     )
-    return new_state_output, new_state_report
+    return diff_output, new_state_output, new_state_report, events_str
 
 
 async def advice_state(state: str, question: str) -> str:
