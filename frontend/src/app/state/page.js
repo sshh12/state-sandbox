@@ -10,6 +10,7 @@ import { PlayDialog } from '@/components/dashboard/play-dialog';
 import { HelpDialog } from '@/components/help-dialog';
 import { ReportDialog } from '@/components/dashboard/report-dialog';
 import { cn } from '@/lib/utils';
+import { SafeSVG } from '@/components/ui/safe-svg';
 
 export default function StatePage({ stateId }) {
   const [state, setState] = useState(null);
@@ -54,17 +55,20 @@ export default function StatePage({ stateId }) {
       <div className="flex-1 space-y-4 p-8 pt-6">
         <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <h2
-              className={cn(
-                'text-3xl font-bold tracking-tight',
-                turnLoading && 'animate-pulse'
-              )}
-            >
-              {
-                snapshots[0]?.state_overview.basic_information.country_name
-                  .value
-              }
-            </h2>
+            <div className="flex items-center gap-3">
+              <SafeSVG svgString={state?.flag_svg} />
+              <h2
+                className={cn(
+                  'text-3xl font-bold tracking-tight',
+                  turnLoading && 'animate-pulse'
+                )}
+              >
+                {
+                  snapshots[0]?.state_overview.basic_information.country_name
+                    .value
+                }
+              </h2>
+            </div>
             <Badge variant="secondary">
               {
                 snapshots[0]?.state_overview.basic_information.government_type
