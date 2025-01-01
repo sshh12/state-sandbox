@@ -49,3 +49,67 @@ Reply with:
 """
     output = await provider.generate_fast_reasoning(prompt)
     return extract_markdown_codeblock(output)
+
+
+async def generate_next_state(
+    start_date: datetime, end_date: datetime, prev_state: str, policy: str
+) -> str:
+    provider = OpenAIProvider()
+    prompt = f"""
+Given this fictional state and the following events between {start_date} and {end_date}, simulate the key changes that occur to the state.
+
+<state>
+{prev_state}
+</state>
+
+<events>
+- {policy}
+</events>
+
+You must jointly consider:
+- All <events> along with their impact on the economy, society, and international relations (all aspects of the <state>)
+- The unique characteristics, systems, and values of the <state>
+- Natural changes in population and resource counts over the course of a month
+- Natural random changes in production, distributions, infrastructure, and facilities.
+
+Think carefully and consider the full and holistic effects of all events along with natural expected changes and variance overtime. For this simulation to be accurate you must consider not only the immediate impacts but the higher order consequences.
+
+Reply with:
+1. The high-level natural expected changes and random changes during the month.
+2. For each event, the high-level expected impacted on the <state>
+- Some events will be very impactful and others might have minimal change
+- Event impacts can span several state dimensions with complex higher-order consequences
+3. For each state dimension (Overview, People, Education, ...) list out the explicit changes. 
+- Noting what changed (before/after), what's added, and what's removed. 
+- Providing explicit numerical or percentage values before before/after.
+- Noting how the top challenges in each dimension might evolve
+- Noting for critical changed metrics (e.g. GDP, inflation, etc) how you computed the signficance of the change 
+""".strip()
+    diff_output = await provider.generate_fast_reasoning(prompt)
+    print(diff_output)
+    new_state_prompt = f"""
+Given this fictional state and the following events between Jan 1, 2022 and Feb 1, 2022, provide the updated <state>.
+
+<state-template>
+{STATE_TEMPLATE}
+</state-template>
+
+<state>
+{prev_state}
+</state>
+
+<state-recent-changes>
+{diff_output}
+</state-recent-changes>
+
+The impacts of recent events have already been decided in <state-recent-changes>. 
+
+Your task is to return <state> in <state-template> with the changes from <state-recent-changes> applied. 
+
+Note that <state-recent-changes> might not be in the right format. 
+
+Reply with the new <state> in a markdown codeblock.
+""".strip()
+    new_state_output = await provider.generate_fast_reasoning(new_state_prompt)
+    print(new_state_output)
+    return extract_markdown_codeblock(new_state_output)

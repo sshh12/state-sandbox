@@ -51,3 +51,7 @@ class StateSnapshotResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class CreateNewSnapshotRequest(BaseModel):
+    policy: str

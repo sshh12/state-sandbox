@@ -1,7 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-
 export function Table({ data }) {
-  console.log(data);
   return (
     <div className="space-y-8">
       {data.map((item) => (

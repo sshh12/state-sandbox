@@ -11,16 +11,25 @@ import { HelpDialog } from '@/components/help-dialog';
 
 export default function StatePage({ stateId }) {
   const [snapshots, setSnapshots] = useState([]);
+  const [turnLoading, setTurnLoading] = useState(false);
   const latest = snapshots.sort(
     (a, b) => new Date(b.date) - new Date(a.date)
   )[0];
-  console.log('latest', latest);
+  console.log('latest', snapshots, latest);
 
   useEffect(() => {
     api.getStateSnapshots(stateId).then((snaps) => {
       setSnapshots(snaps.map((snap) => snap.json_state));
     });
   }, [stateId]);
+
+  const handlePlay = (policy) => {
+    setTurnLoading(true);
+    api.createStateSnapshot(stateId, policy).then((snap) => {
+      setSnapshots([...snapshots, snap.json_state]);
+      setTurnLoading(false);
+    });
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -37,7 +46,11 @@ export default function StatePage({ stateId }) {
             </Badge>
           </div>
           <div className="flex items-center space-x-2">
-            <PlayDialog date={latest?.date} />
+            <PlayDialog
+              date={latest?.date}
+              onPlay={handlePlay}
+              turnLoading={turnLoading}
+            />
             <HelpDialog />
           </div>
         </div>
