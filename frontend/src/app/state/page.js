@@ -6,6 +6,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import OverviewPage from '@/components/dashboard/overview';
 import { api } from '@/lib/api';
 import { Badge } from '@/components/ui/badge';
+import { PlayDialog } from '@/components/dashboard/play-dialog';
+import { HelpDialog } from '@/components/help-dialog';
 
 export default function StatePage({ stateId }) {
   const [snapshots, setSnapshots] = useState([]);
@@ -25,8 +27,8 @@ export default function StatePage({ stateId }) {
       <DashboardNav />
 
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <div className="flex items-center justify-between space-y-2">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <h2 className="text-3xl font-bold tracking-tight">
               {latest?.state_overview.basic_information.country_name.value}
             </h2>
@@ -35,19 +37,8 @@ export default function StatePage({ stateId }) {
             </Badge>
           </div>
           <div className="flex items-center space-x-2">
-            <button className="bg-black text-white px-4 py-2 rounded-md">
-              Play (
-              {latest?.date
-                ? new Date(latest.date + 'T00:00:00').toLocaleDateString(
-                    'en-US',
-                    {
-                      month: 'short',
-                      year: 'numeric',
-                    }
-                  )
-                : null}
-              )
-            </button>
+            <PlayDialog date={latest?.date} />
+            <HelpDialog />
           </div>
         </div>
 
