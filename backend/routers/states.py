@@ -28,6 +28,17 @@ async def get_states(
     return states
 
 
+@router.get("/{state_id}", response_model=StateResponse)
+async def get_state(
+    state_id: int,
+    db: Session = Depends(get_db),
+):
+    state = db.query(State).filter(State.id == state_id).first()
+    if not state:
+        raise HTTPException(status_code=404, detail="State not found")
+    return state
+
+
 @router.post("", response_model=StateResponse)
 async def create_state(
     request: CreateStateRequest,

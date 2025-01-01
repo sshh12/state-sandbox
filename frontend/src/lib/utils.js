@@ -44,7 +44,7 @@ export function formatNumber(value) {
 }
 
 export function formatDiff(snapshotA, snapshotB, metric) {
-  if (!snapshotA || !snapshotB || !metric) return '';
+  if (!snapshotA || !snapshotB || !metric) return '0%';
   const metricA = getValue(snapshotA, metric);
   const metricB = getValue(snapshotB, metric);
   const percentDiff = ((metricB.value - metricA.value) / metricA.value) * 100;

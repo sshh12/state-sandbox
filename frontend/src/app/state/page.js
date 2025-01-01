@@ -8,11 +8,15 @@ import { api } from '@/lib/api';
 import { Badge } from '@/components/ui/badge';
 import { PlayDialog } from '@/components/dashboard/play-dialog';
 import { HelpDialog } from '@/components/help-dialog';
+import { ReportDialog } from '@/components/dashboard/report-dialog';
 import { cn } from '@/lib/utils';
 
 export default function StatePage({ stateId }) {
+  const [state, setState] = useState(null);
   const [snapshots, setSnapshots] = useState([]);
   const [turnLoading, setTurnLoading] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [latestReport, setLatestReport] = useState('');
   console.log('latest', snapshots[0]);
 
   useEffect(() => {
@@ -25,11 +29,21 @@ export default function StatePage({ stateId }) {
     });
   }, [stateId]);
 
+  useEffect(() => {
+    api.getState(stateId).then((state) => {
+      setState(state);
+    });
+  }, [stateId]);
+
   const handlePlay = (policy) => {
     setTurnLoading(true);
     api.createStateSnapshot(stateId, policy).then((snap) => {
       setSnapshots([...snapshots, snap.json_state]);
       setTurnLoading(false);
+      if (snap.markdown_delta_report) {
+        setLatestReport(snap.markdown_delta_report);
+        setReportOpen(true);
+      }
     });
   };
 
@@ -68,6 +82,12 @@ export default function StatePage({ stateId }) {
             <HelpDialog />
           </div>
         </div>
+
+        <ReportDialog
+          isOpen={reportOpen}
+          onOpenChange={setReportOpen}
+          report={latestReport}
+        />
 
         <Tabs defaultValue="overview" className="space-y-4">
           <div className="border-b overflow-x-auto">

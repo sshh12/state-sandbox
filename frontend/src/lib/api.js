@@ -126,6 +126,10 @@ class ApiClient {
     return this._post('/api/states', { name, questions });
   }
 
+  async getState(stateId) {
+    return this._get(`/api/states/${stateId}`);
+  }
+
   async createStateSnapshot(stateId, policy) {
     return this._post(`/api/states/${stateId}/snapshots`, { policy });
   }
