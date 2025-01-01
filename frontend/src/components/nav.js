@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useUser } from '@/context/user-context';
 
 const links = [
   { name: 'States', href: '/states' },
@@ -18,17 +19,22 @@ const links = [
 
 export function DashboardNav() {
   const pathname = usePathname();
+  const { states } = useUser();
 
   return (
     <nav className="flex items-center space-x-8 border-b px-6">
       <div className="flex items-center space-x-3">
         <div className="w-8 h-8 bg-gray-200 rounded-full" />
-        <Select defaultValue="alicia">
-          <SelectTrigger className="w-[140px] border-0 focus:ring-0">
-            <SelectValue placeholder="Select user" />
+        <Select defaultValue={states?.[0]?.id}>
+          <SelectTrigger className="w-[200px] border-0 focus:ring-0">
+            <SelectValue placeholder="Select state" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="alicia">Alicia Koch</SelectItem>
+            {(states || []).map((state) => (
+              <SelectItem key={state.id} value={state.id}>
+                {state.name}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>

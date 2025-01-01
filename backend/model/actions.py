@@ -1,8 +1,13 @@
 from typing import List, Tuple
 from datetime import datetime
+import random
 from model.providers import OpenAIProvider
 from model.prompts import STATE_TEMPLATE, DIFF_EXECUTIVE_TEMPLATE, RANDOM_TEMPLATE
-from model.parsing import extract_markdown_codeblock, extract_svg_codeblock
+from model.parsing import (
+    extract_markdown_codeblock,
+    extract_svg_codeblock,
+    parse_events_output,
+)
 
 
 def _format_month_date(date: str) -> str:
@@ -107,9 +112,21 @@ Reply with a markdown codeblock containing the report. Do not include xml tags.
     return new_state_report
 
 
+def _sample_event(events: List[Tuple[float, str]]) -> str:
+    """Sample a single event based on probabilities."""
+    total = sum(prob for prob, _ in events)
+    r = random.random() * total
+    cumsum = 0
+    for prob, event in events:
+        cumsum += prob
+        if r <= cumsum:
+            return event
+    return events[-1][1]  # Fallback to last event
+
+
 async def generate_random_events(
     start_date: datetime, end_date: datetime, prev_state: str
-) -> str:
+) -> List[str]:
     provider = OpenAIProvider()
     prompt = f"""
 Given this fictional state from {start_date} to {end_date}, provide a realistic list of potential random events that could occur within the next month in the correct format.
@@ -125,16 +142,26 @@ Given this fictional state from {start_date} to {end_date}, provide a realistic 
 Reply with <format> within a markdown codeblock. Do not include xml tags.
 """.strip()
     output = extract_markdown_codeblock(await provider.generate_fast_reasoning(prompt))
-    print(output)
-    return ""
+
+    # Parse the output into categories and their events
+    categories = parse_events_output(output)
+
+    # Sample one event from each category
+    sampled_events = []
+    for category, events in categories.items():
+        event = _sample_event(events)
+        sampled_events.append(f"{category}: {event}")
+
+    return sampled_events
 
 
 async def generate_next_state(
     start_date: datetime, end_date: datetime, prev_state: str, policy: str
 ) -> Tuple[str, str]:
-    await generate_random_events(start_date, end_date, prev_state)
-    asdasd
     provider = OpenAIProvider()
+    events = await generate_random_events(start_date, end_date, prev_state)
+    events_str = "\n".join([f"- {e}" for e in events])
+    print(events_str)
     diff_prompt = f"""
 Given this fictional state and the following events between {start_date} and {end_date}, simulate the key changes that occur to the state.
 
@@ -143,7 +170,8 @@ Given this fictional state and the following events between {start_date} and {en
 </state>
 
 <events>
-- {policy}
+{policy}
+{events_str}
 </events>
 
 You must jointly consider:
@@ -159,6 +187,7 @@ Reply with:
 2. For each event, the high-level expected impacted on the <state>
 - Some events will be very impactful and others might have minimal change
 - Event impacts can span several state dimensions with complex higher-order consequences
+- Government policies (if any) should, no matter how positive, include complex negative consequences
 3. For each state dimension (Overview, People, Education, ...) list out the explicit changes. 
 - Noting what changed (before/after), what's added, and what's removed. 
 - Providing explicit numerical or percentage values before before/after.

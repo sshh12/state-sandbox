@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Progress } from '@/components/ui/progress';
 
 export function ProgressTimer({
-  duration = 5 * 60 * 1000, // default 5 minutes
+  duration = 2.5 * 60 * 1000, // default 2.5 minutes
   isRunning = false,
   className,
   showPercentage = true,

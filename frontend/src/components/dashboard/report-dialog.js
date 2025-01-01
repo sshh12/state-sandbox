@@ -9,17 +9,18 @@ export function ReportDialog({ isOpen, onOpenChange, report }) {
   return (
     <Dialog
       open={isOpen}
-      onOpenChange={(open, event) => {
-        if (event?.type === 'pointerDownOutside') {
-          event.preventDefault();
-          return;
+      onOpenChange={(open) => {
+        if (open === false) {
+          onOpenChange(false);
         }
-        onOpenChange(open);
+      }}
+      onPointerDownOutside={(e) => {
+        e.preventDefault();
       }}
     >
-      <DialogContent className="max-w-[95vw] md:max-w-3xl lg:max-w-4xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-[95vw] max-h-[80vh] overflow-y-auto">
         <DialogTitle className="sr-only">Report</DialogTitle>
-        <div className="prose prose-sm dark:prose-invert">
+        <div className="prose prose-sm dark:prose-invert max-w-[65ch] mx-auto">
           <ReactMarkdown>{report}</ReactMarkdown>
         </div>
       </DialogContent>

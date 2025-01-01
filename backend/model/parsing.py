@@ -1,6 +1,6 @@
 import re
 import markdown_to_json
-from typing import Any
+from typing import Any, List, Tuple, Dict
 
 
 def extract_markdown_codeblock(text: str) -> str:
@@ -95,3 +95,45 @@ def parse_state(state_markdown: str) -> dict:
     data = _md_to_json(state_markdown)
     data = _parse_kv(data)
     return data
+
+
+def parse_events_section(section: str) -> List[Tuple[float, str]]:
+    """Parse a section of events into a list of (probability, event) tuples."""
+    events = []
+    for line in section.strip().split("\n"):
+        if not line.startswith("- "):
+            continue
+        try:
+            prob_str, event = line[2:].split("%", 1)
+            prob = float(prob_str.strip()) / 100
+            events.append((prob, event.strip()))
+        except Exception:
+            continue
+    return events
+
+
+def parse_events_output(output: str) -> Dict[str, List[Tuple[float, str]]]:
+    """Parse the full events output into a dictionary of category -> events list."""
+    categories = {}
+    current_category = None
+    current_events = []
+
+    for line in output.split("\n"):
+        line = line.strip()
+        if not line:
+            continue
+
+        if line.startswith("# "):
+            if current_category and current_events:
+                categories[current_category] = parse_events_section(
+                    "\n".join(current_events)
+                )
+            current_category = line[2:]
+            current_events = []
+        else:
+            current_events.append(line)
+
+    if current_category and current_events:
+        categories[current_category] = parse_events_section("\n".join(current_events))
+
+    return categories

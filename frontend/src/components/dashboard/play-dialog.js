@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -26,6 +26,23 @@ export function PlayDialog({ date, onPlay, turnLoading, stateId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [customQuestion, setCustomQuestion] = useState('');
   const [advisorLoading, setAdvisorLoading] = useState(false);
+  const [currentExampleIndex, setCurrentExampleIndex] = useState(0);
+
+  const examplePolicies = [
+    'Increase minimum wage by $2',
+    'Add a 90% trade tariff on imports from China',
+    'Invest $500M in renewable energy',
+    'Implement universal pre-K education',
+    'Increase police funding by 10%',
+  ];
+
+  // Rotate example every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentExampleIndex((prev) => (prev + 1) % examplePolicies.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   const advisorQuestions = [
     'How can I increase GDP?',
@@ -44,16 +61,21 @@ export function PlayDialog({ date, onPlay, turnLoading, stateId }) {
 
   const handlePlay = () => {
     setAdvisorFeedback('');
+    setIsOpen(false);
     onPlay(policies);
   };
 
   return (
     <Dialog
-      open={isOpen}
+      open={isOpen || turnLoading}
       onOpenChange={(open) => {
         // Only allow closing if not loading
         if (turnLoading && !open) return;
-        setIsOpen(open);
+        if (!open && !turnLoading) {
+          setIsOpen(false);
+        } else {
+          setIsOpen(open);
+        }
       }}
     >
       <DialogTrigger asChild>
@@ -84,14 +106,14 @@ export function PlayDialog({ date, onPlay, turnLoading, stateId }) {
           {turnLoading && (
             <ProgressTimer
               isRunning={turnLoading}
-              duration={5 * 60 * 1000}
+              duration={2.5 * 60 * 1000}
               className="w-full"
             />
           )}
           <div className="space-y-2">
             <h4 className="font-medium">Your Policies</h4>
             <Textarea
-              placeholder="Enter your policy changes here..."
+              placeholder={`Enter your policy changes here (if any)...\ne.g. ${examplePolicies[currentExampleIndex]}`}
               value={policies}
               onChange={(e) => setPolicies(e.target.value)}
               className="h-32"

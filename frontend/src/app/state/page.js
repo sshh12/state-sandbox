@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { DashboardNav } from '@/components/nav';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import OverviewPage from '@/components/dashboard/overview';
@@ -14,17 +14,22 @@ import { SafeSVG } from '@/components/ui/safe-svg';
 
 export default function StatePage({ stateId }) {
   const [state, setState] = useState(null);
-  const [snapshots, setSnapshots] = useState([]);
+  const [_snapshots, setSnapshots] = useState([]);
   const [turnLoading, setTurnLoading] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [latestReport, setLatestReport] = useState('');
-  console.log('latest', snapshots);
+
+  const snapshots = useMemo(() => {
+    const sorted = [..._snapshots].sort(
+      (a, b) => +new Date(b.date) - +new Date(a.date)
+    );
+    console.log('sorted', sorted);
+    return sorted;
+  }, [_snapshots]);
 
   useEffect(() => {
     api.getStateSnapshots(stateId).then((snaps) => {
-      const newSnapshots = snaps.map((snap) => snap.json_state);
-      newSnapshots.sort((a, b) => new Date(b.date) - new Date(a.date));
-      setSnapshots(newSnapshots);
+      setSnapshots(snaps.map((snap) => snap.json_state));
     });
   }, [stateId]);
 
@@ -37,7 +42,7 @@ export default function StatePage({ stateId }) {
   const handlePlay = (policy) => {
     setTurnLoading(true);
     api.createStateSnapshot(stateId, policy).then((snap) => {
-      setSnapshots([snap.json_state, ...snapshots]);
+      setSnapshots((prevSnapshots) => prevSnapshots.concat([snap.json_state]));
       setTurnLoading(false);
       if (snap.markdown_delta_report) {
         setLatestReport(snap.markdown_delta_report);

@@ -96,7 +96,12 @@ async def get_state_snapshots(
     state_id: int,
     db: Session = Depends(get_db),
 ):
-    snapshots = db.query(StateSnapshot).filter(StateSnapshot.state_id == state_id).all()
+    snapshots = (
+        db.query(StateSnapshot)
+        .filter(StateSnapshot.state_id == state_id)
+        .order_by(StateSnapshot.date.desc())
+        .all()
+    )
     for snapshot in snapshots:
         _fix_snapshot_json(snapshot)
     return snapshots
