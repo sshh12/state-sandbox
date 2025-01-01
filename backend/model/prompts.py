@@ -405,8 +405,8 @@ STATE_TEMPLATE = """
 - Variance in culture and values (among age, gender, ethnicity, etc.)
 - Individualism vs Collectivism -->
 
-### Sports and Recreation
-- {SportOrActivity}: {DetailedDescription}
+## Sports and Recreation
+- {SportOrActivity}: {Percentage} <!-- percentage of population participating -->
 ...
 
 ## Cultural Metrics

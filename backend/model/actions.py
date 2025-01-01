@@ -229,6 +229,7 @@ Reply with the new <state> in a markdown codeblock. Do not include xml tags.
     new_state_report = await generate_diff_report(
         start_date, end_date, prev_state, diff_output
     )
+    print(new_state_report)
     return diff_output, new_state_output, new_state_report, events_str
 
 

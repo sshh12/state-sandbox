@@ -106,7 +106,7 @@ export function PlayDialog({ date, onPlay, turnLoading, stateId }) {
           {turnLoading && (
             <ProgressTimer
               isRunning={turnLoading}
-              duration={2.5 * 60 * 1000}
+              duration={5 * 60 * 1000}
               className="w-full"
             />
           )}
