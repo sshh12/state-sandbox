@@ -11,9 +11,16 @@ from routers.schemas import (
     CreateStateRequest,
     StateSnapshotResponse,
     CreateNewSnapshotRequest,
+    AdviceRequest,
+    AdviceResponse,
 )
 from routers.auth import get_current_user_from_token
-from model.actions import generate_state, generate_next_state, generate_state_flag
+from model.actions import (
+    generate_state,
+    generate_next_state,
+    generate_state_flag,
+    advice_state,
+)
 from model.parsing import parse_state
 
 router = APIRouter(prefix="/api/states", tags=["states"])
@@ -138,3 +145,30 @@ async def create_state_snapshot(
     _fix_snapshot_json(state_snapshot)
 
     return state_snapshot
+
+
+@router.post("/{state_id}/advice", response_model=AdviceResponse)
+async def get_advice(
+    state_id: int,
+    request: AdviceRequest,
+    current_user: User = Depends(get_current_user_from_token),
+    db: Session = Depends(get_db),
+):
+    state = (
+        db.query(State)
+        .filter(State.id == state_id, State.user_id == current_user.id)
+        .first()
+    )
+    if not state:
+        raise HTTPException(status_code=404, detail="State not found")
+
+    latest_snapshot = (
+        db.query(StateSnapshot)
+        .filter(StateSnapshot.state_id == state_id)
+        .order_by(StateSnapshot.date.desc())
+        .first()
+    )
+    if not latest_snapshot:
+        raise HTTPException(status_code=404, detail="State not found")
+    advice = await advice_state(latest_snapshot.markdown_state, request.question)
+    return AdviceResponse(markdown_advice=advice)

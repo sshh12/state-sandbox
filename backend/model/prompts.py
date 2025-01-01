@@ -88,7 +88,7 @@ STATE_TEMPLATE = """
 - Other: {Percentage}
 
 ### Population Growth
-- Overall Population Growth Rate: {Percentage} per year
+- Overall Population Growth Rate: {Percentage} per month <!-- per month! -->
 - Ethnic Population Growth: {DetailedDescription} <!-- e.g. how growth is distributed among ethnic groups -->
 - Religious Population Growth: {DetailedDescription}
 - Economic Class Population Growth: {DetailedDescription}
@@ -330,7 +330,7 @@ STATE_TEMPLATE = """
 - Fitch: {RatingLetters}
 
 ## Economic Metrics
-- GDP Growth Rate: {Percentage} per year
+- GDP Growth Rate: {Percentage} per month <!-- per month! -->
 - Unemployment Rate: {Percentage}
 - Labor Force Participation Rate: {Percentage} <!-- % people ages 15 or older who are employed or seeking work -->
 - Poverty Rate: {Percentage}
@@ -621,6 +621,7 @@ DIFF_EXECUTIVE_TEMPLATE = """
 - This is a report to state leadership on the changes to the <state> over the last month.
 - Do not add nested lists or headings not specified in the template.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
+- Do not include a greeting or a summary at the end.
 - You should include what changes, why it changes, and notable metrics that will reflect the change.
 - Focus on the most important events, some might not be that important for the leadership.
 - Some sections may be empty if nothing relevant changed. You can re-arrange the sections to focus on the most important updates.
@@ -630,7 +631,6 @@ DIFF_EXECUTIVE_TEMPLATE = """
 
 <!-- 
 - 1 - 2 sentence dense technical overview of what *important* happened, for the leadership of the <state>.
-- Do not include a greeting.
 -->
 
 1. **Economy**:

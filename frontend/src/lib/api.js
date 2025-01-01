@@ -133,6 +133,10 @@ class ApiClient {
   async createStateSnapshot(stateId, policy) {
     return this._post(`/api/states/${stateId}/snapshots`, { policy });
   }
+
+  async getStateAdvice(stateId, question) {
+    return this._post(`/api/states/${stateId}/advice`, { question });
+  }
 }
 
 // Export singleton instance

@@ -59,3 +59,11 @@ class StateSnapshotResponse(BaseModel):
 
 class CreateNewSnapshotRequest(BaseModel):
     policy: str
+
+
+class AdviceRequest(BaseModel):
+    question: str
+
+
+class AdviceResponse(BaseModel):
+    markdown_advice: str

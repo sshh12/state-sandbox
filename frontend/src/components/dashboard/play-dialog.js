@@ -17,25 +17,33 @@ import { Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { ProgressTimer } from '@/components/ui/progress-timer';
 import { formatMonthDate } from '@/lib/utils';
+import { api } from '@/lib/api';
+import ReactMarkdown from 'react-markdown';
 
-export function PlayDialog({ date, onPlay, turnLoading }) {
+export function PlayDialog({ date, onPlay, turnLoading, stateId }) {
   const [policies, setPolicies] = useState('');
   const [advisorFeedback, setAdvisorFeedback] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [customQuestion, setCustomQuestion] = useState('');
+  const [advisorLoading, setAdvisorLoading] = useState(false);
 
   const advisorQuestions = [
-    'What policies should I implement to increase GDP?',
+    'How can I increase GDP?',
     'How can I improve public approval?',
-    'What should I do to reduce unemployment?',
   ];
 
-  const getAdvisorFeedback = (type) => {
-    // TODO: Implement advisor feedback API calls
-    setAdvisorFeedback(`${type} advisor feedback will appear here...`);
+  const getAdvisorFeedback = async (type) => {
+    setAdvisorLoading(true);
+    try {
+      const advice = await api.getStateAdvice(stateId, type);
+      setAdvisorFeedback(advice.markdown_advice);
+    } finally {
+      setAdvisorLoading(false);
+    }
   };
 
   const handlePlay = () => {
+    setAdvisorFeedback('');
     onPlay(policies);
   };
 
@@ -68,8 +76,8 @@ export function PlayDialog({ date, onPlay, turnLoading }) {
         <DialogHeader>
           <DialogTitle>Play Turn</DialogTitle>
           <DialogDescription>
-            Set your policies and get advice from your advisors before advancing
-            the simulation.
+            Set your policies (if any) and get advice from your advisors before
+            advancing the simulation by exactly one month.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -87,6 +95,7 @@ export function PlayDialog({ date, onPlay, turnLoading }) {
               value={policies}
               onChange={(e) => setPolicies(e.target.value)}
               className="h-32"
+              disabled={turnLoading}
             />
           </div>
           <div className="space-y-2">
@@ -96,8 +105,16 @@ export function PlayDialog({ date, onPlay, turnLoading }) {
                 <Badge
                   key={index}
                   variant="outline"
-                  className="p-2 cursor-pointer hover:bg-secondary w-full text-left"
-                  onClick={() => getAdvisorFeedback(question)}
+                  className={`p-2 cursor-pointer w-full text-left ${
+                    advisorLoading || turnLoading
+                      ? 'opacity-50 cursor-not-allowed'
+                      : 'hover:bg-secondary'
+                  }`}
+                  onClick={() =>
+                    !advisorLoading &&
+                    !turnLoading &&
+                    getAdvisorFeedback(question)
+                  }
                 >
                   {question}
                 </Badge>
@@ -107,8 +124,14 @@ export function PlayDialog({ date, onPlay, turnLoading }) {
                   placeholder="Ask your own question..."
                   value={customQuestion}
                   onChange={(e) => setCustomQuestion(e.target.value)}
+                  disabled={advisorLoading || turnLoading}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' && customQuestion.trim()) {
+                    if (
+                      e.key === 'Enter' &&
+                      customQuestion.trim() &&
+                      !advisorLoading &&
+                      !turnLoading
+                    ) {
                       getAdvisorFeedback(customQuestion);
                     }
                   }}
@@ -116,25 +139,30 @@ export function PlayDialog({ date, onPlay, turnLoading }) {
                 <Button
                   variant="outline"
                   className="shrink-0"
+                  disabled={advisorLoading || turnLoading}
                   onClick={() => {
                     if (customQuestion.trim()) {
                       getAdvisorFeedback(customQuestion);
                     }
                   }}
                 >
-                  Ask
+                  {advisorLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    'Ask'
+                  )}
                 </Button>
               </div>
             </div>
             {advisorFeedback && (
-              <div className="mt-2 rounded-md bg-muted p-4 text-sm">
-                {advisorFeedback}
+              <div className="mt-2 rounded-md bg-muted p-4 text-sm prose prose-sm max-w-none max-h-[200px] overflow-y-auto">
+                <ReactMarkdown>{advisorFeedback}</ReactMarkdown>
               </div>
             )}
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={handlePlay} disabled={turnLoading}>
+          <Button onClick={handlePlay} disabled={turnLoading || advisorLoading}>
             {turnLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

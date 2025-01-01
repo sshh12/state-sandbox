@@ -1,9 +1,8 @@
 from typing import List, Tuple
 from datetime import datetime
 from model.providers import OpenAIProvider
-from model.prompts import STATE_TEMPLATE, DIFF_EXECUTIVE_TEMPLATE
+from model.prompts import STATE_TEMPLATE, DIFF_EXECUTIVE_TEMPLATE, RANDOM_TEMPLATE
 from model.parsing import extract_markdown_codeblock, extract_svg_codeblock
-import asyncio
 
 
 def _format_month_date(date: str) -> str:
@@ -60,7 +59,7 @@ Fill out the following template for a fictional country in {_format_month_date(d
 </state-template>
 
 <values>
-Suggested Country Name: {name[:30]} (ignore if this already exists, make it more realistic, e.g. Republic of, -istan, -land, etc)
+Suggested Country Name: {name[:30]} (make it more realistic, e.g. Republic of, -istan, -land, etc)
 
 {_format_questions(questions)}
 </values>
@@ -69,7 +68,7 @@ Suggested Country Name: {name[:30]} (ignore if this already exists, make it more
 - Include a single fictional country-specific ethnic group and use real groups for the others (e.g. White, Asian, etc)
 - Include a single fictional country-specific religious group and use real religions for the others (e.g. Christianity, Islam, etc)
 - Use real life countries for import and export partners
-- Assume population of 25 million, area of 500k sq km area, and initial GDP of 2.0 billion USD
+- Assume population of 25.68 million, area of 520k sq km area, and initial GDP of 2,700,000,000 USD
 - Be realistic and balanced based on what you know about the world while being creative with your choice of government type (overfitting the values above), systems (health care, justice, etc), and the challenges for each section.
 - When planning, consider the impacts of the <values> above on policies, government, culture, heath, justice, and the economy
 
@@ -81,9 +80,60 @@ Reply with:
     return extract_markdown_codeblock(output)
 
 
+async def generate_diff_report(
+    start_date: datetime, end_date: datetime, prev_state: str, diff_output: str
+) -> str:
+    provider = OpenAIProvider()
+    new_state_report_prompt = f"""
+Given this fictional state and the following events between {start_date} and {end_date}, provide a report on the changes in the state.
+
+<original-state>
+{prev_state}
+</original-state>
+
+<state-recent-changes>
+{diff_output}
+</state-recent-changes>
+
+<report-template>
+{DIFF_EXECUTIVE_TEMPLATE}
+</report-template>
+
+Reply with a markdown codeblock containing the report. Do not include xml tags.
+""".strip()
+    new_state_report = extract_markdown_codeblock(
+        await provider.generate_fast_reasoning(new_state_report_prompt)
+    )
+    return new_state_report
+
+
+async def generate_random_events(
+    start_date: datetime, end_date: datetime, prev_state: str
+) -> str:
+    provider = OpenAIProvider()
+    prompt = f"""
+Given this fictional state from {start_date} to {end_date}, provide a realistic list of potential random events that could occur within the next month in the correct format.
+
+<format>
+{RANDOM_TEMPLATE}
+</format>
+        
+<state>
+{prev_state}
+</state>
+
+Reply with <format> within a markdown codeblock. Do not include xml tags.
+""".strip()
+    output = extract_markdown_codeblock(await provider.generate_fast_reasoning(prompt))
+    print(output)
+    return ""
+
+
 async def generate_next_state(
     start_date: datetime, end_date: datetime, prev_state: str, policy: str
 ) -> Tuple[str, str]:
+    await generate_random_events(start_date, end_date, prev_state)
+    asdasd
     provider = OpenAIProvider()
     diff_prompt = f"""
 Given this fictional state and the following events between {start_date} and {end_date}, simulate the key changes that occur to the state.
@@ -139,30 +189,39 @@ Your task is to return <state> in <state-template> with the changes from <state-
 Note that <state-recent-changes> might not be in the right format. 
 
 Reply with the new <state> in a markdown codeblock. Do not include xml tags.
+- For dimension challenges, lean towards adding a challenge and only remove a challenge if it's no longer relevant.
+- For government policies, lean towards adding a policy and only remove a policy if it's no longer relevant.
 """.strip()
     new_state_output = extract_markdown_codeblock(
         await provider.generate_fast_reasoning(new_state_prompt)
     )
-    new_state_report_prompt = f"""
-Given this fictional state and the following events between {start_date} and {end_date}, provide a report on the changes in the state.
-
-<original-state>
-{prev_state}
-</original-state>
-
-<state-recent-changes>
-{diff_output}
-</state-recent-changes>
-
-<report-template>
-{DIFF_EXECUTIVE_TEMPLATE}
-</report-template>
-
-Reply with a markdown codeblock containing the report. Do not include xml tags.
-""".strip()
-    new_state_report = extract_markdown_codeblock(
-        await provider.generate_fast_reasoning(new_state_report_prompt)
+    new_state_report = await generate_diff_report(
+        start_date, end_date, prev_state, diff_output
     )
-    print(new_state_output)
-    print(new_state_report)
     return new_state_output, new_state_report
+
+
+async def advice_state(state: str, question: str) -> str:
+    provider = OpenAIProvider()
+    prompt = f"""
+You are an expert advisor for the government of a fictional country. Given the user's question (the head of state), provide advice for their policies.
+
+<state>
+{state}
+</state>
+
+<question>
+{question}
+</question>
+
+Reply with a markdown codeblock containing the advice. Do not include xml tags.
+
+Format policy advice in an imperative format:
+- "Create a restriction on ..."
+- "Ban the use of ..."
+- "Increase the minimum wage to ..."
+
+Be brief, technical, and concise. If writing out suggested policies, limit it to the top 3 most effective ones.
+""".strip()
+    output = await provider.generate_fast_reasoning(prompt)
+    return extract_markdown_codeblock(output)

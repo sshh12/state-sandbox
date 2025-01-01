@@ -18,15 +18,13 @@ export default function StatePage({ stateId }) {
   const [turnLoading, setTurnLoading] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [latestReport, setLatestReport] = useState('');
-  console.log('latest', snapshots[0]);
+  console.log('latest', snapshots);
 
   useEffect(() => {
     api.getStateSnapshots(stateId).then((snaps) => {
-      setSnapshots(
-        snaps
-          .map((snap) => snap.json_state)
-          .sort((a, b) => new Date(b.date) - new Date(a.date))
-      );
+      const newSnapshots = snaps.map((snap) => snap.json_state);
+      newSnapshots.sort((a, b) => new Date(b.date) - new Date(a.date));
+      setSnapshots(newSnapshots);
     });
   }, [stateId]);
 
@@ -39,7 +37,7 @@ export default function StatePage({ stateId }) {
   const handlePlay = (policy) => {
     setTurnLoading(true);
     api.createStateSnapshot(stateId, policy).then((snap) => {
-      setSnapshots([...snapshots, snap.json_state]);
+      setSnapshots([snap.json_state, ...snapshots]);
       setTurnLoading(false);
       if (snap.markdown_delta_report) {
         setLatestReport(snap.markdown_delta_report);
@@ -78,6 +76,7 @@ export default function StatePage({ stateId }) {
           </div>
           <div className="flex items-center space-x-2">
             <PlayDialog
+              stateId={stateId}
               date={snapshots[0]?.date}
               onPlay={handlePlay}
               turnLoading={turnLoading}
