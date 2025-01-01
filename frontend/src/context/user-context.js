@@ -21,7 +21,7 @@ export function UserProvider({ children }) {
         .then(setUser)
         .then(fetchData)
         .catch((e) => {
-          if (e.message.includes('token')) {
+          if (e.message.includes('token') || e.message.includes('not found')) {
             localStorage.removeItem('state-sandbox-token');
             window.location.href = '/';
           }

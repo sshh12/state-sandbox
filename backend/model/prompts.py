@@ -18,6 +18,7 @@ STATE_TEMPLATE = """
 - Government Type: {GovernmentType}
 - Head of State/Government: {Title} <!-- role or group title, not name -->
 - Total Population: {Number} people
+- Gross Domestic Product (GDP): {TotalAmountInUSD}
 - Currency: {CurrencyName} ({CurrencyCode})
 - Land Area: {Number} sq km
 
@@ -329,7 +330,6 @@ STATE_TEMPLATE = """
 - Fitch: {RatingLetters}
 
 ## Economic Metrics
-- Gross Domestic Product (GDP): {TotalAmountInUSD}
 - GDP Growth Rate: {Percentage} per year
 - Unemployment Rate: {Percentage}
 - Labor Force Participation Rate: {Percentage} <!-- % people ages 15 or older who are employed or seeking work -->
@@ -628,7 +628,10 @@ DIFF_EXECUTIVE_TEMPLATE = """
 
 ### Executive Summary
 
-<!-- 1 - 2 sentence dense technical overview of what *important* happened, address to the leadership of the <state> -->
+<!-- 
+- 1 - 2 sentence dense technical overview of what *important* happened, for the leadership of the <state>.
+- Do not include a greeting.
+-->
 
 1. **Economy**:
   - <!-- *Title* -->: <!-- Description -->
@@ -648,22 +651,4 @@ DIFF_EXECUTIVE_TEMPLATE = """
 5. **International Relations**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-""".strip()
-
-DIFF_TEMPLATE = """
-<!--
-- Detailed line-by-line diff of the <state>. ALL items in <state> should be included.
-- Note both what changes and what didn't change. ALL changes should include at least a brief explanation.
-- Be realistic about what could have changed and the amount of change
-- Use the same formatting/categories as the <state>.
-- Do not include <!-- comments --> in the final output but use them as key guidance.
-- Do not use *italic* or **bold**. 
--->
-
-...# Topic <!-- for all the headers in the <state> -->
-Key: Value1 -> Value2 (due to ...) <!-- example of change with detailed explanation -->
-Key: Value (no change) <!-- example of no change -->
-Key: (new) Value (due to ...) <!-- example of a new field that was added to a list -->
-(removed Key due to ...) <!-- example of a field that was removed from a list -->
-...
 """.strip()

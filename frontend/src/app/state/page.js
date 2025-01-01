@@ -13,14 +13,15 @@ import { cn } from '@/lib/utils';
 export default function StatePage({ stateId }) {
   const [snapshots, setSnapshots] = useState([]);
   const [turnLoading, setTurnLoading] = useState(false);
-  const latest = snapshots.sort(
-    (a, b) => new Date(b.date) - new Date(a.date)
-  )[0];
-  console.log('latest', snapshots, latest);
+  console.log('latest', snapshots[0]);
 
   useEffect(() => {
     api.getStateSnapshots(stateId).then((snaps) => {
-      setSnapshots(snaps.map((snap) => snap.json_state));
+      setSnapshots(
+        snaps
+          .map((snap) => snap.json_state)
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+      );
     });
   }, [stateId]);
 
@@ -45,18 +46,24 @@ export default function StatePage({ stateId }) {
                 turnLoading && 'animate-pulse'
               )}
             >
-              {latest?.state_overview.basic_information.country_name.value}
+              {
+                snapshots[0]?.state_overview.basic_information.country_name
+                  .value
+              }
             </h2>
             <Badge variant="secondary">
-              {latest?.state_overview.basic_information.government_type.value}
+              {
+                snapshots[0]?.state_overview.basic_information.government_type
+                  .value
+              }
             </Badge>
           </div>
           <div className="flex items-center space-x-2">
             <PlayDialog
-              date={latest?.date}
+              date={snapshots[0]?.date}
               onPlay={handlePlay}
               turnLoading={turnLoading}
-              key={latest?.date}
+              key={snapshots[0]?.date}
             />
             <HelpDialog />
           </div>
@@ -78,7 +85,7 @@ export default function StatePage({ stateId }) {
           </div>
 
           <TabsContent value="overview" className="space-y-4">
-            <OverviewPage snapshots={snapshots} latest={latest} />
+            <OverviewPage snapshots={snapshots} />
           </TabsContent>
         </Tabs>
       </div>

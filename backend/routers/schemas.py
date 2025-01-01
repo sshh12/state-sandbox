@@ -25,6 +25,7 @@ class AuthResponse(BaseModel):
 class StateResponse(BaseModel):
     id: int
     name: str
+    flag_svg: Optional[str]
     created_at: datetime
     updated_at: Optional[datetime]
 
@@ -46,6 +47,9 @@ class StateSnapshotResponse(BaseModel):
     id: int
     date: str
     markdown_state: str
+    markdown_random_events: Optional[str]
+    markdown_delta: Optional[str]
+    markdown_delta_report: Optional[str]
     json_state: dict
     state_id: int
 

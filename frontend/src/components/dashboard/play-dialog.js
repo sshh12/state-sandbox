@@ -15,6 +15,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { ProgressTimer } from '@/components/ui/progress-timer';
+import { formatMonthDate } from '@/lib/utils';
 
 export function PlayDialog({ date, onPlay, turnLoading }) {
   const [policies, setPolicies] = useState('');
@@ -58,16 +60,7 @@ export function PlayDialog({ date, onPlay, turnLoading }) {
               Simulating...
             </>
           ) : (
-            <>
-              Play (
-              {date
-                ? new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
-                    month: 'short',
-                    year: 'numeric',
-                  })
-                : null}
-              )
-            </>
+            <>Play ({date ? formatMonthDate(date) : null})</>
           )}
         </Button>
       </DialogTrigger>
@@ -80,6 +73,13 @@ export function PlayDialog({ date, onPlay, turnLoading }) {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
+          {turnLoading && (
+            <ProgressTimer
+              isRunning={turnLoading}
+              duration={5 * 60 * 1000}
+              className="w-full"
+            />
+          )}
           <div className="space-y-2">
             <h4 className="font-medium">Your Policies</h4>
             <Textarea
