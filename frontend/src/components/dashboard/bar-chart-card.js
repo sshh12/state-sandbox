@@ -12,7 +12,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { getValue, formatNumber, formatMonthDate } from '@/lib/utils';
 
 export default function BarChartCard({ title, snapshots, valueKey, span = 3 }) {
-  const chartData = snapshots
+  const chartData = [...snapshots]
     .sort((a, b) => new Date(a.date) - new Date(b.date))
     .map((snap) => ({
       name: formatMonthDate(snap.date),

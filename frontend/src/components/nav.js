@@ -17,21 +17,23 @@ const links = [
   { name: 'Profile', href: '/profile' },
 ];
 
-export function DashboardNav() {
+export function DashboardNav({ stateId }) {
   const pathname = usePathname();
   const { states } = useUser();
 
   return (
     <nav className="flex items-center space-x-8 border-b px-6">
       <div className="flex items-center space-x-3">
-        <div className="w-8 h-8 bg-gray-200 rounded-full" />
-        <Select defaultValue={states?.[0]?.id}>
-          <SelectTrigger className="w-[200px] border-0 focus:ring-0">
+        <Select
+          value={'' + stateId}
+          onValueChange={(value) => (window.location.href = `/state/${value}`)}
+        >
+          <SelectTrigger className="w-[200px] bg-background border border-input hover:bg-accent hover:text-accent-foreground">
             <SelectValue placeholder="Select state" />
           </SelectTrigger>
           <SelectContent>
             {(states || []).map((state) => (
-              <SelectItem key={state.id} value={state.id}>
+              <SelectItem key={state.id} value={'' + state.id}>
                 {state.name}
               </SelectItem>
             ))}

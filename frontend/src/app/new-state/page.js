@@ -188,7 +188,11 @@ export default function NewState() {
             )}
             {isLoading && (
               <div className="mt-4">
-                <ProgressTimer isRunning={isLoading} className="w-full" />
+                <ProgressTimer
+                  isRunning={isLoading}
+                  className="w-full"
+                  duration={60 * 1000}
+                />
                 <p className="text-sm text-muted-foreground text-center mt-2">
                   {loadingMessages[loadingMessageIndex]}
                 </p>

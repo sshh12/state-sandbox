@@ -88,7 +88,7 @@ STATE_TEMPLATE = """
 - Other: {Percentage}
 
 ### Population Growth
-- Overall Population Growth Rate: {Percentage} per month <!-- per month! -->
+- Population Monthly Growth Rate: {Percentage} per month <!-- per month! -->
 - Ethnic Population Growth: {DetailedDescription} <!-- e.g. how growth is distributed among ethnic groups -->
 - Religious Population Growth: {DetailedDescription}
 - Economic Class Population Growth: {DetailedDescription}
@@ -330,13 +330,13 @@ STATE_TEMPLATE = """
 - Fitch: {RatingLetters}
 
 ## Economic Metrics
-- GDP Growth Rate: {Percentage} per month <!-- per month! -->
+- GDP Monthly Growth Rate: {Percentage} per month <!-- per month! -->
 - Unemployment Rate: {Percentage}
 - Labor Force Participation Rate: {Percentage} <!-- % people ages 15 or older who are employed or seeking work -->
 - Poverty Rate: {Percentage}
 - Inflation Rate: {Percentage}
 - Gini Coefficient: {Number} out of 1.0
-- Average Income: {TotalAmountInUSD} per person
+- Average Annual Income: {TotalAmountInUSD} per person
 - Exchange Rate ({LocalCurrency}/USD): {ExchangeRate}
 - Population with Optimistic Perception of Economic Future: {Percentage}
 
@@ -396,13 +396,14 @@ STATE_TEMPLATE = """
 
 # 9. Culture
 ## Cultural Identity
-### Cultural Values
-- Traditional Values: {DetailedDescription}
-- Family Values: {DetailedDescription}
-- Work Values: {DetailedDescription}
-- Gender Values: {DetailedDescription}
-- Religious Values: {DetailedDescription}
-- Individualism vs Collectivism: {DetailedDescription}
+<!-- describe the cultural identity of the state in detail, including:
+- Traditional Values
+- Family Values
+- Work Values
+- Gender Values
+- Religious Values
+- Variance in culture and values (among age, gender, ethnicity, etc.)
+- Individualism vs Collectivism -->
 
 ### Sports and Recreation
 - {SportOrActivity}: {DetailedDescription}

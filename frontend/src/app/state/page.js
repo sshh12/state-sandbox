@@ -14,18 +14,12 @@ import { SafeSVG } from '@/components/ui/safe-svg';
 
 export default function StatePage({ stateId }) {
   const [state, setState] = useState(null);
-  const [_snapshots, setSnapshots] = useState([]);
+  const [snapshots, setSnapshots] = useState([]);
   const [turnLoading, setTurnLoading] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [latestReport, setLatestReport] = useState('');
-
-  const snapshots = useMemo(() => {
-    const sorted = [..._snapshots].sort(
-      (a, b) => +new Date(b.date) - +new Date(a.date)
-    );
-    console.log('sorted', sorted);
-    return sorted;
-  }, [_snapshots]);
+  const latestSnapshot = snapshots[0];
+  console.log('latest', snapshots, latestSnapshot);
 
   useEffect(() => {
     api.getStateSnapshots(stateId).then((snaps) => {
@@ -42,7 +36,7 @@ export default function StatePage({ stateId }) {
   const handlePlay = (policy) => {
     setTurnLoading(true);
     api.createStateSnapshot(stateId, policy).then((snap) => {
-      setSnapshots((prevSnapshots) => prevSnapshots.concat([snap.json_state]));
+      setSnapshots((prevSnapshots) => [snap.json_state, ...prevSnapshots]);
       setTurnLoading(false);
       if (snap.markdown_delta_report) {
         setLatestReport(snap.markdown_delta_report);
@@ -53,8 +47,7 @@ export default function StatePage({ stateId }) {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <DashboardNav />
-
+      <DashboardNav stateId={stateId} />
       <div className="flex-1 space-y-4 p-8 pt-6">
         <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -67,14 +60,14 @@ export default function StatePage({ stateId }) {
                 )}
               >
                 {
-                  snapshots[0]?.state_overview.basic_information.country_name
+                  latestSnapshot?.state_overview.basic_information.country_name
                     .value
                 }
               </h2>
             </div>
             <Badge variant="secondary">
               {
-                snapshots[0]?.state_overview.basic_information.government_type
+                latestSnapshot?.state_overview.basic_information.government_type
                   .value
               }
             </Badge>
@@ -82,10 +75,10 @@ export default function StatePage({ stateId }) {
           <div className="flex items-center space-x-2">
             <PlayDialog
               stateId={stateId}
-              date={snapshots[0]?.date}
+              date={latestSnapshot?.date}
               onPlay={handlePlay}
               turnLoading={turnLoading}
-              key={snapshots[0]?.date}
+              key={latestSnapshot?.date}
             />
             <HelpDialog />
           </div>

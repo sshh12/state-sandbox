@@ -18,6 +18,7 @@ class User(TimestampMixin, Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True, nullable=False)
     email = Column(String, unique=True, nullable=True)
+    credits = Column(Integer, nullable=False, default=0)
     states = relationship("State", back_populates="user")
 
 
@@ -44,6 +45,7 @@ class StateSnapshot(TimestampMixin, Base):
 
     markdown_state = Column(String, nullable=False)
     markdown_random_events = Column(String, nullable=True)
+    markdown_events = Column(String, nullable=True)
     markdown_delta = Column(String, nullable=True)
     markdown_delta_report = Column(String, nullable=True)
 

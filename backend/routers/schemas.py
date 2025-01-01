@@ -50,6 +50,7 @@ class StateSnapshotResponse(BaseModel):
     markdown_random_events: Optional[str]
     markdown_delta: Optional[str]
     markdown_delta_report: Optional[str]
+    markdown_events: Optional[str]
     json_state: dict
     state_id: int
 

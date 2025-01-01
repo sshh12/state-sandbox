@@ -59,20 +59,20 @@ async def generate_state(date: str, name: str, questions: List[Tuple[str, int]])
     prompt = f"""
 Fill out the following template for a fictional country in {_format_month_date(date)}.
 
+Suggested Country Name: {name[:30]} (make it more realistic, e.g. Republic/Federation/Empire/Kingdom/Sultanate/Emirates/Commonwealth of, -ia/-istan/-onia, etc)
+
 <state-template>
 {STATE_TEMPLATE}
 </state-template>
 
 <values>
-Suggested Country Name: {name[:30]} (make it more realistic, e.g. Republic of, -istan, -land, etc)
-
 {_format_questions(questions)}
 </values>
 
-- Choose a unique but realistic name taking into account the <values> above. It should NOT be an existing nation or from a well-known fictional universe.
+- Choose a unique but realistic name taking into account suggested name above. It should NOT be an existing nation or from a well-known fictional universe.
 - Include a single fictional country-specific ethnic group and use real groups for the others (e.g. White, Asian, etc)
 - Include a single fictional country-specific religious group and use real religions for the others (e.g. Christianity, Islam, etc)
-- Use real life countries for import and export partners
+- Use real countries (e.g. USA, China, Russia, etc) for import and export partners
 - Assume population of 25.68 million, area of 520k sq km area, and initial GDP of 2,700,000,000 USD
 - Be realistic and balanced based on what you know about the world while being creative with your choice of government type (overfitting the values above), systems (health care, justice, etc), and the challenges for each section.
 - When planning, consider the impacts of the <values> above on policies, government, culture, heath, justice, and the economy
