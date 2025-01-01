@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Overview } from '@/components/dashboard/chart2';
+import { BarChart } from '@/components/dashboard/bar-chart';
 import { Table } from '@/components/dashboard/table';
 import { Banknote, Users, Crown, Gauge } from 'lucide-react';
 
@@ -83,10 +83,50 @@ export default function OverviewPage({ snapshots, latest }) {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>Overview</CardTitle>
+            <CardTitle>GDP</CardTitle>
           </CardHeader>
           <CardContent className="pl-2">
-            <Overview />
+            <BarChart
+              data={snapshots.map((snap) => ({
+                name: snap.date,
+                total:
+                  snap.economy.economic_metrics.gross_domestic_product_gdp
+                    .value,
+              }))}
+            />
+          </CardContent>
+        </Card>
+        <Card className="col-span-3">
+          <CardHeader>
+            <CardTitle>Top Citizen Concerns</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table
+              data={
+                latest
+                  ? Object.values(
+                      latest.public_opinion.top_concerns_among_citizens
+                    )
+                  : []
+              }
+            />
+          </CardContent>
+        </Card>
+      </div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="col-span-4">
+          <CardHeader>
+            <CardTitle>Approval Rating</CardTitle>
+          </CardHeader>
+          <CardContent className="pl-2">
+            <BarChart
+              data={snapshots.map((snap) => ({
+                name: snap.date,
+                total:
+                  snap.government.government_metrics
+                    .overall_head_of_stategovernment_approval_rating.value,
+              }))}
+            />
           </CardContent>
         </Card>
         <Card className="col-span-3">

@@ -1,6 +1,6 @@
 import re
 import markdown_to_json
-from typing import Any, Union
+from typing import Any
 
 
 def extract_markdown_codeblock(text: str) -> str:
@@ -9,6 +9,8 @@ def extract_markdown_codeblock(text: str) -> str:
 
 
 def _md_to_json(markdown: str) -> dict:
+    # Remove HTML comments
+    markdown = re.sub(r"<!--.*?-->", "", markdown, flags=re.DOTALL)
     return markdown_to_json.dictify(markdown)
 
 

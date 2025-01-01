@@ -8,6 +8,7 @@ import { api } from '@/lib/api';
 import { Badge } from '@/components/ui/badge';
 import { PlayDialog } from '@/components/dashboard/play-dialog';
 import { HelpDialog } from '@/components/help-dialog';
+import { cn } from '@/lib/utils';
 
 export default function StatePage({ stateId }) {
   const [snapshots, setSnapshots] = useState([]);
@@ -38,7 +39,12 @@ export default function StatePage({ stateId }) {
       <div className="flex-1 space-y-4 p-8 pt-6">
         <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <h2 className="text-3xl font-bold tracking-tight">
+            <h2
+              className={cn(
+                'text-3xl font-bold tracking-tight',
+                turnLoading && 'animate-pulse'
+              )}
+            >
               {latest?.state_overview.basic_information.country_name.value}
             </h2>
             <Badge variant="secondary">
@@ -50,6 +56,7 @@ export default function StatePage({ stateId }) {
               date={latest?.date}
               onPlay={handlePlay}
               turnLoading={turnLoading}
+              key={latest?.date}
             />
             <HelpDialog />
           </div>

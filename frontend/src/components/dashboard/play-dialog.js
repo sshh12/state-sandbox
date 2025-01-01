@@ -13,11 +13,14 @@ import {
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { Loader2 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 export function PlayDialog({ date, onPlay, turnLoading }) {
   const [policies, setPolicies] = useState('');
   const [advisorFeedback, setAdvisorFeedback] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [customQuestion, setCustomQuestion] = useState('');
 
   const advisorQuestions = [
     'What policies should I implement to increase GDP?',
@@ -49,14 +52,23 @@ export function PlayDialog({ date, onPlay, turnLoading }) {
           onClick={() => setIsOpen(true)}
           disabled={turnLoading}
         >
-          Play (
-          {date
-            ? new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
-                month: 'short',
-                year: 'numeric',
-              })
-            : null}
-          )
+          {turnLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Simulating...
+            </>
+          ) : (
+            <>
+              Play (
+              {date
+                ? new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
+                    month: 'short',
+                    year: 'numeric',
+                  })
+                : null}
+              )
+            </>
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
@@ -69,7 +81,7 @@ export function PlayDialog({ date, onPlay, turnLoading }) {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="space-y-2">
-            <h4 className="font-medium">Custom Policies</h4>
+            <h4 className="font-medium">Your Policies</h4>
             <Textarea
               placeholder="Enter your policy changes here..."
               value={policies}
@@ -90,6 +102,29 @@ export function PlayDialog({ date, onPlay, turnLoading }) {
                   {question}
                 </Badge>
               ))}
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Ask your own question..."
+                  value={customQuestion}
+                  onChange={(e) => setCustomQuestion(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && customQuestion.trim()) {
+                      getAdvisorFeedback(customQuestion);
+                    }
+                  }}
+                />
+                <Button
+                  variant="outline"
+                  className="shrink-0"
+                  onClick={() => {
+                    if (customQuestion.trim()) {
+                      getAdvisorFeedback(customQuestion);
+                    }
+                  }}
+                >
+                  Ask
+                </Button>
+              </div>
             </div>
             {advisorFeedback && (
               <div className="mt-2 rounded-md bg-muted p-4 text-sm">
@@ -100,7 +135,14 @@ export function PlayDialog({ date, onPlay, turnLoading }) {
         </div>
         <DialogFooter>
           <Button onClick={handlePlay} disabled={turnLoading}>
-            {turnLoading ? 'Simulating...' : 'Play'}
+            {turnLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Simulating...
+              </>
+            ) : (
+              <>Play Turn</>
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
