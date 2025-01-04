@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { DashboardNav } from '@/components/nav';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import OverviewPage from '@/components/dashboard/overview';
+import PeoplePage from '@/components/dashboard/people';
 import { api } from '@/lib/api';
 import { Badge } from '@/components/ui/badge';
 import { PlayDialog } from '@/components/dashboard/play-dialog';
@@ -121,6 +122,10 @@ export default function StatePage({ stateId }) {
 
           <TabsContent value="overview" className="space-y-4">
             <OverviewPage snapshots={snapshots} />
+          </TabsContent>
+
+          <TabsContent value="people" className="space-y-4">
+            <PeoplePage snapshots={snapshots} />
           </TabsContent>
         </Tabs>
       </div>
