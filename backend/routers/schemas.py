@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional, List, Literal, Union
 
 
 class UserBase(BaseModel):
@@ -68,3 +68,27 @@ class AdviceRequest(BaseModel):
 
 class AdviceResponse(BaseModel):
     markdown_advice: str
+
+
+class BaseEvent(BaseModel):
+    def json_line(self) -> str:
+        """Convert event to a JSON line for streaming"""
+        return self.model_dump_json() + "\n"
+
+
+class StateCreatedEvent(BaseEvent):
+    type: str = "state_created"
+    id: int
+
+
+class StateStatusEvent(BaseEvent):
+    type: str = "status"
+    message: str
+
+
+class StateCompleteEvent(BaseEvent):
+    type: str = "complete"
+    state: StateResponse
+
+
+StateCreationEvent = Union[StateCreatedEvent, StateStatusEvent, StateCompleteEvent]

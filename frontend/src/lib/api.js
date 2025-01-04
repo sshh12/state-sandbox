@@ -22,6 +22,47 @@ class ApiClient {
     return res.json();
   }
 
+  async _postStream(endpoint, data, onMessage) {
+    const res = await fetch(`${API_URL}${endpoint}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.detail || `API error: ${res.statusText}`);
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (line.trim()) {
+          const event = JSON.parse(line);
+          onMessage(event);
+        }
+      }
+    }
+
+    if (buffer.trim()) {
+      const event = JSON.parse(buffer);
+      onMessage(event);
+    }
+  }
+
   async _get(endpoint) {
     const res = await fetch(`${API_URL}${endpoint}`, {
       headers: {
@@ -71,39 +112,6 @@ class ApiClient {
     return res.json();
   }
 
-  async _get_stream(endpoint, params = {}, onMessage) {
-    if (typeof params === 'function' && !onMessage) {
-      onMessage = params;
-      params = {};
-    }
-
-    const searchParams = new URLSearchParams({
-      ...params,
-      token: localStorage.getItem(TOKEN_KEY),
-    });
-
-    const eventSource = new EventSource(
-      `${API_URL}${endpoint}?${searchParams.toString()}`
-    );
-
-    return new Promise((resolve, reject) => {
-      eventSource.onmessage = (event) => {
-        onMessage?.(event.data);
-      };
-
-      eventSource.onerror = (error) => {
-        eventSource.close();
-        console.warning(error);
-        resolve();
-      };
-
-      eventSource.addEventListener('complete', () => {
-        eventSource.close();
-        resolve();
-      });
-    });
-  }
-
   async createAccount() {
     const data = await this._post('/api/auth/create', {});
     localStorage.setItem(TOKEN_KEY, data.token);
@@ -122,8 +130,8 @@ class ApiClient {
     return this._get(`/api/states/${stateId}/snapshots`);
   }
 
-  async createState(name, questions) {
-    return this._post('/api/states', { name, questions });
+  async createState(name, questions, onMessage) {
+    return this._postStream('/api/states', { name, questions }, onMessage);
   }
 
   async getState(stateId) {

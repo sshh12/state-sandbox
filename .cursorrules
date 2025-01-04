@@ -1,14 +1,13 @@
 This is a React Next.js project with a FastAPI Python backend.
 
-Frontend:
+Frontend (/frontend):
 
 - Use .js for JSX files
 - Use 'next/navigation' for all navigation/routing
 - Use frontend/src/lib/api.js for all API calls
 - Prefer shadcn/ui for components
-  - Let the user manually install components
 
-Backend:
+Backend (/backend):
 
 - Use pydantic for all data models
 - Use backend/db/models.py for all database models

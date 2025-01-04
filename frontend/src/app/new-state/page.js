@@ -96,8 +96,19 @@ export default function NewState() {
         value: parseInt(ratings[index]),
       }));
 
-      const state = await api.createState(countryName, questionData);
-      router.push(`/state/${state.id}`);
+      let stateId = null;
+      await api.createState(countryName, questionData, (event) => {
+        switch (event.type) {
+          case 'state_created':
+            stateId = event.id;
+            break;
+          case 'status':
+            break;
+          case 'complete':
+            router.push(`/state/${stateId}`);
+            break;
+        }
+      });
     } catch (error) {
       console.error('Failed to create state:', error);
     } finally {

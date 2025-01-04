@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from fastapi.responses import StreamingResponse
 
 from db.database import get_db
 from db.models import State, StateSnapshot, User
@@ -13,6 +14,9 @@ from routers.schemas import (
     CreateNewSnapshotRequest,
     AdviceRequest,
     AdviceResponse,
+    StateCreatedEvent,
+    StateStatusEvent,
+    StateCompleteEvent,
 )
 from routers.auth import get_current_user_from_token
 from model.actions import (
@@ -47,42 +51,55 @@ async def get_state(
     return state
 
 
-@router.post("", response_model=StateResponse)
+@router.post("", response_model=None)
 async def create_state(
     request: CreateStateRequest,
     current_user: User = Depends(get_current_user_from_token),
     db: Session = Depends(get_db),
 ):
-    date = "2022-01"
-    state = State(
-        date=date,
-        name="Developing Nation",
-        flag_svg='<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600"></svg>',
-        user_id=current_user.id,
-    )
-    db.add(state)
-    db.flush()
+    async def event_stream():
+        date = "2022-01"
+        state = State(
+            date=date,
+            name="Developing Nation",
+            flag_svg='<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600"></svg>',
+            user_id=current_user.id,
+        )
+        db.add(state)
+        db.flush()
 
-    questions = [(q.question, q.value) for q in request.questions]
+        yield StateCreatedEvent(id=state.id).json_line()
 
-    md_state = await generate_state(date=date, name=request.name, questions=questions)
-    svg_flag = await generate_state_flag(md_state)
-    state_snapshot = StateSnapshot(
-        date=date,
-        state_id=state.id,
-        markdown_state=md_state,
-    )
-    parsed_state = parse_state(state_snapshot.markdown_state)
-    full_name = parsed_state["state_overview"]["basic_information"]["country_name"][
-        "value"
-    ]
-    state.name = full_name
-    state.flag_svg = svg_flag
-    db.add(state_snapshot)
-    db.commit()
-    db.refresh(state)
+        questions = [(q.question, q.value) for q in request.questions]
 
-    return state
+        yield StateStatusEvent(message="Generating initial state...").json_line()
+
+        md_state = await generate_state(
+            date=date, name=request.name, questions=questions
+        )
+
+        yield StateStatusEvent(message="Designing flag...").json_line()
+
+        svg_flag = await generate_state_flag(md_state)
+
+        state_snapshot = StateSnapshot(
+            date=date,
+            state_id=state.id,
+            markdown_state=md_state,
+        )
+        parsed_state = parse_state(state_snapshot.markdown_state)
+        full_name = parsed_state["state_overview"]["basic_information"]["country_name"][
+            "value"
+        ]
+        state.name = full_name
+        state.flag_svg = svg_flag
+        db.add(state_snapshot)
+        db.commit()
+        db.refresh(state)
+
+        yield StateCompleteEvent(state=state).json_line()
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream")
 
 
 def _fix_snapshot_json(snapshot: StateSnapshot):

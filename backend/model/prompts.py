@@ -352,7 +352,7 @@ STATE_TEMPLATE = """
 - Technological capabilities
 - Sources of equipment (e.g. domestically produced, foreign-made, etc.) -->
 
-## Military Metrics <!-- some of these may be zero -->
+## Military Personnel and Equipment <!-- some of these may be zero -->
 - Active Duty Personnel: {Number}
 - Reserve Personnel: {Number}
 - Fighter Jets: {Number}
@@ -380,12 +380,16 @@ STATE_TEMPLATE = """
 ...
 
 # 8. Media
-## Media Outlets <!-- avoid mentioning proper nouns, just types. Include state vs private ownership. -->
+## Media Outlets <!-- avoid mentioning proper nouns, just types. Include state vs private ownership. E.g. social media, cable news, etc. -->
 - {MediaType}: {DetailedDescription}
 ...
 
 ### Media Coverage <!-- e.g. coverage of issues, % of media time spent on issues -->
 - {MediaIssue}: {Percentage}
+...
+
+### TV and Film Topics <!-- e.g. % of recent TV shows, movies, etc. spend on topics. Topics can be state propaganda, dramas, comedies, etc. -->
+- {Topic}: {Percentage}
 ...
 
 ## Media Metrics
@@ -445,9 +449,14 @@ STATE_TEMPLATE = """
 ...
 
 # 11. Infrastructure and Technology
-## Transportation Infrastructure
+## Infrastructure
 <!-- describe the transportation infrastructure in detail, including:
-- Status, quality, and quantity of roads, public transport, railways, airports, ports and harbors. -->
+- Transportation infrastructure
+- Energy infrastructure
+- Communication infrastructure
+- Status and quality of roads, public transport, railways, airports, ports and harbors.
+- Status and quality of energy infrastructure (e.g. power plants, transmission lines, etc.)
+- Status and quality of communication infrastructure (e.g. internet, phone, etc.) -->
 
 ## Energy Sources
 - Natural Gas: {Percentage}
@@ -563,7 +572,7 @@ STATE_TEMPLATE = """
 ...
 
 # 13. Public Opinion
-## Top Concerns Among Citizens <!-- At least 5 concerns -->
+## Top Concerns Among Citizens <!-- At least 5 concerns, be specific (e.g. high cost of living, high crime rate, etc.) -->
 - {Concern}: {Percentage}
 ...
 
