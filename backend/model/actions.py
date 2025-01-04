@@ -127,7 +127,10 @@ def _sample_event(events: List[Tuple[float, str]]) -> str:
 
 
 async def generate_random_events(
-    start_date: datetime, end_date: datetime, prev_state: str
+    start_date: datetime,
+    end_date: datetime,
+    prev_state: str,
+    historical_events_str: str,
 ) -> List[str]:
     provider = OpenAIProvider()
     prompt = f"""
@@ -140,6 +143,10 @@ Given this fictional state from {start_date} to {end_date}, provide a realistic 
 <state>
 {prev_state}
 </state>
+
+<historical-events>
+{historical_events_str}
+</historical-events>
 
 Reply with <format> within a markdown codeblock. Do not include xml tags.
 """.strip()
@@ -158,13 +165,28 @@ Reply with <format> within a markdown codeblock. Do not include xml tags.
 
 
 async def generate_next_state(
-    start_date: datetime, end_date: datetime, prev_state: str, policy: str
-) -> Tuple[str, str, str, str]:
+    start_date: datetime,
+    end_date: datetime,
+    prev_state: str,
+    policy: str,
+    historical_events: List[Tuple[str, List[str]]] = None,
+) -> Tuple[str, str, str]:
     provider = OpenAIProvider()
-    events = await generate_random_events(start_date, end_date, prev_state)
+
+    historical_events_str = ""
+    if historical_events:
+        historical_events_str = "\n".join(
+            [f"{date}:\n" + "\n".join(events) for date, events in historical_events]
+        )
+
+    events = await generate_random_events(
+        start_date, end_date, prev_state, historical_events_str
+    )
     events_str = "\n".join([f"- {e}" for e in events])
     events_str = f"- Government Events: {policy if policy else 'None'}\n{events_str}"
+    print(historical_events_str)
     print(events_str)
+
     diff_prompt = f"""
 Given this fictional state and the following events between {start_date} and {end_date}, simulate the key changes that occur to the state.
 
@@ -172,12 +194,17 @@ Given this fictional state and the following events between {start_date} and {en
 {prev_state}
 </state>
 
-<events>
+<historical-events>
+{historical_events_str}
+</historical-events>
+
+<recent-events>
 {events_str}
-</events>
+</recent-events>
 
 You must jointly consider:
-- All <events> along with their impact on the economy, society, and international relations (all aspects of the <state>)
+- All <recent-events> along with their impact on the economy, society, and international relations (all aspects of the <state>)
+- The historical events and their long-term effects on the current state
 - The unique characteristics, systems, and values of the <state>
 - Natural changes in population and resource counts over the course of a month
 - Natural random changes in production, distributions, infrastructure, and facilities.
@@ -197,6 +224,7 @@ Reply with:
 - Noting for critical changed metrics (e.g. GDP, inflation, etc) how you computed the signficance of the change 
 """.strip()
     diff_output = await provider.generate_strong_reasoning(diff_prompt)
+
     new_state_prompt = f"""
 Given this fictional state and the following events between {start_date} and {end_date}, provide the updated <state>.
 

@@ -8,18 +8,29 @@ import { useState, useMemo, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { ProgressTimer } from '@/components/ui/progress-timer';
+import { useUser } from '@/context/user-context';
 
 const questions = [
-  'Individual rights should take precedence over collective security',
-  'The state should own and operate key industries and utilities',
-  'Scientific research should be prioritized over traditional values',
+  'Individual rights should take precedence over collective needs',
+  'The state should have a strong role in economic affairs',
+  'Scientific progress should be prioritized over traditional values',
   'International cooperation is more important than national sovereignty',
-  'The state should enforce traditional cultural and moral values',
-  'Economic inequality is acceptable if it drives innovation and growth',
-  'Civil liberties can be restricted to maintain social order',
-  'Natural resources should be exploited to maximize economic output',
-  'The state should provide universal basic income to all citizens',
-  'Technology companies should be allowed to self-regulate',
+  'The state should promote traditional cultural values',
+  'Economic inequality is acceptable for societal progress',
+  'Personal freedom can be limited for social stability',
+  'Economic growth should take priority over resource conservation',
+  'The state should provide comprehensive social welfare',
+  'Private enterprises should operate with minimal regulation',
+  'Education should focus on practical skills over theoretical knowledge',
+  'Healthcare should be market-driven rather than state-provided',
+  'Citizens have a duty to serve their country',
+  'Environmental protection should take priority over economic growth',
+  'Society should be open to cultural change and immigration',
+  'Religious values should guide public policy',
+  'Justice should prioritize rehabilitation over punishment',
+  'Technological innovation should be closely regulated',
+  'Media should operate independently of government influence',
+  'Power should be decentralized to local communities',
 ];
 
 const ratingOptions = [
@@ -62,17 +73,25 @@ const loadingMessages = [
 ];
 
 export default function NewState() {
+  const { refreshStates } = useUser();
   const [ratings, setRatings] = useState({});
   const [countryName, setCountryName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
+  const [showAllQuestions, setShowAllQuestions] = useState(false);
+  const [shuffledQuestions, setShuffledQuestions] = useState(questions);
   const router = useRouter();
 
+  useEffect(() => {
+    setShuffledQuestions([...questions].sort(() => Math.random() - 0.5));
+  }, []);
+
+  const visibleQuestions = showAllQuestions
+    ? shuffledQuestions
+    : shuffledQuestions.slice(0, 5);
+
   const isFormValid = useMemo(() => {
-    return (
-      countryName.trim() !== '' &&
-      Object.keys(ratings).length === questions.length
-    );
+    return countryName.trim() !== '' && Object.keys(ratings).length >= 5;
   }, [countryName, ratings]);
 
   useEffect(() => {
@@ -91,10 +110,12 @@ export default function NewState() {
 
     setIsLoading(true);
     try {
-      const questionData = questions.map((question, index) => ({
-        question,
-        value: parseInt(ratings[index]),
-      }));
+      const questionData = visibleQuestions
+        .filter((_, index) => ratings[index] !== undefined)
+        .map((question, index) => ({
+          question,
+          value: parseInt(ratings[index]),
+        }));
 
       let stateId = null;
       await api.createState(countryName, questionData, (event) => {
@@ -105,7 +126,9 @@ export default function NewState() {
           case 'status':
             break;
           case 'complete':
-            router.push(`/state/${stateId}`);
+            refreshStates().then(() => {
+              router.push(`/state/${stateId}`);
+            });
             break;
         }
       });
@@ -158,9 +181,12 @@ export default function NewState() {
               />
             </div>
 
-            {questions.map((question, index) => (
+            {visibleQuestions.map((question, index) => (
               <div key={index} className="space-y-3">
-                <Label className="block text-base">{question}</Label>
+                <Label className="block text-base">
+                  {question}
+                  {index < 5 && <span className="text-red-500 ml-1">*</span>}
+                </Label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
                   {ratingOptions.map((option) => (
                     <Button
@@ -184,6 +210,24 @@ export default function NewState() {
                 </div>
               </div>
             ))}
+
+            {!showAllQuestions && (
+              <div className="space-y-2">
+                <div className="h-px bg-border" />
+                <p className="text-sm text-muted-foreground text-center">
+                  Want to further customize your nation? Answer more optional
+                  questions below.
+                </p>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => setShowAllQuestions(true)}
+                >
+                  Show {shuffledQuestions.length - 5} More Optional Questions
+                </Button>
+              </div>
+            )}
 
             {!isLoading && (
               <Button

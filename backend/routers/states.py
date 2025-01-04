@@ -155,14 +155,29 @@ async def create_state_snapshot(
         if not state:
             raise HTTPException(status_code=404, detail="State not found")
 
-        latest_snapshot = (
+        # Get all previous snapshots ordered by date
+        previous_snapshots = (
             db.query(StateSnapshot)
             .filter(StateSnapshot.state_id == state_id)
-            .order_by(StateSnapshot.date.desc())
-            .first()
+            .order_by(StateSnapshot.date.asc())
+            .all()
         )
+        if not previous_snapshots:
+            raise HTTPException(status_code=404, detail="No previous snapshots found")
+
+        latest_snapshot = previous_snapshots[-1]
         current_date = datetime.strptime(latest_snapshot.date, "%Y-%m")
         next_date = current_date + relativedelta(months=1)
+
+        # Collect historical events with their dates
+        historical_events = [
+            (
+                snapshot.date,
+                (snapshot.markdown_events.split("\n")),
+            )
+            for snapshot in previous_snapshots
+            if snapshot.markdown_events
+        ]
 
         yield StateStatusEvent(message="Simulating next month...").json_line()
         async for event in with_heartbeat(
@@ -171,6 +186,7 @@ async def create_state_snapshot(
                 end_date=next_date,
                 prev_state=latest_snapshot.markdown_state,
                 policy=request.policy,
+                historical_events=historical_events,
             )
         ):
             if isinstance(event, HeartbeatResult):

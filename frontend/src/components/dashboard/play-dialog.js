@@ -199,7 +199,7 @@ export function PlayDialog({
             {turnLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Simulating...
+                {loadingMessage || 'Simulating...'}
               </>
             ) : (
               <>Play Turn</>
