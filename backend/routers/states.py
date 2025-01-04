@@ -111,6 +111,14 @@ async def create_state(
 def _fix_snapshot_json(snapshot: StateSnapshot):
     snapshot.json_state = parse_state(snapshot.markdown_state)
     snapshot.json_state["date"] = snapshot.date
+    if snapshot.markdown_events:
+        snapshot.json_state["events"] = snapshot.markdown_events.split("\n")
+    else:
+        snapshot.json_state["events"] = []
+    if snapshot.markdown_delta_report:
+        snapshot.json_state["delta_report"] = snapshot.markdown_delta_report
+    else:
+        snapshot.json_state["delta_report"] = ""
     snapshot.json_state["id"] = snapshot.id
     return snapshot
 
