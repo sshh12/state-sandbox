@@ -71,7 +71,7 @@ Suggested Country Name: {repr(name[:30])} (make it more realistic, e.g. Republic
 {_format_questions(questions)}
 </values>
 
-- Choose a unique but realistic name taking into account suggested name above. It should NOT be an existing nation or from a well-known fictional universe.
+- Choose a unique but realistic name taking into account suggested name above. It should NOT be an existing nation.
 - Include a single fictional country-specific ethnic group and use real groups for the others (e.g. White, Asian, etc)
 - Include a single fictional country-specific religious group and use real religions for the others (e.g. Christianity, Islam, etc)
 - Use real countries (e.g. USA, China, Russia, etc) for import and export partners
