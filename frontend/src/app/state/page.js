@@ -58,7 +58,7 @@ export default function StatePage({ stateId }) {
           setTurnLoading(false);
           setLoadingMessage('');
           if (event.state_snapshot.markdown_delta_report) {
-            setLatestReport(event.state.markdown_delta_report);
+            setLatestReport(event.state_snapshot.markdown_delta_report);
             setReportOpen(true);
           }
           break;
