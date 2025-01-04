@@ -30,7 +30,7 @@ export default function EventsTimeline({ snapshots }) {
 
   if (allEvents.length === 0) {
     return (
-      <Card>
+      <Card className="col-span-3">
         <CardHeader>
           <CardTitle>Events Timeline</CardTitle>
         </CardHeader>

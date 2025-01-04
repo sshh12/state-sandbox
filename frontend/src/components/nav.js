@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useUser } from '@/context/user-context';
+import { FlagSVG } from '@/components/flag-svg';
 
 const links = [
   { name: 'States', href: '#' },
@@ -28,13 +29,16 @@ export function DashboardNav({ stateId }) {
           value={'' + stateId}
           onValueChange={(value) => (window.location.href = `/state/${value}`)}
         >
-          <SelectTrigger className="w-[200px] bg-background border border-input hover:bg-accent hover:text-accent-foreground">
+          <SelectTrigger className="w-[300px] bg-background border border-input hover:bg-accent hover:text-accent-foreground">
             <SelectValue placeholder="Select state" />
           </SelectTrigger>
           <SelectContent>
             {(states || []).map((state) => (
               <SelectItem key={state.id} value={'' + state.id}>
-                {state.name}
+                <div className="flex items-center gap-2">
+                  <FlagSVG svgString={state.flag_svg} />
+                  {state.name}
+                </div>
               </SelectItem>
             ))}
           </SelectContent>

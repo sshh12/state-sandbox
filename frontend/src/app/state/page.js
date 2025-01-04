@@ -16,8 +16,10 @@ import { HelpDialog } from '@/components/help-dialog';
 import { ReportDialog } from '@/components/dashboard/report-dialog';
 import { cn } from '@/lib/utils';
 import { FlagSVG } from '@/components/flag-svg';
+import { useUser } from '@/context/user-context';
 
 export default function StatePage({ stateId }) {
+  const { refreshStates } = useUser();
   const [state, setState] = useState(null);
   const [snapshots, setSnapshots] = useState([]);
   const [turnLoading, setTurnLoading] = useState(false);
@@ -52,6 +54,7 @@ export default function StatePage({ stateId }) {
             event.state_snapshot.json_state,
             ...prevSnapshots,
           ]);
+          refreshStates();
           setTurnLoading(false);
           setLoadingMessage('');
           if (event.state_snapshot.markdown_delta_report) {
@@ -70,7 +73,7 @@ export default function StatePage({ stateId }) {
         <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <div className="flex items-center gap-3">
-              <FlagSVG svgString={state?.flag_svg} />
+              <FlagSVG svgString={state?.flag_svg} size="2rem" />
               <h2
                 className={cn(
                   'text-3xl font-bold tracking-tight',

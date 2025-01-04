@@ -1,6 +1,6 @@
 import { ReactSVG } from 'react-svg';
 
-export function FlagSVG({ svgString }) {
+export function FlagSVG({ svgString, className, size = '1rem' }) {
   if (!svgString) return null;
 
   // Extract width and height from SVG string if they exist
@@ -23,12 +23,13 @@ export function FlagSVG({ svgString }) {
     <ReactSVG
       src={url}
       wrapper="span"
+      className={className}
       onLoad={() => URL.revokeObjectURL(url)}
       beforeInjection={(svg) => {
         svg.removeAttribute('width');
         svg.removeAttribute('height');
         svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-        svg.style.height = '2rem';
+        svg.style.height = size;
         svg.style.width = 'auto';
         svg.style.display = 'inline-block';
         svg.style.verticalAlign = 'middle';
