@@ -83,7 +83,12 @@ def _parse_kv(data: Any, parent_key: str = "") -> Any:
 
         return parsed_items
 
-    elif isinstance(data, str) and ":" in data and not parent_key.endswith(" System"):
+    elif (
+        isinstance(data, str)
+        and ":" in data
+        and not parent_key.endswith(" System")
+        and not parent_key.endswith(" Headlines")
+    ):
         # Parse "Key: Value" strings
         key, value = data.split(":", 1)
         return {_clean_key(key.strip()): {**_parse_unit(value.strip()), "key": key}}
