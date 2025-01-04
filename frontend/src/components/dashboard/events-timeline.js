@@ -12,7 +12,7 @@ function parseEvent(eventString) {
 
 function shouldShowEvent(event) {
   const { content } = parseEvent(event);
-  return content !== 'None' && content !== 'No notable events';
+  return content !== 'None' && !content.includes('No notable');
 }
 
 export default function EventsTimeline({ snapshots }) {
