@@ -8,6 +8,7 @@ import PeoplePage from '@/components/dashboard/people';
 import EducationPage from '@/components/dashboard/education';
 import HealthPage from '@/components/dashboard/health';
 import CrimePage from '@/components/dashboard/crime';
+import GovernmentPage from '@/components/dashboard/government';
 import { api } from '@/lib/api';
 import { Badge } from '@/components/ui/badge';
 import { PlayDialog } from '@/components/dashboard/play-dialog';
@@ -143,6 +144,10 @@ export default function StatePage({ stateId }) {
 
           <TabsContent value="crime" className="space-y-4">
             <CrimePage snapshots={snapshots} />
+          </TabsContent>
+
+          <TabsContent value="government" className="space-y-4">
+            <GovernmentPage snapshots={snapshots} />
           </TabsContent>
         </Tabs>
       </div>
