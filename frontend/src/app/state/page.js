@@ -15,7 +15,7 @@ import { PlayDialog } from '@/components/dashboard/play-dialog';
 import { HelpDialog } from '@/components/help-dialog';
 import { ReportDialog } from '@/components/dashboard/report-dialog';
 import { cn } from '@/lib/utils';
-import { SafeSVG } from '@/components/ui/safe-svg';
+import { FlagSVG } from '@/components/flag-svg';
 
 export default function StatePage({ stateId }) {
   const [state, setState] = useState(null);
@@ -70,7 +70,7 @@ export default function StatePage({ stateId }) {
         <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <div className="flex items-center gap-3">
-              <SafeSVG svgString={state?.flag_svg} />
+              <FlagSVG svgString={state?.flag_svg} />
               <h2
                 className={cn(
                   'text-3xl font-bold tracking-tight',

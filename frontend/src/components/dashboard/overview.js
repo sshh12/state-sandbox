@@ -59,15 +59,61 @@ export default function OverviewPage({ snapshots }) {
             <CardTitle>Top Citizen Concerns</CardTitle>
           </CardHeader>
           <CardContent>
-            <Table
-              data={
-                snapshots[0]
-                  ? Object.values(
-                      snapshots[0].public_opinion.top_concerns_among_citizens
-                    )
-                  : []
-              }
-            />
+            <div className="space-y-4">
+              {snapshots[0]
+                ? Object.values(
+                    snapshots[0].public_opinion.top_concerns_among_citizens
+                  ).map((concern, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between"
+                    >
+                      <div className="space-y-1">
+                        <p className="text-sm font-medium leading-none">
+                          {concern.key}
+                        </p>
+                      </div>
+                      <div className="flex items-center">
+                        <div className="ml-4 w-16 text-right">
+                          <p className="text-sm font-medium">{concern.raw}</p>
+                        </div>
+                        <div className="ml-4 w-32 h-2 bg-secondary rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-primary"
+                            style={{ width: `${concern.value * 100}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                : null}
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="col-span-3">
+          <CardHeader>
+            <CardTitle>Recent Headlines</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {snapshots[0]?.public_opinion.recent_headlines?.map(
+                (headline, index) => (
+                  <div
+                    key={index}
+                    className="p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
+                  >
+                    <p className="text-sm leading-relaxed">
+                      {headline.replace(/^"|"$/g, '')}
+                    </p>
+                  </div>
+                )
+              )}
+            </div>
+            {!snapshots[0]?.public_opinion.recent_headlines && (
+              <p className="text-sm text-muted-foreground">
+                No recent headlines available.
+              </p>
+            )}
           </CardContent>
         </Card>
       </div>

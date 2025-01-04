@@ -1,6 +1,6 @@
 import { ReactSVG } from 'react-svg';
 
-export function SafeSVG({ svgString }) {
+export function FlagSVG({ svgString }) {
   if (!svgString) return null;
 
   // Extract width and height from SVG string if they exist
