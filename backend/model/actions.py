@@ -185,7 +185,7 @@ You must jointly consider:
 Think carefully and consider the full and holistic effects of all events along with natural expected changes and variance overtime. For this simulation to be accurate you must consider not only the immediate impacts but the higher order consequences.
 
 Reply with:
-1. The high-level natural expected changes and random changes during the month.
+1. The high-level natural expected changes and random changes during the month. Nearly all metrics should change at least slightly.
 2. For each event, the high-level expected impacted on the <state>
 - Some events will be very impactful and others might have minimal change
 - Event impacts can span several state dimensions with complex higher-order consequences
@@ -196,7 +196,7 @@ Reply with:
 - Noting how the top challenges in each dimension might evolve
 - Noting for critical changed metrics (e.g. GDP, inflation, etc) how you computed the signficance of the change 
 """.strip()
-    diff_output = await provider.generate_fast_reasoning(diff_prompt)
+    diff_output = await provider.generate_strong_reasoning(diff_prompt)
     new_state_prompt = f"""
 Given this fictional state and the following events between {start_date} and {end_date}, provide the updated <state>.
 
@@ -221,6 +221,7 @@ Note that <state-recent-changes> might not be in the right format.
 Reply with the new <state> in a markdown codeblock. Do not include xml tags.
 - For dimension challenges, lean towards adding a challenge and only remove a challenge if it's no longer relevant.
 - For government policies, lean towards adding a policy and only remove a policy if it's no longer relevant.
+- Recompute all percentages to add up to 100%
 """.strip()
     new_state_output = extract_markdown_codeblock(
         await provider.generate_fast_reasoning(new_state_prompt)

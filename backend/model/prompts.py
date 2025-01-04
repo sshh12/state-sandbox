@@ -3,7 +3,7 @@ STATE_TEMPLATE = """
 - Follow the template exactly. Filling in {values}, keeping text outside of brackets, and replacing ...s.
 - You are expected to fill out ALL the fields in the template and keep ALL default attributes.
 - Format {Number} like: 123, ~123 million, 0.12, etc. Do not use a percentage or relative values.
-- Format {Percentage} like: 12%, ~12%, < 0.1%, etc. Include a percentage sign.
+- Format {Percentage} like: 12%, ~12%, 0.01%, etc. Include a percentage sign.
 - Format {DetailedDescription} with 1-3 concise sentences. Use technical terms and avoid filler words.
 - Format {TotalAmountInUSD} monetary amounts in USD.
 - Certain policies, descriptions, and values the answer may be "N/A due to...". For metrics that should exist, but you don't know, use your best guess.
@@ -155,14 +155,14 @@ STATE_TEMPLATE = """
 
 ## Health Statistics
 ### Diseases
-- Obesity: {Number} in 100,000 population
-- Mental Health: {Number} in 100,000 population
-- Diabetes: {Number} in 100,000 population
-- Hypertension: {Number} in 100,000 population
-- Asthma: {Number} in 100,000 population
-- Heart Disease: {Number} in 100,000 population
-- Cancer: {Number} in 100,000 population
-- {DiseaseName}: {Number} in 100,000 population
+- Obesity: {Percentage} <!-- percentage of population that has this disease -->
+- Mental Health: {Percentage}
+- Diabetes: {Percentage}
+- Hypertension: {Percentage}
+- Asthma: {Percentage}
+- Heart Disease: {Percentage}
+- Cancer: {Percentage}
+- {DiseaseName}: {Percentage}
 ...
 
 ### Causes of Death

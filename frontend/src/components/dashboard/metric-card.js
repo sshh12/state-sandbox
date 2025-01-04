@@ -11,8 +11,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-export default function MetricCard({ snapshots, title, valueKey, icon }) {
-  const Icon = icon;
+export default function MetricCard({ snapshots, title, valueKey, icon: Icon }) {
   const [showChart, setShowChart] = useState(false);
 
   return (
@@ -38,7 +37,7 @@ export default function MetricCard({ snapshots, title, valueKey, icon }) {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <Icon className="h-4 w-4 text-muted-foreground" />
+            {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
           </div>
         </CardHeader>
         <CardContent>

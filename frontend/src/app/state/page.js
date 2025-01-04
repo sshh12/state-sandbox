@@ -5,6 +5,9 @@ import { DashboardNav } from '@/components/nav';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import OverviewPage from '@/components/dashboard/overview';
 import PeoplePage from '@/components/dashboard/people';
+import EducationPage from '@/components/dashboard/education';
+import HealthPage from '@/components/dashboard/health';
+import CrimePage from '@/components/dashboard/crime';
 import { api } from '@/lib/api';
 import { Badge } from '@/components/ui/badge';
 import { PlayDialog } from '@/components/dashboard/play-dialog';
@@ -110,7 +113,9 @@ export default function StatePage({ stateId }) {
             <TabsList className="inline-flex min-w-full h-10">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="people">People</TabsTrigger>
+              <TabsTrigger value="education">Education</TabsTrigger>
               <TabsTrigger value="health">Health</TabsTrigger>
+              <TabsTrigger value="crime">Crime</TabsTrigger>
               <TabsTrigger value="economy">Economy</TabsTrigger>
               <TabsTrigger value="government">Government</TabsTrigger>
               <TabsTrigger value="military">Military</TabsTrigger>
@@ -126,6 +131,18 @@ export default function StatePage({ stateId }) {
 
           <TabsContent value="people" className="space-y-4">
             <PeoplePage snapshots={snapshots} />
+          </TabsContent>
+
+          <TabsContent value="education" className="space-y-4">
+            <EducationPage snapshots={snapshots} />
+          </TabsContent>
+
+          <TabsContent value="health" className="space-y-4">
+            <HealthPage snapshots={snapshots} />
+          </TabsContent>
+
+          <TabsContent value="crime" className="space-y-4">
+            <CrimePage snapshots={snapshots} />
           </TabsContent>
         </Tabs>
       </div>
