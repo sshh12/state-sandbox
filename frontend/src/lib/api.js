@@ -138,8 +138,12 @@ class ApiClient {
     return this._get(`/api/states/${stateId}`);
   }
 
-  async createStateSnapshot(stateId, policy) {
-    return this._post(`/api/states/${stateId}/snapshots`, { policy });
+  async createStateSnapshot(stateId, policy, onMessage) {
+    return this._postStream(
+      `/api/states/${stateId}/snapshots`,
+      { policy },
+      onMessage
+    );
   }
 
   async getStateAdvice(stateId, question) {

@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional, List, Literal, Union
+from typing import Optional, List
 
 
 class UserBase(BaseModel):
@@ -91,4 +91,10 @@ class StateCompleteEvent(BaseEvent):
     state: StateResponse
 
 
-StateCreationEvent = Union[StateCreatedEvent, StateStatusEvent, StateCompleteEvent]
+class StateSnapshotCompleteEvent(BaseEvent):
+    type: str = "state_snapshot_complete"
+    state_snapshot: StateSnapshotResponse
+
+
+class HeartbeatEvent(BaseEvent):
+    type: str = "heartbeat"

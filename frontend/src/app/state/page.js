@@ -16,6 +16,7 @@ export default function StatePage({ stateId }) {
   const [state, setState] = useState(null);
   const [snapshots, setSnapshots] = useState([]);
   const [turnLoading, setTurnLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('');
   const [reportOpen, setReportOpen] = useState(false);
   const [latestReport, setLatestReport] = useState('');
   const latestSnapshot = snapshots[0];
@@ -35,12 +36,24 @@ export default function StatePage({ stateId }) {
 
   const handlePlay = (policy) => {
     setTurnLoading(true);
-    api.createStateSnapshot(stateId, policy).then((snap) => {
-      setSnapshots((prevSnapshots) => [snap.json_state, ...prevSnapshots]);
-      setTurnLoading(false);
-      if (snap.markdown_delta_report) {
-        setLatestReport(snap.markdown_delta_report);
-        setReportOpen(true);
+    setLoadingMessage('Starting simulation...');
+    api.createStateSnapshot(stateId, policy, (event) => {
+      switch (event.type) {
+        case 'status':
+          setLoadingMessage(event.message);
+          break;
+        case 'state_snapshot_complete':
+          setSnapshots((prevSnapshots) => [
+            event.state_snapshot.json_state,
+            ...prevSnapshots,
+          ]);
+          setTurnLoading(false);
+          setLoadingMessage('');
+          if (event.state_snapshot.markdown_delta_report) {
+            setLatestReport(event.state.markdown_delta_report);
+            setReportOpen(true);
+          }
+          break;
       }
     });
   };
@@ -78,6 +91,7 @@ export default function StatePage({ stateId }) {
               date={latestSnapshot?.date}
               onPlay={handlePlay}
               turnLoading={turnLoading}
+              loadingMessage={loadingMessage}
               key={latestSnapshot?.date}
             />
             <HelpDialog />

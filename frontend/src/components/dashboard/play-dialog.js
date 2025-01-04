@@ -20,7 +20,13 @@ import { formatMonthDate } from '@/lib/utils';
 import { api } from '@/lib/api';
 import ReactMarkdown from 'react-markdown';
 
-export function PlayDialog({ date, onPlay, turnLoading, stateId }) {
+export function PlayDialog({
+  date,
+  onPlay,
+  turnLoading,
+  loadingMessage,
+  stateId,
+}) {
   const [policies, setPolicies] = useState('');
   const [advisorFeedback, setAdvisorFeedback] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -104,11 +110,16 @@ export function PlayDialog({ date, onPlay, turnLoading, stateId }) {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           {turnLoading && (
-            <ProgressTimer
-              isRunning={turnLoading}
-              duration={5 * 60 * 1000}
-              className="w-full"
-            />
+            <>
+              <ProgressTimer
+                isRunning={turnLoading}
+                duration={5 * 60 * 1000}
+                className="w-full"
+              />
+              <p className="text-sm text-muted-foreground text-center">
+                {loadingMessage}
+              </p>
+            </>
           )}
           <div className="space-y-2">
             <h4 className="font-medium">Your Policies</h4>

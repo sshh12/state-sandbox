@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 from typing import List
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from fastapi.responses import StreamingResponse
 
 from db.database import get_db
 from db.models import State, StateSnapshot, User
@@ -17,6 +16,7 @@ from routers.schemas import (
     StateCreatedEvent,
     StateStatusEvent,
     StateCompleteEvent,
+    StateSnapshotCompleteEvent,
 )
 from routers.auth import get_current_user_from_token
 from model.actions import (
@@ -27,6 +27,7 @@ from model.actions import (
     generate_state_advice,
 )
 from model.parsing import parse_state
+from utils.event_stream import with_heartbeat, event_stream_response, HeartbeatResult
 
 router = APIRouter(prefix="/api/states", tags=["states"])
 
@@ -69,18 +70,23 @@ async def create_state(
         db.flush()
 
         yield StateCreatedEvent(id=state.id).json_line()
-
         questions = [(q.question, q.value) for q in request.questions]
 
         yield StateStatusEvent(message="Generating initial state...").json_line()
-
-        md_state = await generate_state(
-            date=date, name=request.name, questions=questions
-        )
+        async for event in with_heartbeat(
+            lambda: generate_state(date=date, name=request.name, questions=questions)
+        ):
+            if isinstance(event, HeartbeatResult):
+                yield event.event
+            else:
+                md_state = event
 
         yield StateStatusEvent(message="Designing flag...").json_line()
-
-        svg_flag = await generate_state_flag(md_state)
+        async for event in with_heartbeat(lambda: generate_state_flag(md_state)):
+            if isinstance(event, HeartbeatResult):
+                yield event.event
+            else:
+                svg_flag = event
 
         state_snapshot = StateSnapshot(
             date=date,
@@ -99,7 +105,7 @@ async def create_state(
 
         yield StateCompleteEvent(state=state).json_line()
 
-    return StreamingResponse(event_stream(), media_type="text/event-stream")
+    return event_stream_response(event_stream())
 
 
 def _fix_snapshot_json(snapshot: StateSnapshot):
@@ -125,58 +131,75 @@ async def get_state_snapshots(
     return snapshots
 
 
-@router.post("/{state_id}/snapshots", response_model=StateSnapshotResponse)
+@router.post("/{state_id}/snapshots", response_model=None)
 async def create_state_snapshot(
     state_id: int,
     request: CreateNewSnapshotRequest,
     current_user: User = Depends(get_current_user_from_token),
     db: Session = Depends(get_db),
 ):
-    state = (
-        db.query(State)
-        .filter(State.id == state_id, State.user_id == current_user.id)
-        .first()
-    )
-    if not state:
-        raise HTTPException(status_code=404, detail="State not found")
+    async def event_stream():
+        state = (
+            db.query(State)
+            .filter(State.id == state_id, State.user_id == current_user.id)
+            .first()
+        )
+        if not state:
+            raise HTTPException(status_code=404, detail="State not found")
 
-    latest_snapshot = (
-        db.query(StateSnapshot)
-        .filter(StateSnapshot.state_id == state_id)
-        .order_by(StateSnapshot.date.desc())
-        .first()
-    )
-    current_date = datetime.strptime(latest_snapshot.date, "%Y-%m")
-    next_date = current_date + relativedelta(months=1)
+        latest_snapshot = (
+            db.query(StateSnapshot)
+            .filter(StateSnapshot.state_id == state_id)
+            .order_by(StateSnapshot.date.desc())
+            .first()
+        )
+        current_date = datetime.strptime(latest_snapshot.date, "%Y-%m")
+        next_date = current_date + relativedelta(months=1)
 
-    diff, next_state, next_events = await generate_next_state(
-        start_date=current_date,
-        end_date=next_date,
-        prev_state=latest_snapshot.markdown_state,
-        policy=request.policy,
-    )
-    next_state_report = await generate_diff_report(
-        start_date=current_date,
-        end_date=next_date,
-        prev_state=latest_snapshot.markdown_state,
-        diff_output=diff,
-    )
-    print(diff, next_state, next_state_report, next_events)
-    state_snapshot = StateSnapshot(
-        date=next_date.strftime("%Y-%m"),
-        state_id=state_id,
-        markdown_state=next_state,
-        markdown_delta=diff,
-        markdown_delta_report=next_state_report,
-        markdown_events=next_events,
-    )
-    db.add(state_snapshot)
-    db.commit()
-    db.refresh(state_snapshot)
+        yield StateStatusEvent(message="Simulating next month...").json_line()
+        async for event in with_heartbeat(
+            lambda: generate_next_state(
+                start_date=current_date,
+                end_date=next_date,
+                prev_state=latest_snapshot.markdown_state,
+                policy=request.policy,
+            )
+        ):
+            if isinstance(event, HeartbeatResult):
+                yield event.event
+            else:
+                diff, next_state, next_events = event
 
-    _fix_snapshot_json(state_snapshot)
+        yield StateStatusEvent(message="Generating summary report...").json_line()
+        async for event in with_heartbeat(
+            lambda: generate_diff_report(
+                start_date=current_date,
+                end_date=next_date,
+                prev_state=latest_snapshot.markdown_state,
+                diff_output=diff,
+            )
+        ):
+            if isinstance(event, HeartbeatResult):
+                yield event.event
+            else:
+                next_state_report = event
 
-    return state_snapshot
+        state_snapshot = StateSnapshot(
+            date=next_date.strftime("%Y-%m"),
+            state_id=state_id,
+            markdown_state=next_state,
+            markdown_delta=diff,
+            markdown_delta_report=next_state_report,
+            markdown_events=next_events,
+        )
+        db.add(state_snapshot)
+        db.commit()
+        db.refresh(state_snapshot)
+
+        _fix_snapshot_json(state_snapshot)
+        yield StateSnapshotCompleteEvent(state_snapshot=state_snapshot).json_line()
+
+    return event_stream_response(event_stream())
 
 
 @router.post("/{state_id}/advice", response_model=AdviceResponse)

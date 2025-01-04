@@ -380,7 +380,7 @@ STATE_TEMPLATE = """
 ...
 
 # 8. Media
-## Media Outlets <!-- avoid mentioning proper nouns, just types. Include state vs private ownership. E.g. social media, cable news, etc. -->
+### Media Outlets <!-- avoid mentioning proper nouns, just types. Include state vs private ownership. E.g. social media, cable news, etc. -->
 - {MediaType}: {DetailedDescription}
 ...
 
