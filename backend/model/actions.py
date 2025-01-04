@@ -204,7 +204,7 @@ Given this fictional state and the following events between {start_date} and {en
 
 You must jointly consider:
 - All <recent-events> along with their impact on the economy, society, and international relations (all aspects of the <state>)
-- The historical events and their long-term effects on the current state
+- The <historical-events> and their long-term effects on the current state
 - The unique characteristics, systems, and values of the <state>
 - Natural changes in population and resource counts over the course of a year
 - Natural random changes in production, distributions, infrastructure, facilities, and other metrics.
@@ -215,14 +215,18 @@ Reply with:
 1. The high-level natural expected changes and random changes during the year. Nearly ALL numerical metrics should change at least slightly.
 2. For each event, the high-level expected impacted on the <state>
 - Some events will be very impactful and others might have minimal change
-- Event impacts can span several state dimensions with complex higher-order consequences
+- Event impacts can span several state dimensions with complex higher-order consequences (Consider the impacts on public perception, economic incentives, media, crime, etc.)
 - Government policies (if any) should, no matter how positive, include complex negative consequences
 3. For each state dimension (Overview, People, Education, ...) list out the explicit changes. 
 - Noting what changed (before/after), what's added, and what's removed. 
 - Providing explicit numerical or percentage values before before/after.
 - Noting how the top challenges in each dimension might evolve
 - Noting for critical changed metrics (e.g. GDP, inflation, etc) how you computed the signficance of the change 
-(do not include a summary at the end)
+
+
+Do not include:
+- A summary at the end
+- *italic* or **bold**
 """.strip()
     diff_output = await provider.generate_strong_reasoning(diff_prompt)
 
