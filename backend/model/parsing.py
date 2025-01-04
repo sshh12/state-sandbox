@@ -48,7 +48,7 @@ def _clean_key(key: str) -> str:
     return key
 
 
-def _parse_kv(data: Any) -> Any:
+def _parse_kv(data: Any, parent_key: str = "") -> Any:
     """
     Recursively parse the data, converting "Key: Value" strings into proper key-value pairs
 
@@ -61,7 +61,7 @@ def _parse_kv(data: Any) -> Any:
         new_data = {}
         for key, value in data.items():
             # Recursively parse nested structures
-            parsed_value = _parse_kv(value)
+            parsed_value = _parse_kv(value, key)
 
             # Handle string keys with colons
             if isinstance(key, str) and ":" in key:
@@ -72,7 +72,7 @@ def _parse_kv(data: Any) -> Any:
 
     elif isinstance(data, list):
         # Handle lists by parsing each element and merge dicts
-        parsed_items = [_parse_kv(item) for item in data]
+        parsed_items = [_parse_kv(item, parent_key) for item in data]
 
         # If all items are dicts, merge them
         if all(isinstance(item, dict) for item in parsed_items):
@@ -83,7 +83,7 @@ def _parse_kv(data: Any) -> Any:
 
         return parsed_items
 
-    elif isinstance(data, str) and ":" in data:
+    elif isinstance(data, str) and ":" in data and not parent_key.endswith(" System"):
         # Parse "Key: Value" strings
         key, value = data.split(":", 1)
         return {_clean_key(key.strip()): {**_parse_unit(value.strip()), "key": key}}

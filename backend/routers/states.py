@@ -167,7 +167,7 @@ async def create_state_snapshot(
 
         latest_snapshot = previous_snapshots[-1]
         current_date = datetime.strptime(latest_snapshot.date, "%Y-%m")
-        next_date = current_date + relativedelta(months=1)
+        next_date = current_date + relativedelta(months=12)
 
         # Collect historical events with their dates
         historical_events = [
@@ -179,7 +179,7 @@ async def create_state_snapshot(
             if snapshot.markdown_events
         ]
 
-        yield StateStatusEvent(message="Simulating next month...").json_line()
+        yield StateStatusEvent(message="Simulating next year...").json_line()
         async for event in with_heartbeat(
             lambda: generate_next_state(
                 start_date=current_date,

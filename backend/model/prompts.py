@@ -88,7 +88,7 @@ STATE_TEMPLATE = """
 - Other: {Percentage}
 
 ### Population Growth
-- Population Monthly Growth Rate: {Percentage} per month <!-- per month! -->
+- Population Annual Growth Rate: {Percentage} per year <!-- per year! -->
 - Ethnic Population Growth: {DetailedDescription} <!-- e.g. how growth is distributed among ethnic groups -->
 - Religious Population Growth: {DetailedDescription}
 - Economic Class Population Growth: {DetailedDescription}
@@ -330,7 +330,7 @@ STATE_TEMPLATE = """
 - Fitch: {RatingLetters}
 
 ## Economic Metrics
-- GDP Monthly Growth Rate: {Percentage} per month <!-- per month! -->
+- GDP Annual Growth Rate: {Percentage} per year <!-- per year! -->
 - Unemployment Rate: {Percentage}
 - Labor Force Participation Rate: {Percentage} <!-- % people ages 15 or older who are employed or seeking work -->
 - Poverty Rate: {Percentage}
@@ -591,7 +591,7 @@ RANDOM_TEMPLATE = """
 - Include at least 10 events per category.
 - Events should be UNRELATED to the government (no new policies, laws, etc.).
 - Events should be consise and unambiguous (no "... changes", it should state what the change is).
-- Events that last longer than a month should be stated as "starts" (or existing events "ends").
+- Events that last longer than a year should be stated as "starts" (or existing events "ends").
 - Do not add nested lists or headings not specified in the template.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
 - Do not use *italic* or **bold**. 
@@ -628,7 +628,7 @@ RANDOM_TEMPLATE = """
 
 DIFF_EXECUTIVE_TEMPLATE = """
 <!--
-- This is a report to state leadership on the changes to the <state> over the last month.
+- This is a report to state leadership on the changes to the <state> over the last year.
 - Do not add nested lists or headings not specified in the template.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
 - Do not include a greeting or a summary at the end.

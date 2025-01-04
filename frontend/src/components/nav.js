@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select';
 import { useUser } from '@/context/user-context';
 import { FlagSVG } from '@/components/flag-svg';
-import { Menu } from 'lucide-react';
+import { Menu, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
@@ -41,24 +41,32 @@ export function DashboardNav({ stateId }) {
   );
 
   const StateSelector = () => (
-    <Select
-      value={'' + stateId}
-      onValueChange={(value) => (window.location.href = `/state/${value}`)}
-    >
-      <SelectTrigger className="w-full md:w-[300px] bg-background border border-input hover:bg-accent hover:text-accent-foreground">
-        <SelectValue placeholder="Select state" />
-      </SelectTrigger>
-      <SelectContent>
-        {(states || []).map((state) => (
-          <SelectItem key={state.id} value={'' + state.id}>
-            <div className="flex items-center gap-2">
-              <FlagSVG svgString={state.flag_svg} />
-              {state.name}
-            </div>
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div className="flex items-center gap-2">
+      <Select
+        value={'' + stateId}
+        onValueChange={(value) => (window.location.href = `/state/${value}`)}
+      >
+        <SelectTrigger className="w-full md:w-[300px] bg-background border border-input hover:bg-accent hover:text-accent-foreground">
+          <SelectValue placeholder="Select state" />
+        </SelectTrigger>
+        <SelectContent>
+          {(states || []).map((state) => (
+            <SelectItem key={state.id} value={'' + state.id}>
+              <div className="flex items-center gap-2">
+                <FlagSVG svgString={state.flag_svg} />
+                {state.name}
+              </div>
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Button variant="outline" size="icon" asChild>
+        <Link href="/new-state">
+          <Plus className="h-4 w-4" />
+          <span className="sr-only">Add new state</span>
+        </Link>
+      </Button>
+    </div>
   );
 
   return (

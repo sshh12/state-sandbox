@@ -134,7 +134,7 @@ async def generate_random_events(
 ) -> List[str]:
     provider = OpenAIProvider()
     prompt = f"""
-Given this fictional state from {start_date} to {end_date}, provide a realistic list of potential random events that could occur within the next month in the correct format.
+Given this fictional state from {start_date} to {end_date}, provide a realistic list of potential random events that could occur within the next year in the correct format.
 
 <format>
 {RANDOM_TEMPLATE}
@@ -173,7 +173,7 @@ async def generate_next_state(
 ) -> Tuple[str, str, str]:
     provider = OpenAIProvider()
 
-    historical_events_str = ""
+    historical_events_str = "No notable historical events"
     if historical_events:
         historical_events_str = "\n".join(
             [f"{date}:\n" + "\n".join(events) for date, events in historical_events]
@@ -206,13 +206,13 @@ You must jointly consider:
 - All <recent-events> along with their impact on the economy, society, and international relations (all aspects of the <state>)
 - The historical events and their long-term effects on the current state
 - The unique characteristics, systems, and values of the <state>
-- Natural changes in population and resource counts over the course of a month
-- Natural random changes in production, distributions, infrastructure, and facilities.
+- Natural changes in population and resource counts over the course of a year
+- Natural random changes in production, distributions, infrastructure, facilities, and other metrics.
 
 Think carefully and consider the full and holistic effects of all events along with natural expected changes and variance overtime. For this simulation to be accurate you must consider not only the immediate impacts but the higher order consequences.
 
 Reply with:
-1. The high-level natural expected changes and random changes during the month. Nearly all metrics should change at least slightly.
+1. The high-level natural expected changes and random changes during the year. Nearly ALL numerical metrics should change at least slightly.
 2. For each event, the high-level expected impacted on the <state>
 - Some events will be very impactful and others might have minimal change
 - Event impacts can span several state dimensions with complex higher-order consequences
@@ -222,6 +222,7 @@ Reply with:
 - Providing explicit numerical or percentage values before before/after.
 - Noting how the top challenges in each dimension might evolve
 - Noting for critical changed metrics (e.g. GDP, inflation, etc) how you computed the signficance of the change 
+(do not include a summary at the end)
 """.strip()
     diff_output = await provider.generate_strong_reasoning(diff_prompt)
 
@@ -251,9 +252,11 @@ Reply with the new <state> in a markdown codeblock. Do not include xml tags.
 - For government policies, lean towards adding a policy and only remove a policy if it's no longer relevant.
 - Recompute all percentages to add up to 100%
 """.strip()
+    print(diff_output)
     new_state_output = extract_markdown_codeblock(
         await provider.generate_fast_reasoning(new_state_prompt)
     )
+    print(new_state_output)
     return diff_output, new_state_output, events_str
 
 

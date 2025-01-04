@@ -45,7 +45,7 @@ export default function MetricCard({ snapshots, title, valueKey, icon: Icon }) {
             {formatValue(snapshots[0], valueKey)}
           </div>
           <p className="text-xs text-muted-foreground">
-            {formatDiff(snapshots[1], snapshots[0], valueKey)} from last month
+            {formatDiff(snapshots[1], snapshots[0], valueKey)} from last year
           </p>
         </CardContent>
       </Card>

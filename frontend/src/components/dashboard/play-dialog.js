@@ -105,7 +105,7 @@ export function PlayDialog({
           <DialogTitle>Play Turn</DialogTitle>
           <DialogDescription>
             Set your policies (if any) and get advice from your advisors before
-            advancing the simulation by exactly one month.
+            advancing the simulation by exactly one year.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
