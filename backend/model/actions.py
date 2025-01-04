@@ -109,7 +109,7 @@ Given this fictional state and the following events between {start_date} and {en
 Reply with a markdown codeblock containing the report. Do not include xml tags.
 """.strip()
     new_state_report = extract_markdown_codeblock(
-        await provider.generate_fast_reasoning(new_state_report_prompt)
+        await provider.generate_fast(new_state_report_prompt)
     )
     return new_state_report
 
@@ -197,7 +197,6 @@ Reply with:
 - Noting for critical changed metrics (e.g. GDP, inflation, etc) how you computed the signficance of the change 
 """.strip()
     diff_output = await provider.generate_fast_reasoning(diff_prompt)
-    print(diff_output)
     new_state_prompt = f"""
 Given this fictional state and the following events between {start_date} and {end_date}, provide the updated <state>.
 
@@ -226,14 +225,10 @@ Reply with the new <state> in a markdown codeblock. Do not include xml tags.
     new_state_output = extract_markdown_codeblock(
         await provider.generate_fast_reasoning(new_state_prompt)
     )
-    new_state_report = await generate_diff_report(
-        start_date, end_date, prev_state, diff_output
-    )
-    print(new_state_report)
-    return diff_output, new_state_output, new_state_report, events_str
+    return diff_output, new_state_output, events_str
 
 
-async def advice_state(state: str, question: str) -> str:
+async def generate_state_advice(state: str, question: str) -> str:
     provider = OpenAIProvider()
     prompt = f"""
 You are an expert advisor for the government of a fictional country. Given the user's question (the head of state), provide advice for their policies.
@@ -255,5 +250,5 @@ Format policy advice in an imperative format:
 
 Be brief, technical, and concise. If writing out suggested policies, limit it to the top 3 most effective ones.
 """.strip()
-    output = await provider.generate_fast_reasoning(prompt)
+    output = await provider.generate_fast(prompt)
     return extract_markdown_codeblock(output)

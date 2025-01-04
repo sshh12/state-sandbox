@@ -35,12 +35,6 @@ export default function OverviewPage({ snapshots }) {
         />
       </div>
       <div className="grid gap-4 md:grid-cols-6 lg:grid-cols-6">
-        <BarChartCard
-          title="Gross Domestic Product"
-          snapshots={snapshots}
-          valueKey="state_overview.basic_information.gross_domestic_product_gdp"
-          span={3}
-        />
         <Card className="col-span-3">
           <CardHeader>
             <CardTitle>Top Citizen Concerns</CardTitle>
@@ -57,24 +51,22 @@ export default function OverviewPage({ snapshots }) {
             />
           </CardContent>
         </Card>
-        <LineChartCard
-          title="Population"
-          snapshots={snapshots}
-          valueKey="state_overview.basic_information.total_population"
-          span={3}
-        />
-        <LineChartCard
-          title="Approval Rating"
-          snapshots={snapshots}
-          valueKey="government.government_metrics.overall_head_of_stategovernment_approval_rating"
-          span={3}
-        />
-        <LineChartCard
-          title="Human Development Index"
-          snapshots={snapshots}
-          valueKey="people.people_metrics.human_development_index_hdi"
-          span={3}
-        />
+        <Card className="col-span-3">
+          <CardHeader>
+            <CardTitle>Top Citizen Concerns</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table
+              data={
+                snapshots[0]
+                  ? Object.values(
+                      snapshots[0].public_opinion.top_concerns_among_citizens
+                    )
+                  : []
+              }
+            />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

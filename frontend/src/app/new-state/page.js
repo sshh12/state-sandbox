@@ -191,7 +191,7 @@ export default function NewState() {
                 <ProgressTimer
                   isRunning={isLoading}
                   className="w-full"
-                  duration={60 * 1000}
+                  duration={2 * 60 * 1000}
                 />
                 <p className="text-sm text-muted-foreground text-center mt-2">
                   {loadingMessages[loadingMessageIndex]}

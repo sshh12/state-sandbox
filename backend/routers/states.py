@@ -19,7 +19,8 @@ from model.actions import (
     generate_state,
     generate_next_state,
     generate_state_flag,
-    advice_state,
+    generate_diff_report,
+    generate_state_advice,
 )
 from model.parsing import parse_state
 
@@ -131,12 +132,19 @@ async def create_state_snapshot(
     current_date = datetime.strptime(latest_snapshot.date, "%Y-%m")
     next_date = current_date + relativedelta(months=1)
 
-    diff, next_state, next_state_report, next_events = await generate_next_state(
+    diff, next_state, next_events = await generate_next_state(
         start_date=current_date,
         end_date=next_date,
         prev_state=latest_snapshot.markdown_state,
         policy=request.policy,
     )
+    next_state_report = await generate_diff_report(
+        start_date=current_date,
+        end_date=next_date,
+        prev_state=latest_snapshot.markdown_state,
+        diff_output=diff,
+    )
+    print(diff, next_state, next_state_report, next_events)
     state_snapshot = StateSnapshot(
         date=next_date.strftime("%Y-%m"),
         state_id=state_id,
@@ -177,5 +185,7 @@ async def get_advice(
     )
     if not latest_snapshot:
         raise HTTPException(status_code=404, detail="State not found")
-    advice = await advice_state(latest_snapshot.markdown_state, request.question)
+    advice = await generate_state_advice(
+        latest_snapshot.markdown_state, request.question
+    )
     return AdviceResponse(markdown_advice=advice)

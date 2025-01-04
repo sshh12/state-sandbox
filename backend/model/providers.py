@@ -13,3 +13,10 @@ class OpenAIProvider:
             messages=[{"role": "user", "content": text}],
         )
         return response.choices[0].message.content
+
+    async def generate_fast(self, text: str) -> str:
+        response = await self.client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": text}],
+        )
+        return response.choices[0].message.content
