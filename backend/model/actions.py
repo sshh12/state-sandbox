@@ -80,7 +80,7 @@ Suggested Country Name: {repr(name[:30])} (make it more realistic, e.g. Republic
 - When planning, consider the impacts of the <values> above on policies, government, culture, health, justice, and the economy
 
 Reply with:
-1. A brief summary of how the <values> above influence the dimensions of the state, how you will balance their strengths and flaws, and what makes them unique in the world.
+1. A brief summary of how the <values> and time period above influence the dimensions of the state, how you will balance their strengths and flaws, and what makes them unique in the world.
 2. The full <state-template> in a markdown codeblock. Do not include xml tags.
 """
     output = await provider.generate_fast_reasoning(prompt)
