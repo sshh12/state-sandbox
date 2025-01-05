@@ -31,6 +31,8 @@ from utils.event_stream import with_heartbeat, event_stream_response, HeartbeatR
 
 router = APIRouter(prefix="/api/states", tags=["states"])
 
+START_DATE = "2000-01"
+
 
 @router.get("", response_model=List[StateResponse])
 async def get_states(
@@ -59,7 +61,7 @@ async def create_state(
     db: Session = Depends(get_db),
 ):
     async def event_stream():
-        date = "2022-01"
+        date = START_DATE
         state = State(
             date=date,
             name="Developing Nation",

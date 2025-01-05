@@ -48,7 +48,7 @@ Consider and reason on the relationship between the colors, symbols, and organiz
 </example>
 
 Reply with:
-(1) A brief summary of how the the states unique values, culture, and systems are will be represented in the flag.
+(1) A brief summary of how the states unique values, culture, and systems are will be represented in the flag.
 (2) The flag in an SVG codeblock.
 - You must make the width = 900 and height = 600
 """.strip()
@@ -71,13 +71,13 @@ Suggested Country Name: {repr(name[:30])} (make it more realistic, e.g. Republic
 {_format_questions(questions)}
 </values>
 
-- Choose a unique but realistic name taking into account suggested name above. It should NOT be an existing nation.
+- Choose a unique but realistic name taking into account suggested name above. It should NOT be a real-world country or offensive.
 - Include a single fictional country-specific ethnic group and use real groups for the others (e.g. White, Asian, etc)
 - Include a single fictional country-specific religious group and use real religions for the others (e.g. Christianity, Islam, etc)
 - Use real countries (e.g. USA, China, Russia, etc) for import and export partners
 - Assume population of 25.68 million, area of 520k sq km area, and initial GDP of 2,700,000,000 USD
-- Be realistic and balanced based on what you know about the world while being creative with your choice of government type (overfitting the values above), systems (health care, justice, etc), and the challenges for each section.
-- When planning, consider the impacts of the <values> above on policies, government, culture, heath, justice, and the economy
+- Be realistic based on what you know about the world while still being very creative with your choice of government type (overfitting the values above), systems (health care, justice, etc), and the challenges for each section.
+- When planning, consider the impacts of the <values> above on policies, government, culture, health, justice, and the economy
 
 Reply with:
 1. A brief summary of how the <values> above influence the dimensions of the state, how you will balance their strengths and flaws, and what makes them unique in the world.
