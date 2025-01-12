@@ -16,8 +16,9 @@ class OpenAIProvider:
 
     async def generate_strong_reasoning(self, text: str) -> str:
         response = await self.client.chat.completions.create(
-            model="o1-preview",
+            model="o1",
             messages=[{"role": "user", "content": text}],
+            reasoning_effort="high",
         )
         return response.choices[0].message.content
 

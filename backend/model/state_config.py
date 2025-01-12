@@ -99,7 +99,7 @@ DIMENSIONS = [
 - Social Mobility Index: {Number} out of 100
 - LGBTQ+ Legal Equality Index: {Number} out of 100
 
-## Top People Challenges <!-- e.g. discrimination, etc. Severity and detailed description. Avoid cultural challenges. At least 2. -->
+## Top People Challenges <!-- e.g. migrants, ethnic or class conflicts, discrimination, etc. Severity and detailed description. Avoid cultural challenges. At least 2. -->
 - {Challenge}: {DetailedDescription}
 """.strip(),
         seed_assumptions=[
@@ -519,9 +519,10 @@ DIMENSIONS = [
 - Citizenship process. -->
 
 ## Government Metadata
-- Government Type: {GovernmentType} <!-- In Title Case -->
+- Government Type: {GovernmentType} <!-- In Title Case, use CIA World Factbook terminology -->
 - Head of State/Government: {Title} <!-- role or group title, not name -->
 - Country Official Name: {StateName} <!-- The full name of the country -->
+- Capital City: {CapitalCity} <!-- The full name of the capital city -->
 
 ## Political Participation
 - Age-related Participation: {DetailedDescription}

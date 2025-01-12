@@ -19,41 +19,40 @@ RANDOM_TEMPLATE = """
 - Events can be good, bad, or mixed.
 - Probabilities and events should be influenced and personalized by the <state>.
 - Probabilities must be as real-world realistic as possible.
-- Include varients of events (e.g. Cat 1 Hurricane, Cat 2 Hurricane, etc.) or joint events (e.g. Hurricane + Earthquake).
-- Include at least 10 events per category.
-- Events should be UNRELATED to the government (no new policies, laws, etc.).
+- Include varients and severity of events (e.g. Cat N Hurricane, etc.) and joint events (e.g. Hurricane + Earthquake).
+- Events should be UNRELATED to the government actions of the <state> (these will be determined by another system).
 - Events should be consise and unambiguous (no "... changes", it should state what the change is).
-- Events that last longer than a year should be stated as "starts" (or existing events "ends").
+- Events that last longer than a year should be stated as "starts" (or "ends").
 - Do not add nested lists or headings not specified in the template.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
 - Do not use *italic* or **bold**. 
 -->
 
-# Environmental Events <!-- natural phenomena affecting environment/climate -->
+# Environmental Events <!-- natural phenomena affecting environment/climate, at least 10 -->
 - {%} No notable environmental events
 ...
 
-# Defense & Military Events <!-- military/security incidents or developments -->
+# Defense & Military Events <!-- military/security incidents or developments, at least 10 -->
 - {%} No notable defense/military events
 ...
 
-# Economic Events <!-- major financial/market/business developments -->
+# Economic Events <!-- major financial/market/business developments, at least 10 -->
 - {%} No notable economic events
 ...
 
-# Heath Events <!-- public health/medical developments -->
+# Heath Events <!-- public health/medical developments, at least 10 -->
 - {%} No notable health events
 ...
 
-# Cultural & Social Events <!-- societal/cultural developments -->
+# Cultural & Social Events <!-- societal/cultural developments, at least 10 -->
 - {%} No notable social events
 ...
 
-# Infrastructure & Technology Events <!-- tech/scientific developments -->
+# Infrastructure & Technology Events <!-- tech/scientific developments, at least 10 -->
 - {%} No notable infrastructure/technology events
 ...
 
-# International Events <!-- foreign relations/global developments by OTHER nations -->
+# International Events <!-- foreign relations/global developments by OTHER nations, at least 10 -->
 - {%} No notable international events
 ...
 """.strip()

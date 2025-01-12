@@ -60,7 +60,7 @@ export default function EventsTimeline({ snapshots }) {
                 </div>
                 <div className="space-y-4 relative">
                   <div
-                    className="absolute top-0 bottom-0 left-[11.5px] w-[2px] bg-muted rounded"
+                    className="absolute top-0 bottom-0 left-[3.5px] w-[2px] bg-muted rounded"
                     style={{
                       display: events.length > 1 ? 'block' : 'none',
                     }}

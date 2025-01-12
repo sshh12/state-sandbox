@@ -73,7 +73,11 @@ export default function StatePage({ stateId }) {
         <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <div className="flex items-center gap-3">
-              <FlagSVG svgString={state?.flag_svg} size="2rem" />
+              <FlagSVG
+                svgString={state?.flag_svg}
+                size="2rem"
+                allowExpand={true}
+              />
               <h2
                 className={cn(
                   'text-3xl font-bold tracking-tight',

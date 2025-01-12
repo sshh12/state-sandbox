@@ -1,6 +1,12 @@
 import { ReactSVG } from 'react-svg';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
-export function FlagSVG({ svgString, className, size = '1rem' }) {
+export function FlagSVG({
+  svgString,
+  className,
+  size = '1rem',
+  allowExpand = false,
+}) {
   if (!svgString) return null;
 
   // Extract width and height from SVG string if they exist
@@ -19,7 +25,7 @@ export function FlagSVG({ svgString, className, size = '1rem' }) {
   const svgBlob = new Blob([modifiedSvgString], { type: 'image/svg+xml' });
   const url = URL.createObjectURL(svgBlob);
 
-  return (
+  const SvgComponent = (
     <ReactSVG
       src={url}
       wrapper="span"
@@ -35,5 +41,36 @@ export function FlagSVG({ svgString, className, size = '1rem' }) {
         svg.style.verticalAlign = 'middle';
       }}
     />
+  );
+
+  if (!allowExpand) {
+    return SvgComponent;
+  }
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <div className="cursor-pointer">{SvgComponent}</div>
+      </DialogTrigger>
+      <DialogContent className="max-w-[90vw] max-h-[90vh]">
+        <ReactSVG
+          src={url}
+          wrapper="span"
+          className="w-full h-full"
+          onLoad={() => URL.revokeObjectURL(url)}
+          beforeInjection={(svg) => {
+            svg.removeAttribute('width');
+            svg.removeAttribute('height');
+            svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+            svg.style.maxWidth = '100%';
+            svg.style.width = 'auto';
+            svg.style.maxHeight = '80vh';
+            svg.style.height = 'auto';
+            svg.style.display = 'block';
+            svg.style.margin = 'auto';
+          }}
+        />
+      </DialogContent>
+    </Dialog>
   );
 }
