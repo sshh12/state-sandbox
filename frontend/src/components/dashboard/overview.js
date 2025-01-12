@@ -12,13 +12,13 @@ export default function OverviewPage({ snapshots }) {
         <MetricCard
           snapshots={snapshots}
           title="Gross Domestic Product"
-          valueKey="state_overview.basic_information.gross_domestic_product_gdp"
+          valueKey="economy.economic_metrics.gross_domestic_product_gdp"
           icon={Banknote}
         />
         <MetricCard
           snapshots={snapshots}
           title="Population"
-          valueKey="state_overview.basic_information.total_population"
+          valueKey="people.people_metrics.total_population"
           icon={Users}
         />
         <MetricCard

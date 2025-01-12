@@ -81,14 +81,14 @@ export default function StatePage({ stateId }) {
                 )}
               >
                 {
-                  latestSnapshot?.state_overview.basic_information.country_name
-                    .value
+                  latestSnapshot?.government.government_metadata
+                    .country_official_name.value
                 }
               </h2>
             </div>
             <Badge variant="secondary">
               {
-                latestSnapshot?.state_overview.basic_information.government_type
+                latestSnapshot?.government.government_metadata.government_type
                   .value
               }
             </Badge>

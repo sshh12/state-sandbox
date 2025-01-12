@@ -38,6 +38,8 @@ Given this fictional state, generate a flag for it.
 
 Consider and reason on the relationship between the colors, symbols, and organization of the flag and the nature and values of the country.
 
+Design a unique flag integrating vexillology principles and the unique values of the country.
+
 <state>
 {state}
 </state>

@@ -418,6 +418,10 @@ DIMENSIONS = [
 - Work Values
 - Gender Values
 - Religious Values
+- National Identity and Patriotism
+- Nationalism and National Pride
+- Attitudes Toward Other Nations/Cultures
+- Historical Memory and National Myths
 - Variance in culture and values (among age, gender, ethnicity, etc.)
 - Individualism vs Collectivism -->
 
@@ -525,7 +529,7 @@ DIMENSIONS = [
 - Ethnic-related Participation: {DetailedDescription}
 - Religious-related Participation: {DetailedDescription}
 
-## Policies <!-- all policy types should have at least 4 policies, policies may be unique to this country and some may align with non-western values -->
+## Policies <!-- all policy types should have at least 4 policies, many policies should beunique to this country and some may align with non-western values -->
 
 ### Civil Liberties and Political Rights Policies <!-- e.g. freedom or restriction of speech, press, assembly, religion -->
 - {PolicyType}: {DetailedDescription}
