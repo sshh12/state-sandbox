@@ -192,9 +192,9 @@ DIMENSIONS = [
         template="""
 ## Justice System
 <!-- describe the justice system in detail, including:
-- The role, organization, and responsibilities of the courts
-- The role, organization, and responsibilities of law enforcement
-- The role, organization, and responsibilities of the prisons
+- The role, organization, and responsibilities of the courts (if any)
+- The role, organization, and responsibilities of law enforcement (if any)
+- The role, organization, and responsibilities of the prisons (if any)
 - Funding -->
 
 ## Crime Metrics
@@ -211,6 +211,12 @@ DIMENSIONS = [
 - Public Order Crimes: {Number} per 100,000 population
 - White-Collar Crimes: {Number} per 100,000 population
 - State/Political Crimes: {Number} per 100,000 population
+
+## Black Market
+<!-- describe the black market in detail, including:
+- The types of goods and services sold (methods, sources, prices, etc.)
+- The enforcement of the black market
+- The impact of the black market on the economy -->
 
 ## Top Crime Challenges <!-- e.g. high crime rates, drug trafficking, etc. Severity and detailed description. At least 2. -->
 - {Challenge}: {DetailedDescription}
@@ -269,7 +275,6 @@ DIMENSIONS = [
 - {Sector}: {Percentage}
 
 ## Government Budget
-
 ### Government Revenue Composition <!-- e.g. % of revenue that comes from each source, some may be zero -->
 - Income Tax: {Percentage}
 - Corporate Tax: {Percentage}
@@ -525,10 +530,11 @@ DIMENSIONS = [
 - Capital City: {CapitalCity} <!-- The full name of the capital city -->
 
 ## Political Participation
-- Age-related Participation: {DetailedDescription}
-- Gender-related Participation: {DetailedDescription}
-- Ethnic-related Participation: {DetailedDescription}
-- Religious-related Participation: {DetailedDescription}
+<!-- describe the political participation in detail, including:
+- Age-related Participation
+- Gender-related Participation
+- Ethnic-related Participation
+- Religious-related Participation -->
 
 ## Policies <!-- all policy types should have at least 4 policies, many policies should beunique to this country and some may align with non-western values -->
 
