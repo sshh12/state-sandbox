@@ -23,6 +23,4 @@
     "prettier.semi": true,
     "prettier.jsxSingleQuote": false,
     "prettier.bracketSpacing": true,
-    "python.defaultInterpreterPath": "${workspaceFolder}/backend/venv/bin/python",
-    "python.pythonPath": "${workspaceFolder}/backend/venv/bin/python"
 } 

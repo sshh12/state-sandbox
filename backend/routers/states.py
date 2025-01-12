@@ -31,7 +31,7 @@ from utils.event_stream import with_heartbeat, event_stream_response, HeartbeatR
 
 router = APIRouter(prefix="/api/states", tags=["states"])
 
-START_DATE = "2000-01"
+START_DATE = "2022-01"
 
 
 @router.get("", response_model=List[StateResponse])
@@ -81,10 +81,10 @@ async def create_state(
             if isinstance(event, HeartbeatResult):
                 yield event.event
             else:
-                md_state = event
+                md_overview, md_state = event
 
         yield StateStatusEvent(message="Designing flag...").json_line()
-        async for event in with_heartbeat(lambda: generate_state_flag(md_state)):
+        async for event in with_heartbeat(lambda: generate_state_flag(md_overview)):
             if isinstance(event, HeartbeatResult):
                 yield event.event
             else:
@@ -96,9 +96,9 @@ async def create_state(
             markdown_state=md_state,
         )
         parsed_state = parse_state(state_snapshot.markdown_state)
-        full_name = parsed_state["state_overview"]["basic_information"]["country_name"][
-            "value"
-        ]
+        full_name = parsed_state["government"]["government_metadata"][
+            "country_official_name"
+        ]["value"]
         state.name = full_name
         state.flag_svg = svg_flag
         db.add(state_snapshot)

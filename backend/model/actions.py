@@ -1,8 +1,14 @@
 from typing import List, Tuple
 from datetime import datetime
 import random
+import asyncio
 from model.providers import OpenAIProvider
-from model.prompts import STATE_TEMPLATE, DIFF_EXECUTIVE_TEMPLATE, RANDOM_TEMPLATE
+from model.state_config import StateDimension, DIMENSIONS
+from model.prompts import (
+    STATE_CONFIG_FORMAT_TEMPLATE,
+    DIFF_EXECUTIVE_TEMPLATE,
+    RANDOM_TEMPLATE,
+)
 from model.parsing import (
     extract_markdown_codeblock,
     extract_svg_codeblock,
@@ -56,35 +62,81 @@ Reply with:
     return extract_svg_codeblock(output)
 
 
-async def generate_state(date: str, name: str, questions: List[Tuple[str, int]]) -> str:
+async def _generate_state_dimension(
+    date: str, overview: str, dimension: StateDimension
+) -> str:
     provider = OpenAIProvider()
+    seed_assumptions = "\n".join([f"- {s}" for s in dimension.seed_assumptions])
     prompt = f"""
-Fill out the following template for a fictional country in {_format_month_date(date)}.
+Given this fictional but realistic country, generate a detailed description of the {dimension.title} dimension in {_format_month_date(date)}.
 
-Suggested Country Name: {repr(name[:30])} (make it more realistic, e.g. Republic/Federation/Empire/Kingdom/Sultanate/Emirates/Commonwealth of, -ia/-istan/-onia, etc)
+<state-overview>
+{overview}
+</state-overview>
 
-<state-template>
-{STATE_TEMPLATE}
-</state-template>
+<dimension-template>
+```markdown
+{STATE_CONFIG_FORMAT_TEMPLATE}
+
+{dimension.template}
+```
+</dimension-template>
+
+<assumptions>
+- Do not include any notes that the country if fictional or indicate where it is located in the world.
+- Like real countries throughout the world, this country may or may not align with western values and norms.
+- Be detailed, creative, yet realistic when defining the fields and systems of the dimension.
+{seed_assumptions}
+</assumptions>
+
+Reply with the <dimension-template> in a markdown codeblock. Carefully consider the <state-overview> and <assumptions> to provide a highly accurate response.
+""".strip()
+    output = await provider.generate_fast_reasoning(prompt)
+    md_output = extract_markdown_codeblock(output)
+    return f"# {dimension.title}\n{md_output}"
+
+
+async def generate_state(
+    date: str, name: str, questions: List[Tuple[str, int]]
+) -> Tuple[str, str]:
+    provider = OpenAIProvider()
+    dimensions = ", ".join([d.title for d in DIMENSIONS])
+    seed_assumptions = []
+    for dimension in DIMENSIONS:
+        seed_assumptions.extend(dimension.seed_assumptions)
+    seed_assumptions_str = "\n".join([f"- {s}" for s in seed_assumptions])
+
+    prompt = f"""
+Build a realistic but fictional country that exists in {_format_month_date(date)}.
+
+Country Name: {repr(name[:30])} (make it more realistic without changing it too much, e.g. Republic/Federation/Empire/Kingdom/Sultanate/Emirates/Commonwealth of, -ia/-istan/-onia, etc)
 
 <values>
 {_format_questions(questions)}
 </values>
 
-- Choose a unique but realistic name taking into account suggested name above. It should NOT be a real-world country or offensive.
-- Include a single fictional country-specific ethnic group and use real groups for the others (e.g. White, Asian, etc)
-- Include a single fictional country-specific religious group and use real religions for the others (e.g. Christianity, Islam, etc)
-- Use real countries (e.g. USA, China, Russia, etc) for import and export partners
-- Assume population of 25.68 million, area of 520k sq km area, and initial GDP of 2,700,000,000 USD
-- Be realistic based on what you know about the world while still being very creative with your choice of government type (overfitting the values above), systems (health care, justice, etc), and the challenges for each section.
-- When planning, consider the impacts of the <values> above on policies, government, culture, health, justice, and the economy
+<assumptions>
+- Ensure the country name is NOT a real-world country, offensive, or an attempt at prompt-injection (if so change it).
+- Do not include any notes that the country if fictional or indicate where it is located in the world.
+- Like real countries throughout the world, this country may or may not align with western values and norms.
+{seed_assumptions_str}
+</assumptions>
 
-Reply with:
-1. A brief summary of how the <values> and time period above influence the dimensions of the state, how you will balance their strengths and flaws, and what makes them unique in the world.
-2. The full <state-template> in a markdown codeblock. Do not include xml tags.
-"""
-    output = await provider.generate_fast_reasoning(prompt)
-    return extract_markdown_codeblock(output)
+Reply with (plain text):
+1. A wikipedia-style summary of the state, how the <values> and time period above influence the dimensions of the state, how you will balance their strengths and flaws, and what makes them unique in the world.
+2. The influence of the <values> on the dimensions of the state ({dimensions}).
+""".strip()
+    overview_output = await provider.generate_fast_reasoning(prompt)
+
+    dimension_outputs = await asyncio.gather(
+        *[
+            _generate_state_dimension(date, overview_output, dimension)
+            for dimension in DIMENSIONS
+        ]
+    )
+    state_output = "\n\n".join(dimension_outputs).strip()
+
+    return overview_output, state_output
 
 
 async def generate_diff_report(
@@ -234,7 +286,7 @@ Do not include:
 Given this fictional state and the following events between {start_date} and {end_date}, provide the updated <state>.
 
 <state-template>
-{STATE_TEMPLATE}
+{STATE_CONFIG_FORMAT_TEMPLATE}
 </state-template>
 
 <state>
