@@ -281,7 +281,7 @@ Key notes:
 
 <output-format>
 ```markdown
-- Government Events: "<-- formatted policy events, State ... -->"
+- Government Events: <-- formatted policy events, State ... -->
 ```
 </output-format>
 
@@ -298,7 +298,7 @@ Rephrase <user-action> into a valid policy event and reply with their action for
 """.strip()
     raw_output = await provider.generate_fast_reasoning(prompt)
     try:
-        output = extract_markdown_codeblock(raw_output)
+        output = extract_markdown_codeblock(raw_output).replace('"', "")
     except Exception as e:
         print("Error parsing output", e)
         return "- Government Events: None"
