@@ -13,6 +13,57 @@ def extract_svg_codeblock(text: str) -> str:
     return match.group(1).strip()
 
 
+def extract_markdown_section(markdown_text: str, h1_header_name: str) -> str:
+    """
+    Extracts content under a specific h1 header from markdown text.
+
+    Args:
+        markdown_text (str): The full markdown text to parse
+        h1_header_name (str): The name of the h1 header to find
+
+    Returns:
+        str: The content under the specified header, or empty string if not found
+
+    Example:
+        ```markdown
+        # Header1
+        - a
+        - b
+        - c
+
+        # Header2
+        other content
+        ```
+        extract_markdown_section(text, "Header1") -> "\n- a\n- b\n- c\n"
+    """
+    # Split the text into lines
+    lines = markdown_text.splitlines()
+
+    # Find the target header
+    target_header = f"# {h1_header_name}"
+
+    # Variables to track extraction
+    content = []
+    is_capturing = False
+
+    for line in lines:
+        # Check if we've hit the target header
+        if line.strip() == target_header:
+            is_capturing = True
+            continue
+
+        # Stop capturing if we hit another h1 header
+        if line.strip().startswith("# ") and is_capturing:
+            break
+
+        # Capture content if we're in the right section
+        if is_capturing:
+            content.append(line)
+
+    # Join captured lines and return
+    return "\n".join(content).strip() + "\n"
+
+
 def _md_to_json(markdown: str) -> dict:
     # Remove HTML comments
     markdown = re.sub(r"<!--.*?-->", "", markdown, flags=re.DOTALL)
@@ -21,7 +72,7 @@ def _md_to_json(markdown: str) -> dict:
 
 def _parse_unit(value: str) -> dict:
     result = {"raw": value, "unit": None, "value": value}
-    if match := re.match(r"(\d+(?:,\d{3})*(?:\.\d+)?)\s*(.*)", value):
+    if match := re.match(r"\$?(\d+(?:,\d{3})*(?:\.\d+)?)\s*(.*)", value):
         value_part, unit = match.groups()
         cleaned_value = value_part.replace(",", "")
         numeric_value = float(cleaned_value)

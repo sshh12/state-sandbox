@@ -146,8 +146,11 @@ class ApiClient {
     );
   }
 
-  async getStateAdvice(stateId, question) {
-    return this._post(`/api/states/${stateId}/advice`, { question });
+  async getStateAdvice(stateId, question, events) {
+    return this._post(`/api/states/${stateId}/advice`, {
+      question,
+      events: events.join('\n'),
+    });
   }
 }
 

@@ -59,13 +59,13 @@ export function PlayDialog({
 
   const advisorQuestions = [
     'How can I increase GDP?',
-    'How can I improve public approval?',
+    'Whats the best way to handle this crisis?',
   ];
 
-  const getAdvisorFeedback = async (type) => {
+  const getAdvisorFeedback = async (type, events) => {
     setAdvisorLoading(true);
     try {
-      const advice = await api.getStateAdvice(stateId, type);
+      const advice = await api.getStateAdvice(stateId, type, events);
       setAdvisorFeedback(advice.markdown_advice);
     } finally {
       setAdvisorLoading(false);
@@ -107,7 +107,7 @@ export function PlayDialog({
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Play Turn</DialogTitle>
           <DialogDescription>
@@ -168,7 +168,7 @@ export function PlayDialog({
                   onClick={() =>
                     !advisorLoading &&
                     !turnLoading &&
-                    getAdvisorFeedback(question)
+                    getAdvisorFeedback(question, events)
                   }
                 >
                   {question}
@@ -187,7 +187,7 @@ export function PlayDialog({
                       !advisorLoading &&
                       !turnLoading
                     ) {
-                      getAdvisorFeedback(customQuestion);
+                      getAdvisorFeedback(customQuestion, events);
                     }
                   }}
                 />

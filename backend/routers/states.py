@@ -189,10 +189,10 @@ async def create_state_snapshot(
         historical_events = [
             (
                 snapshot.date,
-                (snapshot.markdown_events.split("\n")),
+                (snapshot.markdown_future_events.split("\n")),
             )
             for snapshot in previous_snapshots
-            if snapshot.markdown_events
+            if snapshot.markdown_future_events
         ]
 
         yield StateStatusEvent(message="Simulating next year...").json_line()
@@ -200,16 +200,33 @@ async def create_state_snapshot(
             start_date=current_date,
             end_date=next_date,
             prev_state=latest_snapshot.markdown_state,
+            events=latest_snapshot.markdown_future_events,
             policy=request.policy,
             historical_events=historical_events,
         )
 
         yield StateStatusEvent(message="Generating summary report...").json_line()
-        next_state_report = await generate_diff_report(
-            start_date=current_date,
-            end_date=next_date,
-            prev_state=latest_snapshot.markdown_state,
-            diff_output=diff,
+        next_state_report, next_events = await asyncio.gather(
+            generate_diff_report(
+                start_date=current_date,
+                end_date=next_date,
+                prev_state=latest_snapshot.markdown_state,
+                diff_output=diff,
+            ),
+            generate_future_events(
+                start_date=next_date,
+                end_date=next_date + relativedelta(months=12),
+                prev_state=next_state,
+                historical_events_str=next_events,
+            ),
+        )
+
+        yield StateStatusEvent(message="Generating policy suggestions...").json_line()
+        next_events_policy = await generate_future_policy_suggestion(
+            start_date=next_date,
+            end_date=next_date + relativedelta(months=12),
+            prev_state=next_state,
+            events=next_events,
         )
 
         state_snapshot = StateSnapshot(
@@ -218,7 +235,8 @@ async def create_state_snapshot(
             markdown_state=next_state,
             markdown_delta=diff,
             markdown_delta_report=next_state_report,
-            markdown_events=next_events,
+            markdown_future_events=next_events,
+            markdown_future_events_policy=next_events_policy,
         )
         db.add(state_snapshot)
         db.commit()
@@ -254,6 +272,6 @@ async def get_advice(
     if not latest_snapshot:
         raise HTTPException(status_code=404, detail="State not found")
     advice = await generate_state_advice(
-        latest_snapshot.markdown_state, request.question
+        latest_snapshot.markdown_state, request.question, request.events
     )
     return AdviceResponse(markdown_advice=advice)

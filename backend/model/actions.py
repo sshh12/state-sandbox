@@ -12,6 +12,7 @@ from model.prompts import (
 from model.parsing import (
     extract_codeblock,
     extract_svg_codeblock,
+    extract_markdown_section,
     parse_events_output,
 )
 
@@ -128,7 +129,7 @@ Reply with (plain text):
 1. A wikipedia-style summary of the state, how the <values> and time period above influence the dimensions of the state, how you will balance their strengths and flaws, and what makes them unique in the world.
 2. The influence of the <values> on the dimensions of the state ({dimensions}).
 """.strip()
-    overview_output = await provider.generate_fast_reasoning(prompt)
+    overview_output = await provider.generate_strong_reasoning(prompt)
 
     dimension_outputs = await asyncio.gather(
         *[
@@ -201,15 +202,16 @@ Given this fictional <state> from {start_date} to {end_date} and the following e
 Provide a list of actions to respond to the events.
 - Action examples: "Ban the use of social media", "Increase funding for anti-cybercrime programs", etc.
 - Actions should be specific, realistic, and target the events.
-- Actions should be at most 2 sentences.
+- Actions should be at most 2 sentences. Keep it technical, dense, and concise.
 - Actions should reflect the type of <state> and cultural values.
-- Events should have at most 2 actions each.
+- Events should have at most 1 action each.
+- Events that are obviously positive should not have any actions.
 - Do not add nested lists or headings not specified in the template.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
 - Do not use *italic* or **bold**. 
 -->
 
-# Government Actions
+# Government Actions <!-- at most 5 actions -->
 - <-- action -->
 - <-- action -->
 ...
@@ -219,7 +221,8 @@ Provide a list of actions to respond to the events.
 Reply with <format> as a markdown codeblock.
 """.strip()
     output = await provider.generate_fast_reasoning(prompt)
-    return extract_codeblock(output)
+    lines = extract_codeblock(output).split("\n")
+    return "\n".join([line for line in lines if line.strip().startswith("-")])
 
 
 async def generate_future_events(
@@ -270,13 +273,16 @@ async def _generate_next_state_dimension(
     dimension: StateDimension,
     diff_output: str,
 ) -> str:
+    prev_state_dimension = extract_markdown_section(prev_state, dimension.title)
     provider = OpenAIProvider()
     new_state_dimension_prompt = f"""
 Given this fictional state and the following events between {start_date} and {end_date}, provide an updated <dimension-template> for {dimension.title} with the changes from <state-recent-changes> applied.
 
-<previous-state>
-{prev_state}
-</previous-state>
+<prev-state-dimension on="{start_date}">
+```markdown
+{prev_state_dimension}
+```
+</prev-state-dimension>
 
 <state-recent-changes>
 {diff_output}
@@ -291,13 +297,13 @@ Given this fictional state and the following events between {start_date} and {en
 </dimension-template>
 
 Reply with:
-(1) A list of the changes in the dimension (mostly provided by <state-recent-changes>).
-- Event impacts can span several dimensions with complex higher-order consequences. Consider the downstream impacts and how those may also have higher-order consequences on other dimensions.
+(1) A list of the before/after changes in the dimension (mostly provided by <state-recent-changes>).
 - Expect natural changes in population and resource counts over the course of a year.
 - Expect natural random changes in production, distributions, infrastructure, facilities, and other metrics.
 - Note that it's expected that all numerical fields should change at least slightly over the course of a year.
-(2) The new <dimension-template> in a markdown codeblock. Do not include xml tags.
-- ALL numerical fields, counts, metrics, and percentages should change at least slightly due to natural changes and random events.
+- If a metric is not mentioned in <state-recent-changes>, it should still change at least slightly due to natural changes over a year.
+(2) The new <dimension-template> in a markdown codeblock.
+- ALL numerical fields should change
 - For dimension challenges, lean towards adding a challenge and only remove a challenge if it's no longer relevant.
 - For policies (if any), lean towards adding a policy and only remove a policy if it's no longer relevant.
 """.strip()
@@ -339,7 +345,7 @@ Key notes:
 - "Add universal healthcare and make college free" -> "State enacts a policy to add universal healthcare and make college free" (no change)
 </examples>
 
-Rephrase <user-action> into a valid policy event and reply with their action formatted as <output-format> exactly with a markdown codeblock. It should start with "- Government Events:".
+Rephrase <user-action> into a valid policy event and reply with their action formatted as <output-format> exactly with a markdown codeblock. It should start with "- Government Events:" and be in one line in paragraph format.
 """.strip()
     raw_output = await provider.generate_fast_reasoning(prompt)
     try:
@@ -356,6 +362,7 @@ async def generate_next_state(
     start_date: datetime,
     end_date: datetime,
     prev_state: str,
+    events: str,
     policy: str,
     historical_events: List[Tuple[str, List[str]]] = None,
 ) -> Tuple[str, str, str]:
@@ -367,9 +374,7 @@ async def generate_next_state(
             [f"{date}:\n" + "\n".join(events) for date, events in historical_events]
         )
 
-    events = ""
-    events_str = "\n".join([f"- {e}" for e in events])
-    events_str = f"{await _generate_reasonable_policy_event(policy)}\n{events_str}"
+    events_str = f"{await _generate_reasonable_policy_event(policy)}\n{events}"
     print("--- historical events ---")
     print(historical_events_str)
     print("--- events ---")
@@ -380,7 +385,7 @@ async def generate_next_state(
     diff_prompt = f"""
 Given this fictional state and the following events between {start_date} and {end_date}, simulate the key changes that occur to the state.
 
-<state>
+<state on="{start_date}">
 {prev_state}
 </state>
 
@@ -388,35 +393,34 @@ Given this fictional state and the following events between {start_date} and {en
 {historical_events_str}
 </historical-events>
 
-<recent-events>
+<events start="{start_date}" end="{end_date}">
 {events_str}
-</recent-events>
+</events>
 
 You must jointly consider:
-- All <recent-events> along with their impact on the economy, society, and international relations (all aspects of the <state>)
-- The <historical-events> and their long-term effects on the current state
-- The unique characteristics, systems, and values of the <state>
-- Natural changes and variance in population and resource counts over the course of a year
+- All recent <events> along with their impact on all aspects of the <state>.
+- The <historical-events> and their long-term effects on the <state>.
+- The unique characteristics, systems, and values of the <state> and what this causes and how this is effected.
+- Natural changes and variance in population and resource counts over the course of a year.
 - Natural random changes in production, distributions, infrastructure, facilities, and other metrics.
 
-Think carefully and consider the full and holistic effects of all events along with natural expected changes and variance overtime. For this simulation to be accurate you must consider not only the immediate impacts but the higher order consequences.
-
 Reply with:
-1. The high-level natural expected changes and random changes during the year.
-2. For each event, the high-level expected impacted on the <state>
-- Some events will be very impactful and others might have minimal change
-- Event impacts can span several state dimensions with complex higher-order consequences. Consider the downstream impacts on public perception, economic incentives, media, crime, etc. and how those may also have higher-order consequences on other dimensions.
-- The intersectionality of recent events, historical events, the <state>, and policies should also be considered.
-- Government actions and policy events (if any) should, no matter how positive, include complex negative consequences.
-3. For each dimension ({dimensions_str}) list out the explicit changes. 
+1. For each event, the high-level expected impacted on the <state>
+- Some events will be very impactful and others might have minimal change.
+- Consider the intersectionality of recent events, historical events, the <state>, and policies.
+- Event impacts can span several state dimensions with complex higher-order consequences. 
+  - State the 2nd order effects of the event on across all dimensions.
+  - State the 3rd order effects of the event on across all dimensions.
+- Government actions and policy events (if any) should, no matter how positive, include complex and thought provoking negative consequences.
+2. For each dimension ({dimensions_str}) list out the explicit changes. 
 - Noting in great detail what changed (before/after) and why.
 - Noting how the top challenges in each dimension have evolved.
 - Noting how values might have grown relative to estimated growth rates and how the growth rates themselves might have changed.
+- Include changes to GDP, growth rates, population, and other metrics.
 
 Do not include:
 - A summary at the end
 - *italic* or **bold**
-- Absolute statistics (express changes as % changes)
 """.strip()
     diff_output = await provider.generate_strong_reasoning(diff_prompt)
     print("---")
@@ -436,14 +440,18 @@ Do not include:
     return diff_output, new_state_output, events_str
 
 
-async def generate_state_advice(state: str, question: str) -> str:
+async def generate_state_advice(state: str, question: str, events: str) -> str:
     provider = OpenAIProvider()
     prompt = f"""
-You are an expert advisor for the government of a fictional country. Given the user's question (the head of state), provide advice for their policies.
+You are an expert advisor for the government of a fictional country. Given the user's question (the head of state), provide advice for their policies and upcoming events.
 
 <state>
 {state}
 </state>
+
+<upcoming-events>
+{events}
+</upcoming-events>
 
 <question>
 {question}

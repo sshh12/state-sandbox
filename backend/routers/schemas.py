@@ -71,6 +71,7 @@ class CreateNewSnapshotRequest(BaseModel):
 
 class AdviceRequest(BaseModel):
     question: str
+    events: str
 
 
 class AdviceResponse(BaseModel):

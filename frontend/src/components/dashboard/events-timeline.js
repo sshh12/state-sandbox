@@ -2,7 +2,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { format } from 'date-fns';
 
 function parseEvent(eventString) {
-  const match = eventString.match(/^- ([^:]+): (.+)$/);
+  const match = eventString.match(/([^:]+): (.+)$/);
   if (!match) return { category: 'Other', content: eventString };
   return {
     category: match[1],
@@ -20,6 +20,7 @@ export default function EventsTimeline({ snapshots }) {
 
   // Get all events from all snapshots with their dates
   const allEvents = snapshots
+    .slice(0, -1)
     .filter((snapshot) => snapshot.events?.length > 0)
     .map((snapshot) => ({
       date: snapshot.date,
@@ -44,7 +45,7 @@ export default function EventsTimeline({ snapshots }) {
   }
 
   return (
-    <Card className="col-span-3">
+    <Card className="col-span-3 pb-2">
       <CardHeader>
         <CardTitle>Events Timeline</CardTitle>
       </CardHeader>
@@ -55,7 +56,7 @@ export default function EventsTimeline({ snapshots }) {
               <div key={date} className="space-y-2">
                 <div className="sticky top-0 bg-card z-10 py-1">
                   <h3 className="text-sm font-medium">
-                    {format(new Date(date), 'MMMM yyyy')}
+                    {format(new Date(date), 'yyyy')}
                   </h3>
                 </div>
                 <div className="space-y-4 relative">

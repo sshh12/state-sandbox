@@ -5,6 +5,7 @@ import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 
 const UserContext = createContext({
+  loading: true,
   user: null,
   states: null,
   refreshUser: async () => {},
@@ -13,6 +14,7 @@ const UserContext = createContext({
 });
 
 export function UserProvider({ children }) {
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [states, setStates] = useState(null);
   const router = useRouter();
@@ -23,6 +25,7 @@ export function UserProvider({ children }) {
         .getCurrentUser()
         .then(setUser)
         .then(fetchData)
+        .then(() => setLoading(false))
         .catch((e) => {
           if (e.message.includes('token')) {
             localStorage.removeItem('state-sandbox-token');
@@ -30,6 +33,7 @@ export function UserProvider({ children }) {
           }
         });
     } else {
+      setLoading(false);
       router.push('/auth');
     }
   }, []);
@@ -58,6 +62,7 @@ export function UserProvider({ children }) {
   return (
     <UserContext.Provider
       value={{
+        loading,
         user,
         states,
         refreshUser,

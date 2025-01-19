@@ -16,8 +16,8 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 const links = [
-  { name: 'Leaderboard', href: '#' },
-  { name: 'Account', href: '#' },
+  { name: 'Leaderboard', href: '/leaderboard' },
+  { name: 'Account', href: '/account' },
 ];
 
 export function DashboardNav({ stateId }) {

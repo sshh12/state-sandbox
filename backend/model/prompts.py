@@ -18,6 +18,7 @@ These are random events the goverment will need to make decisions on.
 - Events are mutually exclusive within their category.
 - Event categories must include a first no-event category.
 - Events must start with a % probability.
+- Events should be caused by nature, citizens, businesses, or other states.
 - Events can be controversial, bad, or mixed. All should be expected to invoke an opinionated response from the government.
 - Events should be consise and unambiguous (no "... changes", it should state what the change is).
 - Events that last longer than a year should be stated as "starts" (or "ends").
