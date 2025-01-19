@@ -34,11 +34,11 @@ These are random events the goverment will need to make decisions on.
 - x% No notable events
 ...
 
-# Defense and Military Events <!-- military/security incidents or developments, at least 10 -->
+# Economic Events <!-- major financial/market developments, at least 10 -->
 - x% No notable events
 ...
 
-# Economic and International Events <!-- major financial/market/international developments, at least 10 -->
+# Defense and Military Events <!-- military/security incidents or developments, at least 10 -->
 - x% No notable events
 ...
 
@@ -51,6 +51,10 @@ These are random events the goverment will need to make decisions on.
 ...
 
 # Infrastructure and Technology Events <!-- tech/scientific developments, at least 10 -->
+- x% No notable events
+...
+
+# International Relations Events <!-- diplomatic/international developments, at least 10 -->
 - x% No notable events
 ...
 """.strip()
@@ -90,19 +94,22 @@ DIFF_EXECUTIVE_TEMPLATE = """
 - 1 - 2 sentence dense technical overview of what *important* happened, for the leadership of the <state>.
 -->
 
-1. **Economy**:
+1. **Environmental and Weather**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-2. **Social & Cultural**:
+2. **Economic**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-3. **Health & Crime**:
+3. **Defense & Military**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-4. **Defense & Military**:
+4. **Health & Crime**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-5. **Infrastructure & Technology**:
+5. **Cultural and Social**:
+  - <!-- *Title* -->: <!-- Description -->
+  - ...
+6. **Infrastructure & Technology**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
 5. **International Relations**:

@@ -307,7 +307,7 @@ Reply with:
 
 async def _generate_reasonable_policy_event(raw_policy: str) -> str:
     if not raw_policy:
-        return "- Government Events: None"
+        return "Government Events: None"
     provider = OpenAIProvider()
     prompt = f"""
 Your are a moderator for a game that allows users to play the role of a government leader.
@@ -325,7 +325,7 @@ Key notes:
 
 <output-format>
 ```markdown
-- Government Events: <-- formatted policy events, State ... -->
+Government Events: <-- formatted policy events, State ... -->
 ```
 </output-format>
 
