@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import Image from 'next/image';
 
 export function WhatIsThisModal({ isOpen, onClose }) {
   return (
@@ -16,19 +17,32 @@ export function WhatIsThisModal({ isOpen, onClose }) {
           <DialogTitle>About State Sandbox</DialogTitle>
           <DialogDescription className="space-y-4 pt-4">
             <p>
-              State Sandbox is an experimental AI-powered simulation tool that
-              lets you explore different policy decisions and their impacts on a
-              simulated society.
+              State Sandbox is an experimental game for socioeconomic
+              simulation, powered by Large Language Models to simulate complex
+              policy impacts on a virtual society.
             </p>
             <p>
-              Create a state, set policies, and watch how your decisions affect
-              various aspects of society including the economy, social welfare,
-              environment, and more.
+              As a leader, you'll navigate high-dimensional gameplay across
+              multiple domains: people, economy, media, crime, environment, and
+              more. Make arbitrary policy decisions, respond to realistic random
+              events and natural disasters, and see how your choices shape your
+              nation's future.
             </p>
+            <div className="relative w-full h-[300px] my-4">
+              <Image
+                src="/demo.png"
+                alt="State Sandbox Demo"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
             <p>
-              This is a research project and experimental tool. Data may be
-              deleted without notice. Use a temporary account to try it out, or
-              create a regular account to save your progress.
+              Compete on the leaderboard by optimizing your nation's GDP,
+              population, and other key metrics. This is an experimental
+              research project - data may be reset without notice. Try it out
+              with a temporary account or create a permanent one to track your
+              progress.
             </p>
           </DialogDescription>
         </DialogHeader>
