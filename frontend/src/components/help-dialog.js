@@ -21,34 +21,31 @@ export function HelpDialog({ state, open, onOpenChange }) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>How to Play</DialogTitle>
-          <DialogDescription>
-            <div className="space-y-4">
-              {state?.name && (
-                <div className="space-y-4 pt-4">
-                  <p>
-                    You are the leader of {state.name} and are tasked with
-                    running the country. Click "play" to see the upcoming
-                    challenges your nation will face over the next year and
-                    define arbitrary policy decisions to handle them. Explore
-                    the dashboard to learn about {state.name} and how to act
-                    effectively.
-                  </p>
-                  <p>
-                    Policies should handle upcoming events (suggested policies
-                    are also included) but you can also pass other laws to see
-                    how they will play out. Compete on the leaderboard by
-                    enacting policies that optimize for GDP, population, and
-                    other metrics.
-                  </p>
-                </div>
-              )}
-              {state?.description && (
-                <div className="space-y-4 pt-4 bg-muted rounded-lg p-4">
-                  <p>{state.description}</p>
-                </div>
-              )}
-            </div>
-          </DialogDescription>
+          <div className="space-y-4">
+            {state?.name && (
+              <>
+                <DialogDescription>
+                  You are the leader of <strong>{state.name}</strong> and are
+                  tasked with running the country. Click "play" to see the
+                  upcoming challenges your nation will face over the next year
+                  and define arbitrary policy decisions to handle them. Explore
+                  the dashboard to learn about <strong>{state.name}</strong> and
+                  how to act effectively.
+                </DialogDescription>
+                <DialogDescription>
+                  Policies should handle upcoming events (suggested policies are
+                  also included) but you can also pass other laws to see how
+                  they will play out. Compete on the leaderboard by enacting
+                  policies that optimize for GDP, population, and other metrics.
+                </DialogDescription>
+              </>
+            )}
+            {state?.description && (
+              <div className="bg-muted rounded-lg p-4">
+                <DialogDescription>{state.description}</DialogDescription>
+              </div>
+            )}
+          </div>
         </DialogHeader>
       </DialogContent>
     </Dialog>

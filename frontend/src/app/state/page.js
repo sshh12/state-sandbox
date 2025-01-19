@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { DashboardNav } from '@/components/nav';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import OverviewPage from '@/components/dashboard/overview';
@@ -26,7 +26,7 @@ import { FlagSVG } from '@/components/flag-svg';
 import { useUser } from '@/context/user-context';
 import { useSearchParams } from 'next/navigation';
 
-export default function StatePage({ stateId }) {
+function StatePageContent({ stateId }) {
   const searchParams = useSearchParams();
   const { refreshStates } = useUser();
   const [state, setState] = useState(null);
@@ -215,5 +215,13 @@ export default function StatePage({ stateId }) {
         </Tabs>
       </div>
     </div>
+  );
+}
+
+export default function StatePage({ stateId }) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <StatePageContent stateId={stateId} />
+    </Suspense>
   );
 }
