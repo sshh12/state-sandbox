@@ -396,6 +396,7 @@ You must jointly consider:
 - The unique characteristics, systems, and values of the <state> and what this causes and how this is effected.
 - Natural changes and variance in population and resource counts over the course of a year.
 - Natural random changes in production, distributions, infrastructure, facilities, and other metrics.
+- The assumption that all notable government actions in response to events (or lack thereof) are included in the events.
 
 Reply with:
 1. For each event, the high-level expected impacted on the <state>
