@@ -43,11 +43,11 @@ export function DashboardNav({ stateId }) {
   const StateSelector = () => (
     <div className="flex items-center gap-2">
       <Select
-        value={'' + stateId}
+        value={stateId || ''}
         onValueChange={(value) => (window.location.href = `/state/${value}`)}
       >
-        <SelectTrigger className="w-full md:w-[300px] bg-background border border-input hover:bg-accent hover:text-accent-foreground">
-          <SelectValue placeholder="Select state" />
+        <SelectTrigger className="w-[180px]">
+          <SelectValue defaultValue="" placeholder="Select Nation" />
         </SelectTrigger>
         <SelectContent>
           {(states || []).map((state) => (

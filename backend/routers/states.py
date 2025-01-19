@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import func, and_
 from typing import List
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -18,6 +19,7 @@ from routers.schemas import (
     StateStatusEvent,
     StateCompleteEvent,
     StateSnapshotCompleteEvent,
+    StateWithLatestSnapshotResponse,
 )
 from routers.auth import get_current_user_from_token
 from model.actions import (
@@ -44,6 +46,50 @@ async def get_states(
 ):
     states = db.query(State).filter(State.user_id == current_user.id).all()
     return states
+
+
+@router.get("/latest", response_model=List[StateWithLatestSnapshotResponse])
+async def get_latest_state_snapshots(
+    db: Session = Depends(get_db),
+):
+    """Get the latest snapshot from all states along with state data. This endpoint is unauthenticated."""
+    # Subquery to get the latest snapshot date for each state
+    latest_dates = (
+        db.query(StateSnapshot.state_id, func.max(StateSnapshot.date).label("max_date"))
+        .group_by(StateSnapshot.state_id)
+        .subquery()
+    )
+
+    # Query to get the states and their latest snapshots
+    latest_states = (
+        db.query(State, StateSnapshot)
+        .join(StateSnapshot, State.id == StateSnapshot.state_id)
+        .join(
+            latest_dates,
+            and_(
+                StateSnapshot.state_id == latest_dates.c.state_id,
+                StateSnapshot.date == latest_dates.c.max_date,
+            ),
+        )
+        .all()
+    )
+
+    result = []
+    for state, snapshot in latest_states:
+        _fix_snapshot_json(snapshot)
+        result.append(
+            {
+                "id": state.id,
+                "name": state.name,
+                "description": state.description,
+                "flag_svg": state.flag_svg,
+                "created_at": state.created_at,
+                "updated_at": state.updated_at,
+                "latest_snapshot": snapshot,
+            }
+        )
+
+    return result
 
 
 @router.get("/{state_id}", response_model=StateResponse)
@@ -196,12 +242,12 @@ async def create_state_snapshot(
         ]
 
         yield StateStatusEvent(message="Simulating next year...").json_line()
-        diff, next_state, next_events = await generate_next_state(
+        diff, next_state, simulated_events = await generate_next_state(
             start_date=current_date,
             end_date=next_date,
             prev_state=latest_snapshot.markdown_state,
             events=latest_snapshot.markdown_future_events,
-            policy=request.policy,
+            policy_input=request.policy,
             historical_events=historical_events,
         )
 
@@ -217,7 +263,7 @@ async def create_state_snapshot(
                 start_date=next_date,
                 end_date=next_date + relativedelta(months=12),
                 prev_state=next_state,
-                historical_events_str=next_events,
+                historical_events=next_events,
             ),
         )
 
@@ -229,6 +275,8 @@ async def create_state_snapshot(
             events=next_events,
         )
 
+        # patch in the policy events selected by the user
+        latest_snapshot.markdown_future_events = simulated_events
         state_snapshot = StateSnapshot(
             date=next_date.strftime("%Y-%m"),
             state_id=state_id,

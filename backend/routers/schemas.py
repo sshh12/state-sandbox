@@ -106,3 +106,16 @@ class StateSnapshotCompleteEvent(BaseEvent):
 
 class HeartbeatEvent(BaseEvent):
     type: str = "heartbeat"
+
+
+class StateWithLatestSnapshotResponse(BaseModel):
+    id: int
+    name: str
+    description: str
+    flag_svg: str
+    created_at: datetime
+    updated_at: datetime
+    latest_snapshot: StateSnapshotResponse
+
+    class Config:
+        from_attributes = True

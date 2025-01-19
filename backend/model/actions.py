@@ -229,7 +229,7 @@ async def generate_future_events(
     start_date: datetime,
     end_date: datetime,
     prev_state: str,
-    historical_events_str: str,
+    historical_events: str,
 ) -> str:
     provider = OpenAIProvider()
     prompt = f"""
@@ -240,7 +240,7 @@ Given this fictional <state> from {start_date} to {end_date}, provide a list of 
 </state>
 
 <historical-events>
-{historical_events_str}
+{historical_events}
 </historical-events>
 
 <format>
@@ -363,7 +363,7 @@ async def generate_next_state(
     end_date: datetime,
     prev_state: str,
     events: str,
-    policy: str,
+    policy_input: str,
     historical_events: List[Tuple[str, List[str]]] = None,
 ) -> Tuple[str, str, str]:
     provider = OpenAIProvider()
@@ -374,7 +374,7 @@ async def generate_next_state(
             [f"{date}:\n" + "\n".join(events) for date, events in historical_events]
         )
 
-    events_str = f"{await _generate_reasonable_policy_event(policy)}\n{events}"
+    events_str = f"{await _generate_reasonable_policy_event(policy_input)}\n{events}"
     print("--- historical events ---")
     print(historical_events_str)
     print("--- events ---")
