@@ -27,7 +27,7 @@ from model.actions import (
     generate_state_advice,
 )
 from model.parsing import parse_state
-from utils.event_stream import with_heartbeat, event_stream_response, HeartbeatResult
+from utils.event_stream import with_heartbeat, event_stream_response
 
 router = APIRouter(prefix="/api/states", tags=["states"])
 
@@ -75,20 +75,12 @@ async def create_state(
         questions = [(q.question, q.value) for q in request.questions]
 
         yield StateStatusEvent(message="Generating initial state...").json_line()
-        async for event in with_heartbeat(
-            lambda: generate_state(date=date, name=request.name, questions=questions)
-        ):
-            if isinstance(event, HeartbeatResult):
-                yield event.event
-            else:
-                md_overview, md_state = event
+        md_overview, md_state = await generate_state(
+            date=date, name=request.name, questions=questions
+        )
 
         yield StateStatusEvent(message="Designing flag...").json_line()
-        async for event in with_heartbeat(lambda: generate_state_flag(md_overview)):
-            if isinstance(event, HeartbeatResult):
-                yield event.event
-            else:
-                svg_flag = event
+        svg_flag = await generate_state_flag(md_overview)
 
         state_snapshot = StateSnapshot(
             date=date,
@@ -182,33 +174,21 @@ async def create_state_snapshot(
         ]
 
         yield StateStatusEvent(message="Simulating next year...").json_line()
-        async for event in with_heartbeat(
-            lambda: generate_next_state(
-                start_date=current_date,
-                end_date=next_date,
-                prev_state=latest_snapshot.markdown_state,
-                policy=request.policy,
-                historical_events=historical_events,
-            )
-        ):
-            if isinstance(event, HeartbeatResult):
-                yield event.event
-            else:
-                diff, next_state, next_events = event
+        diff, next_state, next_events = await generate_next_state(
+            start_date=current_date,
+            end_date=next_date,
+            prev_state=latest_snapshot.markdown_state,
+            policy=request.policy,
+            historical_events=historical_events,
+        )
 
         yield StateStatusEvent(message="Generating summary report...").json_line()
-        async for event in with_heartbeat(
-            lambda: generate_diff_report(
-                start_date=current_date,
-                end_date=next_date,
-                prev_state=latest_snapshot.markdown_state,
-                diff_output=diff,
-            )
-        ):
-            if isinstance(event, HeartbeatResult):
-                yield event.event
-            else:
-                next_state_report = event
+        next_state_report = await generate_diff_report(
+            start_date=current_date,
+            end_date=next_date,
+            prev_state=latest_snapshot.markdown_state,
+            diff_output=diff,
+        )
 
         state_snapshot = StateSnapshot(
             date=next_date.strftime("%Y-%m"),

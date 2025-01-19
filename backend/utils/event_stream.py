@@ -21,49 +21,55 @@ async def heartbeat() -> AsyncGenerator[str, None]:
 
 
 async def with_heartbeat(
-    operation: Callable[[], T]
-) -> AsyncGenerator[HeartbeatResult | T, None]:
+    stream: AsyncGenerator[str, None]
+) -> AsyncGenerator[str, None]:
     """
-    Wrapper to run an async operation with heartbeat events.
-    Yields heartbeat events while the operation is running.
+    Wrapper to add heartbeat events to a stream.
 
     Args:
-        operation: Async operation to run while sending heartbeats
+        stream: Original event stream
 
     Yields:
-        HeartbeatResult: Heartbeat events while operation is running
-        T: Final result of the operation
+        str: Events from original stream interspersed with heartbeat events
     """
     heartbeat_task = asyncio.create_task(heartbeat().__anext__())
-    operation_task = asyncio.create_task(operation())
+    stream_task = asyncio.create_task(stream.__anext__())
 
     try:
-        while not operation_task.done():
+        while True:
             done, _ = await asyncio.wait(
-                [heartbeat_task, operation_task], return_when=asyncio.FIRST_COMPLETED
+                [heartbeat_task, stream_task], return_when=asyncio.FIRST_COMPLETED
             )
 
+            if stream_task in done:
+                try:
+                    yield await stream_task
+                    stream_task = asyncio.create_task(stream.__anext__())
+                except StopAsyncIteration:
+                    break
+
             if heartbeat_task in done:
-                yield HeartbeatResult(event=await heartbeat_task)
+                yield await heartbeat_task
                 heartbeat_task = asyncio.create_task(heartbeat().__anext__())
 
-        yield await operation_task
     finally:
         heartbeat_task.cancel()
+        stream_task.cancel()
         try:
             await heartbeat_task
-        except asyncio.CancelledError:
+            await stream_task
+        except (asyncio.CancelledError, StopAsyncIteration):
             pass
 
 
-def event_stream_response(stream: AsyncGenerator[str, None]) -> Any:
+def event_stream_response(stream: AsyncGenerator[str, None]) -> StreamingResponse:
     """
-    Helper to create a StreamingResponse with proper media type.
+    Helper to create a StreamingResponse with proper media type and heartbeat events.
 
     Args:
         stream: Async generator yielding event strings
 
     Returns:
-        StreamingResponse configured for server-sent events
+        StreamingResponse configured for server-sent events with heartbeat
     """
-    return StreamingResponse(stream, media_type="text/event-stream")
+    return StreamingResponse(with_heartbeat(stream), media_type="text/event-stream")

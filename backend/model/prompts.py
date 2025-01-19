@@ -2,11 +2,10 @@ STATE_CONFIG_FORMAT_TEMPLATE = """
 <!--
 - Follow the template exactly. Filling in {values}, keeping text outside of brackets, and replacing ...s.
 - You are expected to fill out ALL the fields in the template and keep ALL default attributes.
-- Format {Number} like: 123, ~123 million, 0.12, etc. Do not use a percentage or relative values.
-- Format {Percentage} like: 12%, ~12%, 0.01%, etc. Include a percentage sign.
+- Format {Number} like: 123, 123 million, 0.12. Do not use a percentage or relative values.
+- Format {Percentage} like: 12%, 0.01%.
 - Format {DetailedDescription} with 1-3 concise sentences. Use technical terms and avoid filler words.
-- Format {TotalAmountInUSD} monetary amounts in USD.
-- Certain policies, descriptions, and values the answer may be "N/A due to...". For metrics that should exist, but you don't know, use your best guess.
+- Format {TotalAmountInUSD} monetary amounts in USD like $123, $123 million, $0.12.
 - Do not use *italic* or **bold**. 
 - Do not add nested lists or headings not specified in the template.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
