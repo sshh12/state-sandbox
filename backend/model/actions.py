@@ -9,7 +9,7 @@ from model.state_config import StateDimension, DIMENSIONS
 from model.action_schemas import (
     STATE_CONFIG_FORMAT_TEMPLATE,
     DIFF_EXECUTIVE_TEMPLATE,
-    RANDOM_TEMPLATE,
+    RANDOM_EVENTS_TEMPLATE,
     FUTURE_POLICY_TEMPLATE,
 )
 from model.parsing import (
@@ -257,7 +257,7 @@ Given this fictional <state> from {start_date} to {end_date}, provide a list of 
 
 <format>
 ```markdown
-{RANDOM_TEMPLATE}
+{RANDOM_EVENTS_TEMPLATE}
 ```
 </format>
 

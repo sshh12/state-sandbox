@@ -111,7 +111,9 @@ export default function NewState() {
     setIsLoading(true);
     try {
       const questionData = visibleQuestions
-        .filter((_, index) => ratings[index] !== undefined)
+        .filter(
+          (_, index) => ratings[index] !== undefined && ratings[index] !== null
+        )
         .map((question, index) => ({
           question,
           value: parseInt(ratings[index]),

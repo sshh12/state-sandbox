@@ -18,6 +18,12 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 const links = [
   { name: 'Leaderboard', href: '/leaderboard' },
   { name: 'Account', href: '/account' },
+  {
+    name: 'Feedback',
+    href: 'https://forms.gle/KDbeBvVLnj2sNaHeA',
+    target: '_blank',
+    rel: 'noopener noreferrer',
+  },
 ];
 
 export function DashboardNav({ stateId }) {
@@ -30,6 +36,8 @@ export function DashboardNav({ stateId }) {
         <Link
           key={link.href}
           href={link.href}
+          target={link.target}
+          rel={link.rel}
           className={`py-4 text-sm font-medium transition-colors hover:text-primary ${
             pathname === link.href ? 'text-foreground' : 'text-muted-foreground'
           }`}

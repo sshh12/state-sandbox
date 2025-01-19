@@ -233,6 +233,16 @@ async def create_state_snapshot(
         if not previous_snapshots:
             raise HTTPException(status_code=404, detail="No previous snapshots found")
 
+        if state.turn_in_progress:
+            raise HTTPException(
+                status_code=400,
+                detail="Turn already in progress, refresh after a few minutes",
+            )
+
+        state.turn_in_progress = True
+        db.add(state)
+        db.commit()
+
         latest_snapshot = previous_snapshots[-1]
         current_date = datetime.strptime(latest_snapshot.date, "%Y-%m")
         next_date = current_date + relativedelta(months=12)
@@ -283,6 +293,8 @@ async def create_state_snapshot(
 
         # patch in the policy events selected by the user
         latest_snapshot.markdown_future_events = simulated_events
+        state.turn_in_progress = False
+        db.add(state)
         db.add(latest_snapshot)
         state_snapshot = StateSnapshot(
             date=next_date.strftime("%Y-%m"),

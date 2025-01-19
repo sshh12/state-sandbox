@@ -13,7 +13,7 @@ STATE_CONFIG_FORMAT_TEMPLATE = """
 -->
 """.strip()
 
-RANDOM_TEMPLATE = """
+RANDOM_EVENTS_TEMPLATE = """
 <!--
 These are random events the goverment will need to make decisions on.
 - Events are mutually exclusive within their category.
@@ -24,39 +24,38 @@ These are random events the goverment will need to make decisions on.
 - Events should be consise and unambiguous (no "... changes", it should state what the change is).
 - Events that last longer than a year should be stated as "starts" (or "ends").
 - Event categories must include a first no-event category.
-- Event probabilities should be realistic and influenced by the <state>.
-- Consider the historical events when determining the probability of an event.
+- Event probabilities should be realistic (chance over the course of a year) and influenced by the <state> and known historical events.
 - Be specific with varients and severity of events (e.g. Cat N Hurricane, Cyberattack on N industrial facilities, etc.)
 - Do not add nested lists or headings not specified in the template.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
 - Do not use *italic* or **bold**. 
 -->
 
-# Environmental and Weather Events <!-- natural phenomena affecting environment/climate, at least 10 -->
+# Environmental and Weather Events <!-- Examples: Natural disasters (hurricanes, floods), climate anomalies (record temperatures, droughts), environmental incidents (oil spills, forest fires), wildlife crises (invasive species, mass die-offs) -->
 - x% No notable events
 ...
 
-# Economic Events <!-- major financial/market developments, at least 10 -->
+# Economic Events <!-- Examples: Market crashes, major company bankruptcies, industry-wide strikes, commodity price shocks, foreign investment withdrawals, currency manipulation by foreign powers, trade embargo impacts -->
 - x% No notable events
 ...
 
-# Defense and Military Events <!-- military/security incidents or developments, at least 10 -->
+# Defense and Military Events <!-- Examples: Cyber attacks on critical infrastructure, terrorist incidents, border incursions, military equipment failures, foreign spy networks discovered, military tech breaches, armed militia formations -->
 - x% No notable events
 ...
 
-# Health and Crime Events <!-- public health/medical developments, organized crime, at least 10 -->
+# Health and Crime Events <!-- Examples: Disease outbreaks, drug-resistant infections, organized crime expansion, new synthetic drug epidemics, healthcare system breaches, mass poisoning incidents, bioterror threats -->
 - x% No notable events
 ...
 
-# Cultural and People Events <!-- societal/cultural developments, at least 10 -->
+# Cultural and People Events <!-- Examples: Mass protests, religious conflicts, demographic shifts, controversial media influence, education system crises, cultural heritage destruction, social movement radicalization -->
 - x% No notable events
 ...
 
-# Infrastructure and Technology Events <!-- tech/scientific developments, at least 10 -->
+# Infrastructure and Technology Events <!-- Examples: Critical infrastructure failures, AI system malfunctions, data center breaches, transportation system vulnerabilities, power grid instabilities, water system contamination -->
 - x% No notable events
 ...
 
-# International Relations Events <!-- diplomatic/international developments, at least 10 -->
+# International Relations Events <!-- Examples: Diplomatic expulsions, trade agreement violations, foreign asset seizures, international sanctions threats, refugee crises, foreign interference in domestic affairs -->
 - x% No notable events
 ...
 """.strip()
