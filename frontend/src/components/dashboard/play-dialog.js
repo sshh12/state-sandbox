@@ -26,8 +26,10 @@ export function PlayDialog({
   turnLoading,
   loadingMessage,
   stateId,
+  events = [],
+  eventsPolicy = [],
 }) {
-  const [policies, setPolicies] = useState('');
+  const [policies, setPolicies] = useState(eventsPolicy.join('\n'));
   const [advisorFeedback, setAdvisorFeedback] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [customQuestion, setCustomQuestion] = useState('');
@@ -41,6 +43,11 @@ export function PlayDialog({
     'Implement universal pre-K education',
     'Increase police funding by 10%',
   ];
+
+  // Update policies when eventsPolicy changes
+  useEffect(() => {
+    setPolicies(eventsPolicy.join('\n'));
+  }, [eventsPolicy]);
 
   // Rotate example every 3 seconds
   useEffect(() => {
@@ -104,7 +111,8 @@ export function PlayDialog({
         <DialogHeader>
           <DialogTitle>Play Turn</DialogTitle>
           <DialogDescription>
-            Set your policies (if any) and get advice from your advisors before
+            Your nation will face the following events over the next year. Set
+            your policies (if any) and get advice from your advisors before
             advancing the simulation by exactly one year.
           </DialogDescription>
         </DialogHeader>
@@ -121,13 +129,27 @@ export function PlayDialog({
               </p>
             </>
           )}
+          {events.length > 0 && (
+            <div className="space-y-2">
+              <h4 className="font-medium">Upcoming Events</h4>
+              <div className="rounded-md bg-muted p-4 space-y-1">
+                <ul className="list-disc list-inside space-y-1">
+                  {events.map((event, index) => (
+                    <li key={index} className="text-sm">
+                      {event.split(': ')[1] || event}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
           <div className="space-y-2">
             <h4 className="font-medium">Your Policies</h4>
             <Textarea
               placeholder={`Enter your policy changes here (if any)...\ne.g. ${examplePolicies[currentExampleIndex]}`}
               value={policies}
               onChange={(e) => setPolicies(e.target.value)}
-              className="h-32"
+              className="h-48"
               disabled={turnLoading}
             />
           </div>

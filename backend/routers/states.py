@@ -26,7 +26,8 @@ from model.actions import (
     generate_state_flag,
     generate_diff_report,
     generate_state_advice,
-    generate_random_events,
+    generate_future_events,
+    generate_future_policy_suggestion,
 )
 from model.parsing import parse_state
 from utils.event_stream import event_stream_response
@@ -87,7 +88,12 @@ async def create_state(
         yield StateStatusEvent(message="Designing flag...").json_line()
         svg_flag, random_events_md = await asyncio.gather(
             generate_state_flag(md_overview),
-            generate_random_events(start_date, end_date, md_state, ""),
+            generate_future_events(start_date, end_date, md_state, ""),
+        )
+
+        yield StateStatusEvent(message="Generating policy suggestion...").json_line()
+        policy_suggestion = await generate_future_policy_suggestion(
+            start_date, end_date, md_state, random_events_md
         )
 
         state_snapshot = StateSnapshot(
@@ -95,6 +101,7 @@ async def create_state(
             state_id=state.id,
             markdown_state=md_state,
             markdown_future_events=random_events_md,
+            markdown_future_events_policy=policy_suggestion,
         )
         parsed_state = parse_state(state_snapshot.markdown_state)
         full_name = parsed_state["government"]["government_metadata"][
@@ -114,10 +121,16 @@ async def create_state(
 def _fix_snapshot_json(snapshot: StateSnapshot):
     snapshot.json_state = parse_state(snapshot.markdown_state)
     snapshot.json_state["date"] = snapshot.date
-    if snapshot.markdown_events:
-        snapshot.json_state["events"] = snapshot.markdown_events.split("\n")
+    if snapshot.markdown_future_events:
+        snapshot.json_state["events"] = snapshot.markdown_future_events.split("\n")
     else:
         snapshot.json_state["events"] = []
+    if snapshot.markdown_future_events_policy:
+        snapshot.json_state["events_policy"] = (
+            snapshot.markdown_future_events_policy.split("\n")
+        )
+    else:
+        snapshot.json_state["events_policy"] = ""
     if snapshot.markdown_delta_report:
         snapshot.json_state["delta_report"] = snapshot.markdown_delta_report
     else:

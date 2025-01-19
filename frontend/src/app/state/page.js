@@ -101,6 +101,8 @@ export default function StatePage({ stateId }) {
             <PlayDialog
               stateId={stateId}
               date={latestSnapshot?.date}
+              events={latestSnapshot?.events}
+              eventsPolicy={latestSnapshot?.events_policy}
               onPlay={handlePlay}
               turnLoading={turnLoading}
               loadingMessage={loadingMessage}

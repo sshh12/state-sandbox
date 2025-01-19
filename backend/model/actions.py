@@ -10,7 +10,7 @@ from model.prompts import (
     RANDOM_TEMPLATE,
 )
 from model.parsing import (
-    extract_markdown_codeblock,
+    extract_codeblock,
     extract_svg_codeblock,
     parse_events_output,
 )
@@ -94,7 +94,7 @@ Given this fictional but realistic country, generate a detailed description of t
 Reply with the <dimension-template> in a markdown codeblock. Carefully consider the <state-overview> and <assumptions> to provide a highly accurate response.
 """.strip()
     output = await provider.generate_fast_reasoning(prompt)
-    md_output = extract_markdown_codeblock(output)
+    md_output = extract_codeblock(output)
     return f"# {dimension.title}\n{md_output}"
 
 
@@ -162,7 +162,7 @@ Given this fictional state and the following events between {start_date} and {en
 
 Reply with a markdown codeblock containing the report. Do not include xml tags.
 """.strip()
-    new_state_report = extract_markdown_codeblock(
+    new_state_report = extract_codeblock(
         await provider.generate_fast(new_state_report_prompt)
     )
     return new_state_report
@@ -180,7 +180,49 @@ def _sample_event(events: List[Tuple[float, str]]) -> str:
     return events[-1][1]  # Fallback to last event
 
 
-async def generate_random_events(
+async def generate_future_policy_suggestion(
+    start_date: datetime, end_date: datetime, prev_state: str, events: str
+) -> str:
+    provider = OpenAIProvider()
+    prompt = f"""
+Given this fictional <state> from {start_date} to {end_date} and the following events, provide a policy suggestion for the government to enact.
+
+<state>
+{prev_state}
+</state>
+
+<events>
+{events}
+</events>
+
+<format>
+```markdown
+<!-- 
+Provide a list of actions to respond to the events.
+- Action examples: "Ban the use of social media", "Increase funding for anti-cybercrime programs", etc.
+- Actions should be specific, realistic, and target the events.
+- Actions should be at most 2 sentences.
+- Actions should reflect the type of <state> and cultural values.
+- Events should have at most 2 actions each.
+- Do not add nested lists or headings not specified in the template.
+- Do not include <!-- comments --> in the final output but use them as key guidance.
+- Do not use *italic* or **bold**. 
+-->
+
+# Government Actions
+- <-- action -->
+- <-- action -->
+...
+```
+</format>
+
+Reply with <format> as a markdown codeblock.
+""".strip()
+    output = await provider.generate_fast_reasoning(prompt)
+    return extract_codeblock(output)
+
+
+async def generate_future_events(
     start_date: datetime,
     end_date: datetime,
     prev_state: str,
@@ -199,12 +241,14 @@ Given this fictional <state> from {start_date} to {end_date}, provide a list of 
 </historical-events>
 
 <format>
+```markdown
 {RANDOM_TEMPLATE}
+```
 </format>
 
 Reply with <format> as a markdown codeblock.
 """.strip()
-    output = extract_markdown_codeblock(await provider.generate_fast_reasoning(prompt))
+    output = extract_codeblock(await provider.generate_fast_reasoning(prompt))
     print(output)
 
     # Parse the output into categories and their events
@@ -258,7 +302,7 @@ Reply with:
 - For policies (if any), lean towards adding a policy and only remove a policy if it's no longer relevant.
 """.strip()
     raw_output = await provider.generate_fast_reasoning(new_state_dimension_prompt)
-    md_new_state_dimension = extract_markdown_codeblock(raw_output)
+    md_new_state_dimension = extract_codeblock(raw_output)
     return f"# {dimension.title}\n{md_new_state_dimension}"
 
 
@@ -299,7 +343,7 @@ Rephrase <user-action> into a valid policy event and reply with their action for
 """.strip()
     raw_output = await provider.generate_fast_reasoning(prompt)
     try:
-        output = extract_markdown_codeblock(raw_output).replace('"', "")
+        output = extract_codeblock(raw_output).replace('"', "")
     except Exception as e:
         print("Error parsing output", e)
         return "- Government Events: None"
@@ -415,4 +459,4 @@ Format policy advice in an imperative format:
 Be brief, technical, and concise. If writing out suggested policies, limit it to the top 3 most effective ones.
 """.strip()
     output = await provider.generate_fast(prompt)
-    return extract_markdown_codeblock(output)
+    return extract_codeblock(output)

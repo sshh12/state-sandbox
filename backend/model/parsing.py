@@ -3,8 +3,8 @@ import markdown_to_json
 from typing import Any, List, Tuple, Dict
 
 
-def extract_markdown_codeblock(text: str) -> str:
-    match = re.search(r"```markdown\n(.*?)```", text, re.DOTALL)
+def extract_codeblock(text: str) -> str:
+    match = re.search(r"```[a-zA-Z]+\n(.*?)```", text, re.DOTALL)
     return match.group(1).strip()
 
 

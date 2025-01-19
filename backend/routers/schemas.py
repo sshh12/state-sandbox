@@ -58,7 +58,6 @@ class StateSnapshotResponse(BaseModel):
     markdown_future_events_policy: str
     markdown_delta: Optional[str]
     markdown_delta_report: Optional[str]
-    markdown_events: Optional[str]
     json_state: dict
     state_id: int
 
