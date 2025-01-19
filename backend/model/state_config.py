@@ -80,19 +80,15 @@ DIMENSIONS = [
 - Economic Class Population Growth: {Description}
 
 ## Migration
-- Immigration: {Description}
-- Immigration Sentiment: {Description}
-- Immigration Totals: {Number} immigrants annually
-- Emigration: {Description}
-- Emigration Sentiment: {Description}
-- Emigration Totals: {Number} emigrants annually
+<!-- describe the migration patterns (migrating to this state) in detail, including:
+- The types of people migrating (e.g. refugees, economic migrants, etc.) and ethnicity
+- The sources of migrants (e.g. neighboring countries, distant regions, etc.)
+- The destinations of migrants (e.g. urban areas, rural areas, etc.)
+- The jobs and industries -->
 
 ## People Metrics
 - Total Population: {Number} people
 - Gallup World Happiness Score: {Number} out of 10
-- Access to Improved Water Sources: {Percentage}
-- Access to Improved Sanitation: {Percentage}
-- Access to Electricity: {Percentage}
 - Human Development Index (HDI): {Number}
 - Gender Inequality Index (GII): {Number} out of 1.0
 - Female Labor Force Participation Rate: {Percentage}
@@ -163,6 +159,7 @@ DIMENSIONS = [
 - Heart Disease: {Percentage}
 - Cancer: {Percentage}
 - {DiseaseName}: {Percentage}
+...
 
 ### Causes of Death Composition <!-- percentage of deaths -->
 - Heart Disease: {Percentage}
@@ -172,6 +169,7 @@ DIMENSIONS = [
 - Accidents: {Percentage}
 - Suicide: {Percentage}
 - {CauseOfDeath}: {Percentage}
+...
 - Other Causes: {Percentage}
 
 ## Health Metrics
@@ -195,7 +193,8 @@ DIMENSIONS = [
 - The role, organization, and responsibilities of the courts (if any)
 - The role, organization, and responsibilities of law enforcement (if any)
 - The role, organization, and responsibilities of the prisons (if any)
-- Funding -->
+- The correlation between crime and poverty, education, and other factors -->
+- Government funding -->
 
 ## Crime Metrics
 - Population Incarcerated: {Percentage}
@@ -245,6 +244,7 @@ DIMENSIONS = [
 - Wholesale and Retail Trade: {Description}
 - Tourism and Hospitality: {Description}
 - {Sector}: {Description}
+...
 
 ### Sector Contributions to GDP
 - Agriculture: {Percentage} <!-- percentage of GDP -->
@@ -259,6 +259,7 @@ DIMENSIONS = [
 - Wholesale and Retail Trade: {Percentage}
 - Tourism and Hospitality: {Percentage}
 - {Sector}: {Percentage}
+...
 
 ### Employment by Sector <!-- percentage of workforce -->
 - Agriculture: {Percentage}
@@ -273,6 +274,7 @@ DIMENSIONS = [
 - Wholesale and Retail Trade: {Percentage}
 - Tourism and Hospitality: {Percentage}
 - {Sector}: {Percentage}
+...
 
 ## Government Budget
 ### Government Revenue Composition <!-- e.g. % of revenue that comes from each source, some may be zero -->
@@ -291,6 +293,8 @@ DIMENSIONS = [
 - Non-Tax Revenue from Government Services: {Percentage}
 - Non-Tax Revenue from Fines and Penalties: {Percentage}
 - Non-Tax Revenue from Investment Income: {Percentage}
+- {RevenueSource}: {Percentage}
+...
 - Other Revenue Sources: {Percentage}
 
 ### Government Expenditure Composition <!-- e.g. % of expenditure that goes to each category, some may be zero -->
@@ -305,10 +309,49 @@ DIMENSIONS = [
 - Agriculture and Rural Development Expenditure: {Percentage}
 - Debt Service (Interest Payments) Expenditure: {Percentage}
 - {ExpenditureCategory}: {Percentage}
+...
+- Other Expenditure: {Percentage}
 
 ### Government Budget Metrics
 - Total Annual Revenue: {AmountUSD}
 - Total Annual Expenditure: {AmountUSD}
+
+## Credit Ratings
+- Standard & Poor's: {RatingLetters}
+- Moody's: {RatingLetters}
+- Fitch: {RatingLetters}
+
+## Economic Metrics
+- Gross Domestic Product (GDP): {AmountUSD}
+- GDP Annual Growth Rate: {Percentage} per year
+- Currency: {CurrencyName} ({CurrencyCode})
+- Unemployment Rate: {Percentage} <!-- % of labor force that is unemployed -->
+- Labor Force Participation Rate: {Percentage} <!-- % people ages 15 or older who are employed or seeking work -->
+- Poverty Rate: {Percentage} <!-- % of population living below the poverty line -->
+- Inflation Rate: {Percentage} <!-- annualized -->
+- Gini Coefficient: {Number} out of 1.0
+- Average Annual Income: {AmountUSD} per person
+- Exchange Rate ({LocalCurrency}/USD): {ExchangeRate}
+- Optimistic Perception of Economic Future: {Percentage} <!-- % of population that believes the economy will improve -->
+
+## Top Economic Challenges <!-- e.g. unemployment, inflation, trade imbalances, etc. Severity and detailed description. At least 2. -->
+- {Challenge}: {Description}
+""".strip(),
+        seed_assumptions=[
+            "Assume an initial GDP of 2,700,000,000 USD",
+            "Assume all real countries (e.g. USA, China, Russia, etc) for import and export partners",
+        ],
+    ),
+    StateDimension(
+        title="International Relations",
+        template="""
+## Diplomatic Relations
+<!-- describe the diplomatic relations in detail, including:
+- Major allies and their relationship
+- Major rivals and their relationship
+- Diplomatic missions abroad
+- International agreements and treaties
+- Foreign policy and national security -->
 
 ## Trade <!-- good types include electronics, rare metals, grain, oil, etc. at least 5 imports and 5 exports -->
 ### Export Goods Composition <!-- e.g. % of exports that come from each good type -->
@@ -331,34 +374,16 @@ DIMENSIONS = [
 - Total Exports: {AmountUSD}
 - Total Imports: {AmountUSD}
 
-## Credit Ratings
-- Standard & Poor's: {RatingLetters}
-- Moody's: {RatingLetters}
-- Fitch: {RatingLetters}
-
-## Economic Metrics
-- Gross Domestic Product (GDP): {AmountUSD}
-- GDP Annual Growth Rate: {Percentage} per year
-- Currency: {CurrencyName} ({CurrencyCode})
-- Unemployment Rate: {Percentage}
-- Labor Force Participation Rate: {Percentage} <!-- % people ages 15 or older who are employed or seeking work -->
-- Poverty Rate: {Percentage}
-- Inflation Rate: {Percentage}
-- Gini Coefficient: {Number} out of 1.0
-- Average Annual Income: {AmountUSD} per person
-- Exchange Rate ({LocalCurrency}/USD): {ExchangeRate}
-- Population with Optimistic Perception of Economic Future: {Percentage}
-
-## Top Economic Challenges <!-- e.g. unemployment, inflation, trade imbalances, etc. Severity and detailed description. At least 2. -->
+## Top International Relations Challenges <!-- e.g. territorial disputes, trade conflicts, etc. Severity and detailed description. At least 2. -->
 - {Challenge}: {Description}
 """.strip(),
         seed_assumptions=[
-            "Assume an initial GDP of 2,700,000,000 USD",
+            "Assume all real good types (e.g. electronics, rare metals, grain, oil, etc.)",
             "Assume all real countries (e.g. USA, China, Russia, etc) for import and export partners",
         ],
     ),
     StateDimension(
-        title="Military and Defense",
+        title="Defense",
         template="""
 ## Military System
 <!-- describe the military system in detail, including:
@@ -367,28 +392,30 @@ DIMENSIONS = [
 - Technological capabilities
 - Sources of equipment (e.g. domestically produced, foreign-made, etc.) -->
 
-## Military Personnel and Equipment <!-- some of these may be zero -->
+## Military Personnel <!-- some of these may be zero -->
 - Active Duty Personnel: {Number}
 - Reserve Personnel: {Number}
-- Fighter Jets: {Number}
-- Bombers: {Number}
-- UAVs: {Number}
-- Helicopters: {Number}
-- Transport Aircraft: {Number}
-- Aircraft Carriers: {Number}
-- Nuclear Submarines: {Number}
-- Destroyers: {Number}
-- Frigates: {Number}
-- Tanks: {Number}
+
+## Military Assets
+- Advanced Combat Aircraft (5th/4th gen): {Number} <!-- e.g. F-35, Su-57 level -->
+- Basic Combat Aircraft (3rd/2nd gen): {Number} <!-- e.g. MiG-21 level -->
+- Transport/Support Aircraft: {Number}
+- Combat Helicopters: {Number}
+- Support Helicopters: {Number}
+- Unmanned Aerial Systems: {Number}
+- Major Combat Ships: {Number} <!-- e.g. destroyers, cruisers -->
+- Minor Combat Ships: {Number} <!-- e.g. corvettes, patrol boats -->
+- Submarines: {Number}
+- Support Vessels: {Number}
+- Modern Main Battle Tanks: {Number} <!-- e.g. M1A2, T-90 level -->
+- Legacy Tanks: {Number} <!-- e.g. T-55 level -->
+- Armored Combat Vehicles: {Number}
 - Artillery Systems: {Number}
-- Infantry Fighting Vehicles: {Number}
-- Armored Personnel Carriers: {Number}
-- Nuclear ICMBs: {Number}
-- Ballistic Missiles: {Number}
-- Anti-Ballistic Missile Systems: {Number}
-- Cyber Defense Specialists: {Number}
-- Reconnaissance Satellites: {Number}
-- Communication Satellites: {Number}
+- Ballistic Missile Systems: {Number}
+- Air Defense Systems: {Number}
+- Satellite Systems: {Number}
+- Cyber/Electronic Warfare Units: {Number}
+- Special Forces Units: {Number}
 
 ## Top Defense Challenges <!-- e.g. terrorism, cyber threats, organized crime, etc. Include risk level and detailed description. At least 2. -->
 - {Challenge}: {Description}
@@ -397,20 +424,34 @@ DIMENSIONS = [
     StateDimension(
         title="Media",
         template="""
-## Media Outlets <!-- avoid mentioning proper nouns, just types. Include state vs private ownership. E.g. social media, cable news, etc. -->
-- {MediaType}: {Description}
+## Media Landscape
+<!-- describe the media landscape in detail, including:
+- Level of state control and censorship
+- Media ownership concentration
+- Role of international media
+- Level of press freedom
+- Digital media adoption
+- Media literacy -->
+
+## Media Source Composition <!-- e.g. % of content from each source -->
+- Online News: {Percentage}
+- Print News: {Percentage}
+- TV News: {Percentage}
+- Radio News: {Percentage}
+- Social Media: {Percentage}
+- {MediaSource}: {Percentage}
+...
 
 ## News Coverage Composition <!-- e.g. coverage of issues, % of media time spent on issues -->
 - {MediaIssue}: {Percentage}
-
-## TV/Film Topic Composition <!-- e.g. % of recent TV shows, movies, etc. spent on topics. Topics can be state propaganda, dramas, comedies, etc. -->
-- {Topic}: {Percentage}
+...
 
 ## Media Metrics
 - Press Freedom Index: {Number} out of 100
 - Digital Divide Index (Infrastructure): {Number} out of 100
 - Digital Divide Index (Socioeconomic): {Number} out of 100
-- Social Media Usage: {Percentage}
+- Social Media Usage: {Percentage} <!-- % of population that uses social media -->
+- Average Daily Media Consumption: {Number} hours
 """.strip(),
     ),
     StateDimension(
@@ -430,12 +471,25 @@ DIMENSIONS = [
 - Variance in culture and values (among age, gender, ethnicity, etc.)
 - Individualism vs Collectivism -->
 
-## Sports and Recreation Composition <!-- e.g. % of population that participates in each activity -->
-- {SportOrActivity}: {Percentage}
+## Cultural Practices
+<!-- describe the cultural practices in detail, including:
+- Cusine: traditional dishes, popular dishes, etc.
+- Music: traditional music, popular music, etc.
+- Art: traditional art, popular art, etc.
+- Dance: traditional dance, popular dance, etc.
+- Literature: traditional literature, popular literature, etc.
+- Film: traditional film, popular film, etc.
+- Sports: traditional sports, popular sports, etc. -->
 
 ## Cultural Metrics
 - Soft Power Index: {Number} of 100
 - International Cultural Centers: {Number}
+- Protected Cultural Sites: {Number}
+- Published Books per Year: {Number}
+- Art Galleries: {Number}
+- Museums: {Number}
+- Theaters: {Number}
+- Concert Venues: {Number}
 
 ## Top Cultural Challenges <!-- e.g. cultural preservation, cultural diversity, etc. Severity and detailed description. At least 2. -->
 - {Challenge}: {Description}
@@ -457,7 +511,6 @@ DIMENSIONS = [
 - Precious Metals (Gold/Silver): {Number} ounces per day
 - Industrial Metals (Copper/Iron): {Number} tons per day
 - Strategic Metals (Uranium/Rare Earth): {Number} tons per day
-- {Resource}: {Number} tons per day
 
 ## Environmental Metrics
 - Total Land Area: {Number} sq km
@@ -490,19 +543,20 @@ DIMENSIONS = [
 - Coal: {Percentage}
 - Hydroelectric: {Percentage}
 - {EnergySource}: {Percentage}
+...
 
-## Technologies <!-- How well or poorly the state is doing in each technology -->
-- Artificial Intelligence: {Description}
-- Quantum Computing: {Description}
-- Robotics: {Description}
-- Space Program: {Description}
-- Biotechnology: {Description}
-- {Technology}: {Description}
+## Technologies
+<!-- describe the technologies in detail, including:
+- Artificial Intelligence, Quantum Computing, Robotics, Space Program, Biotechnology, etc. 
+- How well or poorly the state is doing in each technology -->
 
 ## Infrastructure Metrics
 - Total Electricity Generation: {Megawatts}
 - Mobile Phone Subscriptions: {Percentage}
 - Highspeed Internet Access: {Percentage}
+- Access to Improved Water Sources: {Percentage}
+- Access to Improved Sanitation: {Percentage}
+- Access to Electricity: {Percentage}
 - Roads: {Number} km
 - Railways: {Number} km
 - Airports: {Number}
@@ -536,64 +590,60 @@ DIMENSIONS = [
 - Ethnic-related Participation
 - Religious-related Participation -->
 
-## Policies <!-- all policy types should have at least 4 policies, many policies should beunique to this country and some may align with non-western values -->
-
-### Civil Liberties and Political Rights Policies <!-- e.g. freedom or restriction of speech, press, assembly, religion -->
+## Policies <!-- all policy types should have at least 4 policies, many policies should be unique to this country and some may align with non-western values -->
+### Civil Rights and Democracy Policies <!-- e.g. voting rights, freedom of speech, assembly, religion -->
 - {PolicyType}: {Description}
 
-### Fiscal & Labor Policies <!-- e.g. tax rates, minimum wage, unemployment benefits, government spending priorities -->
+### Economic and Monetary Policies <!-- e.g. interest rates, inflation targets, financial regulation -->
 - {PolicyType}: {Description}
 
-### Monetary Policies <!-- e.g. inflation targets, interest rates -->
+### Fiscal and Tax Policies <!-- e.g. government spending, taxation, debt management -->
 - {PolicyType}: {Description}
 
-### Trade & Investment Policies <!-- e.g. tariffs, trade agreements, domestic investment incentives, foreign investment regulations -->
+### Healthcare and Public Health Policies <!-- e.g. medical systems, insurance, drug policy, health research -->
 - {PolicyType}: {Description}
 
-### Education Policies <!-- e.g. school systems, educational reforms -->
+### Education and Research Policies <!-- e.g. schools, universities, scientific funding, innovation -->
 - {PolicyType}: {Description}
-...
 
-### Healthcare Policies <!-- e.g. healthcare systems, healthcare reforms -->
+### Social Welfare Policies <!-- e.g. poverty programs, disability support, retirement benefits -->
 - {PolicyType}: {Description}
-...
 
-### Criminal Justice Policies <!-- e.g. police forces, prisons, courts, drug laws, substance abuse policies, etc. -->
+### Justice System Policies <!-- e.g. courts, legal system, criminal law, rehabilitation -->
 - {PolicyType}: {Description}
-...
 
-### Housing Policies <!-- e.g. housing policies, housing reforms -->
+### Law Enforcement Policies <!-- e.g. policing, investigation, public safety, emergency services -->
 - {PolicyType}: {Description}
-...
 
-### Media Policies <!-- e.g. media regulations, media ownership -->
+### Defense and Security Policies <!-- e.g. military, intelligence, cybersecurity, terrorism -->
 - {PolicyType}: {Description}
-...
 
-### Social & Cultural Policies <!-- e.g. social security systems, social welfare programs, equality laws, cultural policies, cultural reforms -->
+### Foreign Relations Policies <!-- e.g. diplomacy, international organizations, foreign aid -->
 - {PolicyType}: {Description}
-...
 
-### Environmental Policies <!-- e.g. international agreements, carbon pricing, industrial emissions regulations, waste management, conservation laws -->
+### Immigration and Border Policies <!-- e.g. visas, citizenship, customs, border control -->
 - {PolicyType}: {Description}
-...
 
-### Diplomatic Policies <!-- e.g. alliances, memberships, foreign policy -->
+### Environmental and Climate Policies <!-- e.g. conservation, emissions, wildlife protection -->
 - {PolicyType}: {Description}
-...
 
-### Defense Policies <!-- e.g. defense budgets, military alliances, security policies, drafts -->
+### Infrastructure and Transportation Policies <!-- e.g. roads, utilities, public transit, urban planning -->
 - {PolicyType}: {Description}
-...
 
-### Immigration Policies <!-- e.g. visa requirements, immigration laws -->
+### Labor and Employment Policies <!-- e.g. workers rights, job training, workplace safety -->
 - {PolicyType}: {Description}
-...
+
+### Technology and Digital Policies <!-- e.g. internet regulation, AI governance, data privacy -->
+- {PolicyType}: {Description}
+
+### Culture and Media Policies <!-- e.g. arts funding, broadcasting, sports, heritage preservation -->
+- {PolicyType}: {Description}
 
 ## Government Metrics
 - Corruption Perception Index (CPI): {Number} out of 100
 - Direction of Country: {Percentage} believe country is on right track
 - Overall Head of State/Government Approval Rating: {Percentage}
+- Democracy Index: {Number} out of 10.0 <!-- The Economist Democracy Index -->
 
 ## Top Government Challenges <!-- e.g. corruption, political instability, etc. Severity and detailed description. At least 2. -->
 - {Challenge}: {Description}
@@ -602,11 +652,11 @@ DIMENSIONS = [
     StateDimension(
         title="Public Opinion",
         template="""
-## Top Concerns Among Citizens <!-- At least 5 concerns, be specific (e.g. high cost of living due to ..., high ... crime rate, etc.) -->
-- {Concern}: {Percentage} <!-- % that have this concern -->
+## Recent Citizen Quotes <!-- At least 5 that that a random sample of population and their concerns. This should be a mix of people and change every year. Quotes should be rich and specific. Format exactly as shown. -->
+- {Name} ({Number} years old, {Gender}, {Ethnicity}, {Religion}, {Occupation}, {AmountUSD} annual income) - "{Quote}"
 ...
 
-## Recent Headlines <!-- At least 5 recent viral headlines. Avoid generic headlines, make them interesting and specific. -->
+## Recent Headlines <!-- At least 5 recent viral headlines. Avoid generic headlines, make them interesting and specific. As if written by like CNN or Fox News. -->
 - "{Headline}"
 ...
 """.strip(),

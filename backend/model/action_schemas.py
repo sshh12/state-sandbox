@@ -6,6 +6,7 @@ STATE_CONFIG_FORMAT_TEMPLATE = """
 - Format {Percentage} like: 12%, 0.01%.
 - Format {Description} with 1-3 concise sentences. Use technical terms and avoid filler words.
 - Format {AmountUSD} monetary amounts in USD like $123, $123 million, $0.12.
+- Format {Challenge}, {PolicyType}, etc. like "Topic Name" (no styling or quotes)
 - Do not use *italic* or **bold**. 
 - Do not add nested lists or headings not specified in the template.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
@@ -16,15 +17,16 @@ RANDOM_TEMPLATE = """
 <!--
 These are random events the goverment will need to make decisions on.
 - Events are mutually exclusive within their category.
-- Event categories must include a first no-event category.
 - Events must start with a % probability.
 - Events should be caused by nature, citizens, businesses, or other states.
 - Events can be controversial, bad, or mixed. All should be expected to invoke an opinionated response from the government.
 - Events can tip the scales of various dimensions of the state.
 - Events should be consise and unambiguous (no "... changes", it should state what the change is).
 - Events that last longer than a year should be stated as "starts" (or "ends").
+- Event categories must include a first no-event category.
 - Event probabilities should be realistic and influenced by the <state>.
-- Include varients and severity of events (e.g. Cat N Hurricane, etc.) and joint events (e.g. Hurricane + Earthquake).
+- Consider the historical events when determining the probability of an event.
+- Be specific with varients and severity of events (e.g. Cat N Hurricane, Cyberattack on N industrial facilities, etc.)
 - Do not add nested lists or headings not specified in the template.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
 - Do not use *italic* or **bold**. 
@@ -46,7 +48,7 @@ These are random events the goverment will need to make decisions on.
 - x% No notable events
 ...
 
-# Cultural and Social Events <!-- societal/cultural developments, at least 10 -->
+# Cultural and People Events <!-- societal/cultural developments, at least 10 -->
 - x% No notable events
 ...
 
@@ -95,25 +97,25 @@ DIFF_EXECUTIVE_TEMPLATE = """
 - 1 - 2 sentence dense technical overview of what *important* happened, for the leadership of the <state>.
 -->
 
-1. **Environmental and Weather**:
+1. **Environment and Weather**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-2. **Economic**:
+2. **Economy**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-3. **Defense & Military**:
+3. **Defense**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-4. **Health & Crime**:
+4. **Health and Crime**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-5. **Cultural and Social**:
+5. **Culture and People**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-6. **Infrastructure & Technology**:
+6. **Infrastructure and Technology**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-5. **International Relations**:
+7. **International Relations**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
 """.strip()
