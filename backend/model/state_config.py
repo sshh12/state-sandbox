@@ -338,7 +338,7 @@ DIMENSIONS = [
 - {Challenge}: {Description}
 """.strip(),
         seed_assumptions=[
-            "Assume an initial GDP of 2,700,000,000 USD",
+            "Assume an initial GDP of 2,700,000,000 USD (2.7 billion USD)",
             "Assume all real countries (e.g. USA, China, Russia, etc) for import and export partners",
         ],
     ),

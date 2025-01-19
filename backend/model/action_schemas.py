@@ -67,6 +67,7 @@ Provide a list of at most 4 actions to respond to the events.
 - Action examples: "Ban the use of social media", "Increase funding for anti-cybercrime programs", etc.
 - Actions should be specific, realistic, and target the events.
 - Actions should have non-obvious negative consequences (don't state this explicitly).
+- Actions should not include the effects or risks of the action.
 - Actions should be at most 2 sentences. Keep it technical, dense, and concise.
 - Actions should reflect the type of <state> and cultural values.
 - Events should have at most 1 action each.

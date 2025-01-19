@@ -132,12 +132,14 @@ export default function HealthPage({ snapshots }) {
           data={Object.values(health_statistics.diseases)}
           snapshots={snapshots}
           valueKeyPrefix="health.health_statistics.diseases"
+          span={1}
         />
         <PieChartCard
           title="Causes of Death"
           data={Object.values(health_statistics.causes_of_death_composition)}
           snapshots={snapshots}
           valueKeyPrefix="health.health_statistics.causes_of_death_composition"
+          span={1}
         />
       </div>
     </div>

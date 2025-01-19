@@ -131,6 +131,7 @@ export default function InfrastructurePage({ snapshots }) {
           data={Object.values(energy_source_composition)}
           snapshots={snapshots}
           valueKeyPrefix="infrastructure_and_technology.energy_source_composition"
+          span={1}
         />
       </div>
     </div>

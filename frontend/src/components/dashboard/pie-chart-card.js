@@ -105,14 +105,14 @@ export default function PieChartCard({
         <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={350}>
+        <ResponsiveContainer width="100%" height={500}>
           <RechartsPieChart>
             <Pie
               data={chartData}
               cx="50%"
               cy="45%"
               innerRadius={60}
-              outerRadius={100}
+              outerRadius={120}
               dataKey="value"
               paddingAngle={2}
               onClick={handleClick}

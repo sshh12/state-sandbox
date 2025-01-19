@@ -35,7 +35,10 @@ export default function InternationalRelationsPage({ snapshots }) {
           valueKey="international_relations.trade.trade_metrics.total_imports"
           icon={ArrowDownRight}
         />
-        <Card className="col-span-2">
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Diplomatic Relations</CardTitle>
           </CardHeader>
@@ -45,9 +48,6 @@ export default function InternationalRelationsPage({ snapshots }) {
             </p>
           </CardContent>
         </Card>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
         <ChallengesCard
           title="International Relations Challenges"
           challenges={top_international_relations_challenges}
@@ -60,24 +60,28 @@ export default function InternationalRelationsPage({ snapshots }) {
           data={Object.values(export_goods_composition)}
           snapshots={snapshots}
           valueKeyPrefix="international_relations.trade.export_goods_composition"
+          span={1}
         />
         <PieChartCard
           title="Import Goods"
           data={Object.values(import_goods_composition)}
           snapshots={snapshots}
           valueKeyPrefix="international_relations.trade.import_goods_composition"
+          span={1}
         />
         <PieChartCard
           title="Export Partners"
           data={Object.values(export_partner_composition)}
           snapshots={snapshots}
           valueKeyPrefix="international_relations.trade.export_partner_composition"
+          span={1}
         />
         <PieChartCard
           title="Import Partners"
           data={Object.values(import_partner_composition)}
           snapshots={snapshots}
           valueKeyPrefix="international_relations.trade.import_partner_composition"
+          span={1}
         />
       </div>
     </div>

@@ -134,54 +134,63 @@ export default function PeoplePage({ snapshots }) {
           data={Object.values(gender_composition)}
           snapshots={snapshots}
           valueKeyPrefix="people.population_distribution.gender_composition"
+          span={1}
         />
         <PieChartCard
           title="Urban/Rural Distribution"
           data={Object.values(urbanrural_composition)}
           snapshots={snapshots}
           valueKeyPrefix="people.population_distribution.urbanrural_composition"
+          span={1}
         />
         <PieChartCard
           title="Economic Class Distribution"
           data={Object.values(economic_composition)}
           snapshots={snapshots}
           valueKeyPrefix="people.population_distribution.economic_composition"
+          span={1}
         />
         <PieChartCard
           title="Education Level Distribution"
           data={Object.values(education_composition)}
           snapshots={snapshots}
           valueKeyPrefix="people.population_distribution.education_composition"
+          span={1}
         />
         <PieChartCard
           title="Ethnic Distribution"
           data={Object.values(ethnic_composition)}
           snapshots={snapshots}
           valueKeyPrefix="people.population_distribution.ethnic_composition"
+          span={1}
         />
         <PieChartCard
           title="Religious Distribution"
           data={Object.values(religious_composition)}
           snapshots={snapshots}
           valueKeyPrefix="people.population_distribution.religious_composition"
+          span={1}
         />
         <PieChartCard
           title="Language Distribution"
           data={Object.values(language_composition)}
           snapshots={snapshots}
           valueKeyPrefix="people.population_distribution.language_composition"
+          span={1}
         />
         <PieChartCard
           title="Housing Distribution"
           data={Object.values(housing_composition)}
           snapshots={snapshots}
           valueKeyPrefix="people.population_distribution.housing_composition"
+          span={1}
         />
         <PieChartCard
           title="Sexuality Distribution"
           data={Object.values(sexuality_composition)}
           snapshots={snapshots}
           valueKeyPrefix="people.population_distribution.sexuality_composition"
+          span={1}
         />
       </div>
     </div>

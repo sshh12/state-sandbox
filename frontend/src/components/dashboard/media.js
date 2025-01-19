@@ -81,12 +81,14 @@ export default function MediaPage({ snapshots }) {
           data={Object.values(media_source_composition)}
           snapshots={snapshots}
           valueKeyPrefix="media.media_source_composition"
+          span={1}
         />
         <PieChartCard
           title="News Coverage Distribution"
           data={Object.values(news_coverage_composition)}
           snapshots={snapshots}
           valueKeyPrefix="media.news_coverage_composition"
+          span={1}
         />
       </div>
     </div>

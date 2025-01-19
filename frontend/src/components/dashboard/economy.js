@@ -152,12 +152,14 @@ export default function EconomyPage({ snapshots }) {
           data={Object.values(sectors.sector_contributions_to_gdp)}
           snapshots={snapshots}
           valueKeyPrefix="economy.sectors.sector_contributions_to_gdp"
+          span={1}
         />
         <PieChartCard
           title="Employment by Sector"
           data={Object.values(sectors.employment_by_sector)}
           snapshots={snapshots}
           valueKeyPrefix="economy.sectors.employment_by_sector"
+          span={1}
         />
       </div>
 
@@ -168,6 +170,7 @@ export default function EconomyPage({ snapshots }) {
           data={Object.values(government_budget.government_revenue_composition)}
           snapshots={snapshots}
           valueKeyPrefix="economy.government_budget.government_revenue_composition"
+          span={1}
         />
         <PieChartCard
           title="Government Expenditure"
@@ -176,6 +179,7 @@ export default function EconomyPage({ snapshots }) {
           )}
           snapshots={snapshots}
           valueKeyPrefix="economy.government_budget.government_expenditure_composition"
+          span={1}
         />
       </div>
 

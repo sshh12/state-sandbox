@@ -11,7 +11,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { formatValue, getValue } from '@/lib/utils';
 import { DashboardNav } from '@/components/nav';
 import Link from 'next/link';
@@ -37,6 +43,31 @@ const metrics = [
     id: 'hdi',
     name: 'Human Development Index',
     valueKey: 'people.people_metrics.human_development_index_hdi',
+  },
+  {
+    id: 'happiness',
+    name: 'World Happiness Score',
+    valueKey: 'people.people_metrics.gallup_world_happiness_score',
+  },
+  {
+    id: 'social_mobility',
+    name: 'Social Mobility Index',
+    valueKey: 'people.people_metrics.social_mobility_index',
+  },
+  {
+    id: 'corruption',
+    name: 'Corruption Index',
+    valueKey: 'government.government_metrics.corruption_perception_index_cpi',
+  },
+  {
+    id: 'life_expectancy',
+    name: 'Life Expectancy',
+    valueKey: 'health.life_expectancy.average_life_expectancy_at_birth',
+  },
+  {
+    id: 'unemployment',
+    name: 'Unemployment Rate',
+    valueKey: 'economy.economic_metrics.unemployment_rate',
   },
 ];
 
@@ -73,69 +104,64 @@ export default function LeaderboardPage() {
             <h1 className="text-3xl font-bold">Leaderboard</h1>
           </div>
 
-          <Tabs
-            value={selectedMetric}
-            onValueChange={setSelectedMetric}
-            className="space-y-4"
-          >
-            <TabsList>
-              {metrics.map((metric) => (
-                <TabsTrigger key={metric.id} value={metric.id}>
-                  {metric.name}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+          <div className="w-[200px] mb-4">
+            <Select value={selectedMetric} onValueChange={setSelectedMetric}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select metric" />
+              </SelectTrigger>
+              <SelectContent>
+                {metrics.map((metric) => (
+                  <SelectItem key={metric.id} value={metric.id}>
+                    {metric.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-            {metrics.map((metric) => (
-              <TabsContent key={metric.id} value={metric.id}>
-                <div className="rounded-md border p-4">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-12">Rank</TableHead>
-                        <TableHead className="w-8"></TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead className="text-right">
-                          {metric.name}
-                        </TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {sortedStates.map((state, index) => (
-                        <TableRow key={state.id}>
-                          <TableCell className="font-medium">
-                            {index + 1}
-                          </TableCell>
-                          <TableCell>
-                            <FlagSVG
-                              allowExpand={true}
-                              svgString={state.flag_svg}
-                              size="1.5rem"
-                              className="w-6"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Link
-                              href={`/state/${state.id}`}
-                              className="hover:underline"
-                            >
-                              {state.name}
-                            </Link>
-                          </TableCell>
-                          <TableCell className="text-right">
-                            {formatValue(
-                              state.latest_snapshot.json_state,
-                              metric.valueKey
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </TabsContent>
-            ))}
-          </Tabs>
+          <div className="rounded-md border p-4">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-12">Rank</TableHead>
+                  <TableHead className="w-8"></TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead className="text-right">
+                    {metrics.find((m) => m.id === selectedMetric)?.name}
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {sortedStates.map((state, index) => (
+                  <TableRow key={state.id}>
+                    <TableCell className="font-medium">{index + 1}</TableCell>
+                    <TableCell>
+                      <FlagSVG
+                        allowExpand={true}
+                        svgString={state.flag_svg}
+                        size="1.5rem"
+                        className="w-6"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Link
+                        href={`/state/${state.id}`}
+                        className="hover:underline"
+                      >
+                        {state.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {formatValue(
+                        state.latest_snapshot.json_state,
+                        metrics.find((m) => m.id === selectedMetric)?.valueKey
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </main>
     </div>
