@@ -1,5 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { format } from 'date-fns';
+import { formatYearDate } from '@/lib/utils';
+
 function parseEvent(eventString) {
   // Remove leading "- " if present
   const cleanedString = eventString.replace(/^- /, '');
@@ -57,7 +58,7 @@ export default function EventsTimeline({ snapshots }) {
               <div key={date} className="space-y-2">
                 <div className="sticky top-0 bg-card z-10 py-1">
                   <h3 className="text-sm font-medium">
-                    {format(new Date(date), 'yyyy')}
+                    {formatYearDate(date)}
                   </h3>
                 </div>
                 <div className="space-y-4 relative">

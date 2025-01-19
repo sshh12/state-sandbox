@@ -16,7 +16,7 @@ import { Badge } from '@/components/ui/badge';
 import { Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { ProgressTimer } from '@/components/ui/progress-timer';
-import { formatMonthDate } from '@/lib/utils';
+import { formatYearDate } from '@/lib/utils';
 import { api } from '@/lib/api';
 import ReactMarkdown from 'react-markdown';
 
@@ -103,7 +103,7 @@ export function PlayDialog({
               Simulating...
             </>
           ) : (
-            <>Play ({date ? formatMonthDate(date) : null})</>
+            <>Play ({date ? formatYearDate(date) : null})</>
           )}
         </Button>
       </DialogTrigger>

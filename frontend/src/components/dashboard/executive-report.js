@@ -7,6 +7,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import ReactMarkdown from 'react-markdown';
+import { formatYearDate } from '@/lib/utils';
 import { useState } from 'react';
 
 export default function ExecutiveReport({ snapshots }) {
@@ -44,7 +45,7 @@ export default function ExecutiveReport({ snapshots }) {
               <SelectContent>
                 {snapshots.map((snapshot, index) => (
                   <SelectItem key={index} value={index.toString()}>
-                    {snapshot.date}
+                    {formatYearDate(snapshot.date, -1)}
                   </SelectItem>
                 ))}
               </SelectContent>

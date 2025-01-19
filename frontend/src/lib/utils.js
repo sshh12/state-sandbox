@@ -57,3 +57,10 @@ export function formatMonthDate(date) {
     year: 'numeric',
   });
 }
+export function formatYearDate(date, offset = 0) {
+  const dateObj = new Date(date + 'T00:00:00');
+  dateObj.setFullYear(dateObj.getFullYear() + offset);
+  return dateObj.toLocaleDateString('en-US', {
+    year: 'numeric',
+  });
+}
