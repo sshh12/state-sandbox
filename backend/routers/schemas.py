@@ -32,6 +32,7 @@ class StateResponse(BaseModel):
     id: int
     name: str
     description: str
+    turn_in_progress: bool
     flag_svg: str
     created_at: datetime
     updated_at: datetime
