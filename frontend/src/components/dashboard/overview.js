@@ -4,6 +4,8 @@ import { Banknote, Users, Crown, Gauge } from 'lucide-react';
 import MetricCard from './metric-card';
 import EventsTimeline from './events-timeline';
 import ExecutiveReport from './executive-report';
+import Headlines from './headlines';
+import Quotes from './quotes';
 
 export default function OverviewPage({ snapshots }) {
   return (
@@ -37,32 +39,8 @@ export default function OverviewPage({ snapshots }) {
       <div className="grid gap-4 md:grid-cols-6 lg:grid-cols-6 pb-4">
         <EventsTimeline snapshots={snapshots} />
         <ExecutiveReport snapshots={snapshots} />
-        <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>Recent Headlines</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {snapshots[0]?.public_opinion.recent_headlines?.map(
-                (headline, index) => (
-                  <div
-                    key={index}
-                    className="p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
-                  >
-                    <p className="text-sm leading-relaxed">
-                      {headline.replace(/^"|"$/g, '')}
-                    </p>
-                  </div>
-                )
-              )}
-            </div>
-            {!snapshots[0]?.public_opinion.recent_headlines && (
-              <p className="text-sm text-muted-foreground">
-                No recent headlines available.
-              </p>
-            )}
-          </CardContent>
-        </Card>
+        <Quotes snapshots={snapshots} />
+        <Headlines snapshots={snapshots} />
       </div>
     </div>
   );

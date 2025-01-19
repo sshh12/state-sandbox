@@ -3,9 +3,14 @@ import markdown_to_json
 from typing import Any, List, Tuple, Dict
 
 
-def extract_codeblock(text: str) -> str:
+def extract_codeblock(text: str, strip_styles: bool = True) -> str:
     match = re.search(r"```[a-zA-Z]+\n(.*?)```", text, re.DOTALL)
-    return match.group(1).strip()
+    out = match.group(1).strip()
+    if strip_styles:
+        # remove italic, bold, etc.
+        out = re.sub(r"_(.*?)_", r"\1", out)
+        out = re.sub(r"\*(.*?)\*", r"\1", out)
+    return out
 
 
 def extract_markdown_section(markdown_text: str, h1_header_name: str) -> str:
@@ -67,10 +72,29 @@ def _md_to_json(markdown: str) -> dict:
 
 def _parse_unit(value: str) -> dict:
     result = {"raw": value, "unit": None, "value": value}
+
+    # Define multipliers for different scales
+    multipliers = {
+        "trillion": 1e12,
+        "billion": 1e9,
+        "million": 1e6,
+        "thousand": 1e3,
+        "k": 1e3,
+    }
+
     if match := re.match(r"\$?(\d+(?:,\d{3})*(?:\.\d+)?)\s*(.*)", value):
         value_part, unit = match.groups()
         cleaned_value = value_part.replace(",", "")
         numeric_value = float(cleaned_value)
+
+        # Split unit into parts (e.g., "billion dollars" -> ["billion", "dollars"])
+        unit_parts = unit.lower().split()
+
+        # Check if first part is a multiplier
+        if unit_parts and unit_parts[0] in multipliers:
+            numeric_value *= multipliers[unit_parts[0]]
+            unit = " ".join(unit_parts[1:]) if len(unit_parts) > 1 else "units"
+
         result = {
             "value": numeric_value,
             "unit": unit or "units",
@@ -134,6 +158,9 @@ def _parse_kv(data: Any, parent_key: str = "") -> Any:
         and ":" in data
         and not parent_key.endswith(" System")
         and not parent_key.endswith(" Headlines")
+        and not parent_key.endswith(" Practices")
+        and not parent_key.endswith(" Identity")
+        and not parent_key.endswith(" Features")
     ):
         # Parse "Key: Value" strings
         key, value = data.split(":", 1)

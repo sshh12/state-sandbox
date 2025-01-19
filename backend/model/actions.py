@@ -171,7 +171,7 @@ Given this fictional state and the following events between {start_date} and {en
 Reply with a markdown codeblock containing the report. Do not include xml tags.
 """.strip()
     new_state_report = extract_codeblock(
-        await provider.generate_fast(new_state_report_prompt)
+        await provider.generate_fast(new_state_report_prompt), strip_styles=False
     )
     return new_state_report
 
@@ -468,4 +468,4 @@ Format policy advice in an imperative format:
 Be brief, technical, and concise. If writing out suggested policies, limit it to the top 3 most effective ones.
 """.strip()
     output = await provider.generate_fast(prompt)
-    return extract_codeblock(output)
+    return extract_codeblock(output, strip_styles=False)

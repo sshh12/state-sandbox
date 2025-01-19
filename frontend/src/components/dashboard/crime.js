@@ -1,6 +1,5 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import MetricCard from './metric-card';
-import LineChartCard from './line-chart-card';
 import ChallengesCard from './challenges-card';
 import {
   Prison,
@@ -11,19 +10,18 @@ import {
   Pill,
   Globe,
   Binary,
-  Scale,
+  ShieldAlert,
   UserX,
   Gavel,
   Building,
   Briefcase,
-  ShieldAlert,
 } from 'lucide-react';
 
 export default function CrimePage({ snapshots }) {
   const latestSnapshot = snapshots[0];
   if (!latestSnapshot) return null;
 
-  const { justice_system, crime_metrics, top_crime_challenges } =
+  const { justice_system, crime_metrics, black_market, top_crime_challenges } =
     latestSnapshot.crime;
 
   return (
@@ -64,13 +62,22 @@ export default function CrimePage({ snapshots }) {
             <p className="text-sm text-muted-foreground">{justice_system}</p>
           </CardContent>
         </Card>
-        <ChallengesCard
-          title="Top Crime Challenges"
-          challenges={top_crime_challenges}
-        />
+        <Card>
+          <CardHeader>
+            <CardTitle>Black Market</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">{black_market}</p>
+          </CardContent>
+        </Card>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
+      <ChallengesCard
+        title="Top Crime Challenges"
+        challenges={top_crime_challenges}
+      />
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -81,9 +88,6 @@ export default function CrimePage({ snapshots }) {
           <CardContent>
             <p className="text-2xl font-bold">
               {crime_metrics.violent_crimes.raw}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              per 100,000 population
             </p>
           </CardContent>
         </Card>
@@ -99,9 +103,6 @@ export default function CrimePage({ snapshots }) {
             <p className="text-2xl font-bold">
               {crime_metrics.property_crimes.raw}
             </p>
-            <p className="text-sm text-muted-foreground">
-              per 100,000 population
-            </p>
           </CardContent>
         </Card>
 
@@ -115,9 +116,6 @@ export default function CrimePage({ snapshots }) {
           <CardContent>
             <p className="text-2xl font-bold">
               {crime_metrics.financial_crimes.raw}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              per 100,000 population
             </p>
           </CardContent>
         </Card>
@@ -133,9 +131,6 @@ export default function CrimePage({ snapshots }) {
             <p className="text-2xl font-bold">
               {crime_metrics.whitecollar_crimes.raw}
             </p>
-            <p className="text-sm text-muted-foreground">
-              per 100,000 population
-            </p>
           </CardContent>
         </Card>
 
@@ -149,9 +144,6 @@ export default function CrimePage({ snapshots }) {
           <CardContent>
             <p className="text-2xl font-bold">
               {crime_metrics.drugrelated_crimes.raw}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              per 100,000 population
             </p>
           </CardContent>
         </Card>
@@ -167,9 +159,6 @@ export default function CrimePage({ snapshots }) {
             <p className="text-2xl font-bold">
               {crime_metrics.organized_crime.raw}
             </p>
-            <p className="text-sm text-muted-foreground">
-              per 100,000 population
-            </p>
           </CardContent>
         </Card>
 
@@ -180,9 +169,6 @@ export default function CrimePage({ snapshots }) {
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">{crime_metrics.cybercrime.raw}</p>
-            <p className="text-sm text-muted-foreground">
-              per 100,000 population
-            </p>
           </CardContent>
         </Card>
 
@@ -197,9 +183,6 @@ export default function CrimePage({ snapshots }) {
             <p className="text-2xl font-bold">
               {crime_metrics.public_order_crimes.raw}
             </p>
-            <p className="text-sm text-muted-foreground">
-              per 100,000 population
-            </p>
           </CardContent>
         </Card>
 
@@ -211,9 +194,6 @@ export default function CrimePage({ snapshots }) {
           <CardContent>
             <p className="text-2xl font-bold">
               {crime_metrics.sexual_crimes.raw}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              per 100,000 population
             </p>
           </CardContent>
         </Card>
@@ -228,9 +208,6 @@ export default function CrimePage({ snapshots }) {
           <CardContent>
             <p className="text-2xl font-bold">
               {crime_metrics.statepolitical_crimes.raw}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              per 100,000 population
             </p>
           </CardContent>
         </Card>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { DashboardNav } from '@/components/nav';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import OverviewPage from '@/components/dashboard/overview';
@@ -9,6 +9,13 @@ import EducationPage from '@/components/dashboard/education';
 import HealthPage from '@/components/dashboard/health';
 import CrimePage from '@/components/dashboard/crime';
 import GovernmentPage from '@/components/dashboard/government';
+import EconomyPage from '@/components/dashboard/economy';
+import MilitaryPage from '@/components/dashboard/military';
+import CulturePage from '@/components/dashboard/culture';
+import GeographyPage from '@/components/dashboard/geography';
+import InfrastructurePage from '@/components/dashboard/infrastructure';
+import InternationalRelationsPage from '@/components/dashboard/international-relations';
+import MediaPage from '@/components/dashboard/media';
 import { api } from '@/lib/api';
 import { Badge } from '@/components/ui/badge';
 import { PlayDialog } from '@/components/dashboard/play-dialog';
@@ -132,12 +139,16 @@ export default function StatePage({ stateId }) {
               <TabsTrigger value="education">Education</TabsTrigger>
               <TabsTrigger value="health">Health</TabsTrigger>
               <TabsTrigger value="crime">Crime</TabsTrigger>
+              <TabsTrigger value="media">Media</TabsTrigger>
               <TabsTrigger value="economy">Economy</TabsTrigger>
               <TabsTrigger value="government">Government</TabsTrigger>
               <TabsTrigger value="military">Military</TabsTrigger>
               <TabsTrigger value="culture">Culture</TabsTrigger>
               <TabsTrigger value="geography">Geography</TabsTrigger>
               <TabsTrigger value="infrastructure">Infrastructure</TabsTrigger>
+              <TabsTrigger value="international-relations">
+                International
+              </TabsTrigger>
             </TabsList>
           </div>
 
@@ -161,8 +172,36 @@ export default function StatePage({ stateId }) {
             <CrimePage snapshots={snapshots} />
           </TabsContent>
 
+          <TabsContent value="media" className="space-y-4">
+            <MediaPage snapshots={snapshots} />
+          </TabsContent>
+
+          <TabsContent value="economy" className="space-y-4">
+            <EconomyPage snapshots={snapshots} />
+          </TabsContent>
+
           <TabsContent value="government" className="space-y-4">
             <GovernmentPage snapshots={snapshots} />
+          </TabsContent>
+
+          <TabsContent value="military" className="space-y-4">
+            <MilitaryPage snapshots={snapshots} />
+          </TabsContent>
+
+          <TabsContent value="culture" className="space-y-4">
+            <CulturePage snapshots={snapshots} />
+          </TabsContent>
+
+          <TabsContent value="geography" className="space-y-4">
+            <GeographyPage snapshots={snapshots} />
+          </TabsContent>
+
+          <TabsContent value="infrastructure" className="space-y-4">
+            <InfrastructurePage snapshots={snapshots} />
+          </TabsContent>
+
+          <TabsContent value="international-relations" className="space-y-4">
+            <InternationalRelationsPage snapshots={snapshots} />
           </TabsContent>
         </Tabs>
       </div>

@@ -1,13 +1,18 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import MetricCard from './metric-card';
-import { GraduationCap, BookOpen, School, Building2 } from 'lucide-react';
+import ChallengesCard from './challenges-card';
+import { GraduationCap, BookOpen, School, Scale } from 'lucide-react';
 
 export default function EducationPage({ snapshots }) {
   const latestSnapshot = snapshots[0];
   if (!latestSnapshot) return null;
 
-  const { education_system, literacy, education_metrics } =
-    latestSnapshot.education;
+  const {
+    education_system,
+    literacy,
+    education_metrics,
+    top_education_challenges,
+  } = latestSnapshot.education;
 
   return (
     <div className="space-y-4">
@@ -34,7 +39,7 @@ export default function EducationPage({ snapshots }) {
           snapshots={snapshots}
           title="Gender Parity Index"
           valueKey="education.education_metrics.gender_parity_index_in_education"
-          icon={Building2}
+          icon={Scale}
         />
       </div>
 
@@ -47,6 +52,13 @@ export default function EducationPage({ snapshots }) {
             <p className="text-sm text-muted-foreground">{education_system}</p>
           </CardContent>
         </Card>
+        <ChallengesCard
+          title="Top Education Challenges"
+          challenges={top_education_challenges}
+        />
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Literacy Demographics</CardTitle>
@@ -70,44 +82,31 @@ export default function EducationPage({ snapshots }) {
             </div>
           </CardContent>
         </Card>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader>
-            <CardTitle>Primary Education</CardTitle>
+            <CardTitle>Educational Institutions</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {education_metrics.primary_schools.raw}
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-medium mb-2">Primary Schools</h4>
+                <p className="text-2xl font-bold">
+                  {education_metrics.primary_schools.raw}
+                </p>
+              </div>
+              <div>
+                <h4 className="font-medium mb-2">Secondary Schools</h4>
+                <p className="text-2xl font-bold">
+                  {education_metrics.secondary_schools.raw}
+                </p>
+              </div>
+              <div>
+                <h4 className="font-medium mb-2">Universities</h4>
+                <p className="text-2xl font-bold">
+                  {education_metrics.universities.raw}
+                </p>
+              </div>
             </div>
-            <p className="text-sm text-muted-foreground mt-2">
-              Primary Schools
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Secondary Education</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {education_metrics.secondary_schools.raw}
-            </div>
-            <p className="text-sm text-muted-foreground mt-2">
-              Secondary Schools
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Higher Education</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {education_metrics.universities.raw}
-            </div>
-            <p className="text-sm text-muted-foreground mt-2">Universities</p>
           </CardContent>
         </Card>
       </div>

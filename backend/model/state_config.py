@@ -580,7 +580,7 @@ DIMENSIONS = [
 ## Government Metadata
 - Government Type: {GovernmentType} <!-- In Title Case, use CIA World Factbook terminology -->
 - Head of State/Government: {Title} <!-- role or group title, not name -->
-- Country Official Name: {StateName} <!-- The full name of the country -->
+- Country Official Name: {StateName} <!-- The full name of the country, no special characters or colons -->
 - Capital City: {CapitalCity} <!-- The full name of the capital city -->
 
 ## Political Participation

@@ -2,7 +2,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import MetricCard from './metric-card';
 import ChallengesCard from './challenges-card';
 import PieChartCard from './pie-chart-card';
-import { Heart, Baby, UserPlus, Building2, Activity } from 'lucide-react';
+import { Heart, Baby, UserPlus, Building2 } from 'lucide-react';
 
 export default function HealthPage({ snapshots }) {
   const latestSnapshot = snapshots[0];
@@ -33,13 +33,13 @@ export default function HealthPage({ snapshots }) {
         />
         <MetricCard
           snapshots={snapshots}
-          title="Physician Density (per 1k)"
+          title="Physician Density"
           valueKey="health.health_metrics.physician_density"
           icon={UserPlus}
         />
         <MetricCard
           snapshots={snapshots}
-          title="Hospital Beds (per 1k)"
+          title="Hospital Beds"
           valueKey="health.health_metrics.hospital_bed_density"
           icon={Building2}
         />
@@ -115,6 +115,12 @@ export default function HealthPage({ snapshots }) {
                   {health_metrics.child_mortality_rate.raw}
                 </p>
               </div>
+              <div>
+                <h4 className="font-medium mb-2">Gross Reproduction Rate</h4>
+                <p className="text-sm text-muted-foreground">
+                  {health_metrics.gross_reproduction_rate.raw}
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -129,9 +135,9 @@ export default function HealthPage({ snapshots }) {
         />
         <PieChartCard
           title="Causes of Death"
-          data={Object.values(health_statistics.causes_of_death)}
+          data={Object.values(health_statistics.causes_of_death_composition)}
           snapshots={snapshots}
-          valueKeyPrefix="health.health_statistics.causes_of_death"
+          valueKeyPrefix="health.health_statistics.causes_of_death_composition"
         />
       </div>
     </div>
