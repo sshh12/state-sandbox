@@ -134,11 +134,13 @@ export function PlayDialog({
               <h4 className="font-medium">Upcoming Events</h4>
               <div className="rounded-md bg-muted p-4 space-y-1">
                 <ul className="list-disc list-inside space-y-1">
-                  {events.map((event, index) => (
-                    <li key={index} className="text-sm">
-                      {event.split(': ')[1] || event}
-                    </li>
-                  ))}
+                  {events
+                    .filter((e) => !e.includes('No notable'))
+                    .map((event, index) => (
+                      <li key={index} className="text-sm">
+                        {event.split(': ')[1] || event}
+                      </li>
+                    ))}
                 </ul>
               </div>
             </div>

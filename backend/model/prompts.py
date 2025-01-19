@@ -20,6 +20,7 @@ These are random events the goverment will need to make decisions on.
 - Events must start with a % probability.
 - Events should be caused by nature, citizens, businesses, or other states.
 - Events can be controversial, bad, or mixed. All should be expected to invoke an opinionated response from the government.
+- Events can tip the scales of various dimensions of the state.
 - Events should be consise and unambiguous (no "... changes", it should state what the change is).
 - Events that last longer than a year should be stated as "starts" (or "ends").
 - Event probabilities should be realistic and influenced by the <state>.
