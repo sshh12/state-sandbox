@@ -145,7 +145,7 @@ Build a realistic but fictional country that exists in {_format_month_date(date)
 
 Reply with (plain text):
 1. Pick the type of goverment that optimizes these values (like Republic, Democracy, Dictatorship, Oligarchy, Plutocracy, etc but more specific)
-2. State the full country name. Start with {_simplify_name(name)}. Make it more realistic without changing it too much, e.g. Republic/Federation/Empire/Kingdom/Sultanate/Emirates/Commonwealth of, -ia/-istan/-onia, etc)
+2. State the full country name. It should be derived from {_simplify_name(name)}. Make it more realistic without changing it too much, e.g. Republic/Federation/Empire/Kingdom/Sultanate/Emirates/Commonwealth of, -ia/-istan/-onia, etc)
 3. A wikipedia-style summary of the state, how the <values> and time period above influence the dimensions of the state, how you will balance their strengths and flaws, and what makes them unique in the world.
 4. The influence of the <values> on the dimensions of the state ({dimensions}).
 """.strip()
