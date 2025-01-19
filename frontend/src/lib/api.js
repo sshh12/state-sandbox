@@ -149,7 +149,7 @@ class ApiClient {
   async getStateAdvice(stateId, question, events) {
     return this._post(`/api/states/${stateId}/advice`, {
       question,
-      events: events.join('\n'),
+      events: events?.join('\n') || '',
     });
   }
 }

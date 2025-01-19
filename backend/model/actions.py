@@ -470,7 +470,7 @@ You are an expert advisor for the government of a fictional country. Given the u
 </upcoming-events>
 
 <question>
-{question}
+{repr(question)}
 </question>
 
 Reply with a markdown codeblock containing the advice. Do not include xml tags.
