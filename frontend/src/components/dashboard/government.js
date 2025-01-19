@@ -121,11 +121,7 @@ export default function GovernmentPage({ snapshots }) {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground whitespace-pre-line">
-              {
-                political_participation
-                  .political_participation_in_glindavaria_is_predominantly_guided_by_religious_and_monarchical_structures_agerelated_participation
-                  .value
-              }
+              {political_participation}
             </p>
           </CardContent>
         </Card>

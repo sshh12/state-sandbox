@@ -118,6 +118,17 @@ def _clean_key(key: str) -> str:
     return key
 
 
+_PARAGRAPH_SUFFIXES = [
+    " System",
+    " Practices",
+    " Identity",
+    " Features",
+    " Participation",
+]
+
+_LIST_PARAGRAPH_SUFFIXES = [" Headlines", " Quotes"]
+
+
 def _parse_kv(data: Any, parent_key: str = "") -> Any:
     """
     Recursively parse the data, converting "Key: Value" strings into proper key-value pairs
@@ -140,7 +151,7 @@ def _parse_kv(data: Any, parent_key: str = "") -> Any:
             new_data[_clean_key(key)] = parsed_value
         return new_data
 
-    elif isinstance(data, list):
+    elif isinstance(data, list) and not parent_key.endswith(tuple(_PARAGRAPH_SUFFIXES)):
         # Handle lists by parsing each element and merge dicts
         parsed_items = [_parse_kv(item, parent_key) for item in data]
 
@@ -156,15 +167,16 @@ def _parse_kv(data: Any, parent_key: str = "") -> Any:
     elif (
         isinstance(data, str)
         and ":" in data
-        and not parent_key.endswith(" System")
-        and not parent_key.endswith(" Headlines")
-        and not parent_key.endswith(" Practices")
-        and not parent_key.endswith(" Identity")
-        and not parent_key.endswith(" Features")
+        and not parent_key.endswith(
+            tuple(_PARAGRAPH_SUFFIXES + _LIST_PARAGRAPH_SUFFIXES)
+        )
     ):
         # Parse "Key: Value" strings
         key, value = data.split(":", 1)
         return {_clean_key(key.strip()): {**_parse_unit(value.strip()), "key": key}}
+
+    if isinstance(data, list):
+        data = "\n".join(["- " + item for item in data])
 
     return data
 

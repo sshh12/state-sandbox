@@ -3,16 +3,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import MetricCard from './metric-card';
 import PieChartCard from './pie-chart-card';
 import ChallengesCard from './challenges-card';
-import {
-  DollarSign,
-  TrendingUp,
-  Users,
-  Percent,
-  Building2,
-  Scale,
-  BadgeDollarSign,
-  Wallet,
-} from 'lucide-react';
+import { DollarSign, TrendingUp, Users, Percent } from 'lucide-react';
 
 export default function EconomyPage({ snapshots }) {
   const latestSnapshot = snapshots[0];
@@ -84,13 +75,7 @@ export default function EconomyPage({ snapshots }) {
               <div>
                 <h4 className="font-medium mb-2">Currency</h4>
                 <p className="text-sm text-muted-foreground">
-                  {economic_metrics.currency.value}
-                </p>
-              </div>
-              <div>
-                <h4 className="font-medium mb-2">Exchange Rate (GLD/USD)</h4>
-                <p className="text-sm text-muted-foreground">
-                  {economic_metrics.exchange_rate_gldusd.raw}
+                  {economic_metrics.currency?.value}
                 </p>
               </div>
             </div>

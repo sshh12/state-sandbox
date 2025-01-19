@@ -49,13 +49,7 @@ export default function CulturePage({ snapshots }) {
             <CardTitle>Cultural Identity</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              {cultural_identity.map((item, index) => (
-                <p key={index} className="text-sm text-muted-foreground">
-                  • {item}
-                </p>
-              ))}
-            </div>
+            <p className="text-sm text-muted-foreground">{cultural_identity}</p>
           </CardContent>
         </Card>
         <ChallengesCard
@@ -70,13 +64,9 @@ export default function CulturePage({ snapshots }) {
             <CardTitle>Cultural Practices</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              {cultural_practices.map((practice, index) => (
-                <p key={index} className="text-sm text-muted-foreground">
-                  • {practice}
-                </p>
-              ))}
-            </div>
+            <p className="text-sm text-muted-foreground">
+              {cultural_practices}
+            </p>
           </CardContent>
         </Card>
 
