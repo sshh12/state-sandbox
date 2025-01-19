@@ -6,6 +6,7 @@ Frontend (/frontend):
 - Use 'next/navigation' for all navigation/routing
 - Use frontend/src/lib/api.js for all API calls
 - Prefer shadcn/ui for components
+- `DialogContent` requires a `DialogTitle` for the component to be accessible for screen reader users.
 
 Backend (/backend):
 
