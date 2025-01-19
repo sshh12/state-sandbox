@@ -8,11 +8,6 @@ def extract_codeblock(text: str) -> str:
     return match.group(1).strip()
 
 
-def extract_svg_codeblock(text: str) -> str:
-    match = re.search(r"```svg\n(.*?)```", text, re.DOTALL)
-    return match.group(1).strip()
-
-
 def extract_markdown_section(markdown_text: str, h1_header_name: str) -> str:
     """
     Extracts content under a specific h1 header from markdown text.
