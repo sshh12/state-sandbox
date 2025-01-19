@@ -221,9 +221,10 @@ async def create_state_snapshot(
         previous_snapshots = (
             db.query(StateSnapshot)
             .filter(StateSnapshot.state_id == state_id)
-            .order_by(StateSnapshot.date.asc())
+            .order_by(StateSnapshot.date.desc())
+            .limit(10)
             .all()
-        )
+        )[::-1]
         if not previous_snapshots:
             raise HTTPException(status_code=404, detail="No previous snapshots found")
 
@@ -263,7 +264,7 @@ async def create_state_snapshot(
                 start_date=next_date,
                 end_date=next_date + relativedelta(months=12),
                 prev_state=next_state,
-                historical_events=next_events,
+                historical_events=historical_events,
             ),
         )
 
@@ -277,6 +278,7 @@ async def create_state_snapshot(
 
         # patch in the policy events selected by the user
         latest_snapshot.markdown_future_events = simulated_events
+        db.add(latest_snapshot)
         state_snapshot = StateSnapshot(
             date=next_date.strftime("%Y-%m"),
             state_id=state_id,

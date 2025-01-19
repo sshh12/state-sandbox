@@ -55,6 +55,12 @@ export default function StatePage({ stateId }) {
             ...prevSnapshots,
           ]);
           refreshStates();
+          // hard refresh previous snapshots in case they changed
+          setTimeout(() => {
+            api.getStateSnapshots(stateId).then((snaps) => {
+              setSnapshots(snaps.map((snap) => snap.json_state));
+            });
+          }, 1000);
           setTurnLoading(false);
           setLoadingMessage('');
           if (event.state_snapshot.markdown_delta_report) {

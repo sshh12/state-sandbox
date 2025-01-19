@@ -602,11 +602,13 @@ DIMENSIONS = [
     StateDimension(
         title="Public Opinion",
         template="""
-## Top Concerns Among Citizens <!-- At least 5 concerns, be specific (e.g. high cost of living, high crime rate, etc.) -->
-- {Concern}: {Percentage}
+## Top Concerns Among Citizens <!-- At least 5 concerns, be specific (e.g. high cost of living due to ..., high ... crime rate, etc.) -->
+- {Concern}: {Percentage} <!-- % that have this concern -->
+...
 
-## Recent Headlines <!-- At least 5 recent viral headlines -->
+## Recent Headlines <!-- At least 5 recent viral headlines. Avoid generic headlines, make them interesting and specific. -->
 - "{Headline}"
+...
 """.strip(),
     ),
 ]

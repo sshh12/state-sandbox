@@ -8,6 +8,7 @@ from model.prompts import (
     STATE_CONFIG_FORMAT_TEMPLATE,
     DIFF_EXECUTIVE_TEMPLATE,
     RANDOM_TEMPLATE,
+    FUTURE_POLICY_TEMPLATE,
 )
 from model.parsing import (
     extract_codeblock,
@@ -198,18 +199,7 @@ Given this fictional <state> from {start_date} to {end_date} and the following e
 
 <format>
 ```markdown
-<!-- 
-Provide a list of actions to respond to the events.
-- Action examples: "Ban the use of social media", "Increase funding for anti-cybercrime programs", etc.
-- Actions should be specific, realistic, and target the events.
-- Actions should be at most 2 sentences. Keep it technical, dense, and concise.
-- Actions should reflect the type of <state> and cultural values.
-- Events should have at most 1 action each.
-- Events that are obviously positive should not have any actions.
-- Do not add nested lists or headings not specified in the template.
-- Do not include <!-- comments --> in the final output but use them as key guidance.
-- Do not use *italic* or **bold**. 
--->
+{FUTURE_POLICY_TEMPLATE}
 
 # Government Actions <!-- at most 5 actions -->
 - <-- action -->
@@ -229,8 +219,11 @@ async def generate_future_events(
     start_date: datetime,
     end_date: datetime,
     prev_state: str,
-    historical_events: str,
+    historical_events: List[Tuple[str, List[str]]],
 ) -> str:
+    historical_events_str = "\n".join(
+        [f"{date}:\n" + "\n".join(events) for date, events in historical_events]
+    )
     provider = OpenAIProvider()
     prompt = f"""
 Given this fictional <state> from {start_date} to {end_date}, provide a list of potential random events that could occur within the next year and will require the government to make decisions.
@@ -240,7 +233,7 @@ Given this fictional <state> from {start_date} to {end_date}, provide a list of 
 </state>
 
 <historical-events>
-{historical_events}
+{historical_events_str}
 </historical-events>
 
 <format>

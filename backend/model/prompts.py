@@ -55,6 +55,24 @@ These are random events the goverment will need to make decisions on.
 ...
 """.strip()
 
+FUTURE_POLICY_TEMPLATE = """
+<!-- 
+Provide a list of at most 4 actions to respond to the events.
+- Action examples: "Ban the use of social media", "Increase funding for anti-cybercrime programs", etc.
+- Actions should be specific, realistic, and target the events.
+- Actions should have non-obvious negative consequences (don't state this explicitly).
+- Actions should be at most 2 sentences. Keep it technical, dense, and concise.
+- Actions should reflect the type of <state> and cultural values.
+- Events should have at most 1 action each.
+- Events that are obviously positive should not have any actions.
+- Do not add nested lists or headings not specified in the template.
+- Do not include <!-- comments --> in the final output but use them as key guidance.
+- Do not use *italic* or **bold**. 
+
+IMPORTANT: Include flawed actions that will make the state worse.
+-->
+""".strip()
+
 DIFF_EXECUTIVE_TEMPLATE = """
 <!--
 - This is a report to state leadership on the changes to the <state> over the last year.

@@ -1,9 +1,10 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { format } from 'date-fns';
-
 function parseEvent(eventString) {
-  const match = eventString.match(/([^:]+): (.+)$/);
-  if (!match) return { category: 'Other', content: eventString };
+  // Remove leading "- " if present
+  const cleanedString = eventString.replace(/^- /, '');
+  const match = cleanedString.match(/([^:]+): (.+)$/);
+  if (!match) return { category: 'Other', content: cleanedString };
   return {
     category: match[1],
     content: match[2].trim(),
