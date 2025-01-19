@@ -7,7 +7,7 @@ import uuid
 
 from db.database import get_db
 from db.models import User
-from routers.schemas import UserResponse, AuthResponse
+from routers.schemas import UserResponse, AuthResponse, CreateUserRequest
 from config import JWT_SECRET_KEY, JWT_EXPIRATION_DAYS
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
@@ -34,10 +34,16 @@ async def get_current_user_from_token(
 
 
 @router.post("/create", response_model=AuthResponse)
-async def create_user(db: Session = Depends(get_db)):
-    username = "ss-" + str(uuid.uuid4())[:8]
+async def create_user(request: CreateUserRequest, db: Session = Depends(get_db)):
     try:
-        new_user = User(username=username)
+        # Check if user already exists
+        existing_user = db.query(User).filter(User.email == request.email).first()
+        if existing_user:
+            raise HTTPException(
+                status_code=400, detail="User with this email already exists"
+            )
+
+        new_user = User(username=request.username, email=request.email)
         db.add(new_user)
         db.commit()
         db.refresh(new_user)

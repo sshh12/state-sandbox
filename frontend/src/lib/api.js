@@ -112,8 +112,8 @@ class ApiClient {
     return res.json();
   }
 
-  async createAccount() {
-    const data = await this._post('/api/auth/create', {});
+  async createAccount(username, email) {
+    const data = await this._post('/api/auth/create', { username, email });
     localStorage.setItem(TOKEN_KEY, data.token);
     return data.user;
   }

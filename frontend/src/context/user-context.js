@@ -2,17 +2,20 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { api } from '@/lib/api';
+import { useRouter } from 'next/navigation';
 
 const UserContext = createContext({
   user: null,
   states: null,
   refreshUser: async () => {},
   refreshStates: async () => {},
+  createAccount: async (username, email) => {},
 });
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
   const [states, setStates] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (localStorage.getItem('state-sandbox-token')) {
@@ -23,11 +26,11 @@ export function UserProvider({ children }) {
         .catch((e) => {
           if (e.message.includes('token')) {
             localStorage.removeItem('state-sandbox-token');
-            window.location.href = '/';
+            router.push('/auth');
           }
         });
     } else {
-      api.createAccount().then(setUser).then(fetchData);
+      router.push('/auth');
     }
   }, []);
 
@@ -45,6 +48,13 @@ export function UserProvider({ children }) {
     setStates(states);
   };
 
+  const createAccount = async (username, email) => {
+    const user = await api.createAccount(username, email);
+    setUser(user);
+    await fetchData();
+    return user;
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -52,6 +62,7 @@ export function UserProvider({ children }) {
         states,
         refreshUser,
         refreshStates,
+        createAccount,
       }}
     >
       {children}

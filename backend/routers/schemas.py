@@ -10,11 +10,17 @@ class UserBase(BaseModel):
 class UserResponse(UserBase):
     id: int
     username: str
+    email: str
     created_at: datetime
     updated_at: Optional[datetime]
 
     class Config:
         from_attributes = True
+
+
+class CreateUserRequest(BaseModel):
+    username: str
+    email: str
 
 
 class AuthResponse(BaseModel):

@@ -9,6 +9,12 @@ export default function Home() {
   const { user, states } = useUser();
 
   useEffect(() => {
+    if (user === null) {
+      router.push('/auth');
+    }
+  }, [user, router]);
+
+  useEffect(() => {
     if (states !== null && states.length === 0) {
       router.push('/new-state');
     }
