@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_
-from typing import List
+from typing import List, Optional
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import asyncio
@@ -96,6 +96,7 @@ async def get_latest_state_snapshots(
 @router.get("/{state_id}", response_model=StateResponse)
 async def get_state(
     state_id: int,
+    current_user: Optional[User] = Depends(get_current_user_from_token),
     db: Session = Depends(get_db),
 ):
     state = db.query(State).filter(State.id == state_id).first()

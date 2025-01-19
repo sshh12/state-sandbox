@@ -36,6 +36,7 @@ class StateResponse(BaseModel):
     flag_svg: str
     created_at: datetime
     updated_at: datetime
+    user_id: int
 
     class Config:
         from_attributes = True

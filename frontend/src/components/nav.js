@@ -29,6 +29,7 @@ const links = [
 export function DashboardNav({ stateId }) {
   const pathname = usePathname();
   const { states } = useUser();
+  const idInStates = states?.find((state) => state.id === stateId);
 
   const NavLinks = () => (
     <>
@@ -51,7 +52,7 @@ export function DashboardNav({ stateId }) {
   const StateSelector = () => (
     <div className="flex items-center gap-2">
       <Select
-        value={stateId || ''}
+        value={idInStates?.id || ''}
         onValueChange={(value) => (window.location.href = `/state/${value}`)}
       >
         <SelectTrigger className="w-[180px]">

@@ -28,7 +28,7 @@ import { useSearchParams } from 'next/navigation';
 
 function StatePageContent({ stateId }) {
   const searchParams = useSearchParams();
-  const { refreshStates } = useUser();
+  const { refreshStates, user } = useUser();
   const [state, setState] = useState(null);
   const [snapshots, setSnapshots] = useState([]);
   const [turnLoading, setTurnLoading] = useState(false);
@@ -39,6 +39,7 @@ function StatePageContent({ stateId }) {
   );
   const [latestReport, setLatestReport] = useState('');
   const latestSnapshot = snapshots[0];
+  const isOwner = state?.user_id === user?.id;
   console.log('latest', snapshots, latestSnapshot);
 
   useEffect(() => {
@@ -115,23 +116,25 @@ function StatePageContent({ stateId }) {
               }
             </Badge>
           </div>
-          <div className="flex items-center space-x-2">
-            <PlayDialog
-              stateId={stateId}
-              date={latestSnapshot?.date}
-              events={latestSnapshot?.events}
-              eventsPolicy={latestSnapshot?.events_policy}
-              onPlay={handlePlay}
-              turnLoading={turnLoading}
-              loadingMessage={loadingMessage}
-              key={latestSnapshot?.date}
-            />
-            <HelpDialog
-              state={state}
-              open={helpOpen}
-              onOpenChange={setHelpOpen}
-            />
-          </div>
+          {isOwner && (
+            <div className="flex items-center space-x-2">
+              <PlayDialog
+                stateId={stateId}
+                date={latestSnapshot?.date}
+                events={latestSnapshot?.events}
+                eventsPolicy={latestSnapshot?.events_policy}
+                onPlay={handlePlay}
+                turnLoading={turnLoading}
+                loadingMessage={loadingMessage}
+                key={latestSnapshot?.date}
+              />
+              <HelpDialog
+                state={state}
+                open={helpOpen}
+                onOpenChange={setHelpOpen}
+              />
+            </div>
+          )}
         </div>
 
         <ReportDialog

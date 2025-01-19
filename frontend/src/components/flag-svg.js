@@ -58,7 +58,7 @@ export function FlagSVG({
         <div className="cursor-pointer">{SvgComponent}</div>
       </DialogTrigger>
       <DialogContent className="max-w-[90vw] max-h-[90vh]">
-        <DialogTitle className="mb-4">Flag Preview</DialogTitle>
+        <DialogTitle className="mb-4">Flag</DialogTitle>
         <ReactSVG
           src={url}
           wrapper="span"
