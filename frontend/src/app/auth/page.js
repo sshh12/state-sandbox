@@ -101,8 +101,7 @@ export default function AuthPage() {
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">State Sandbox</h1>
           <p className="text-muted-foreground">
-            Enter your email to start building. This tool is experimental and
-            projects may be deleted without notice.
+            Enter your email to found a nation and start playing.
           </p>
           <Button
             variant="ghost"

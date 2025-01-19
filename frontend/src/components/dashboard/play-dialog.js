@@ -121,7 +121,7 @@ export function PlayDialog({
             <>
               <ProgressTimer
                 isRunning={turnLoading}
-                duration={5 * 60 * 1000}
+                duration={150000}
                 className="w-full"
               />
               <p className="text-sm text-muted-foreground text-center">
@@ -147,6 +147,10 @@ export function PlayDialog({
           )}
           <div className="space-y-2">
             <h4 className="font-medium">Your Policies</h4>
+            <p className="text-sm text-muted-foreground mb-2">
+              Type literally anything you want. Be creative with your policy
+              decisions.
+            </p>
             <Textarea
               placeholder={`Enter your policy changes here (if any)...\ne.g. ${examplePolicies[currentExampleIndex]}`}
               value={policies}

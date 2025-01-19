@@ -24,14 +24,19 @@ import { ReportDialog } from '@/components/dashboard/report-dialog';
 import { cn } from '@/lib/utils';
 import { FlagSVG } from '@/components/flag-svg';
 import { useUser } from '@/context/user-context';
+import { useSearchParams } from 'next/navigation';
 
 export default function StatePage({ stateId }) {
+  const searchParams = useSearchParams();
   const { refreshStates } = useUser();
   const [state, setState] = useState(null);
   const [snapshots, setSnapshots] = useState([]);
   const [turnLoading, setTurnLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
   const [reportOpen, setReportOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(
+    searchParams.get('showHelp') === 'true'
+  );
   const [latestReport, setLatestReport] = useState('');
   const latestSnapshot = snapshots[0];
   console.log('latest', snapshots, latestSnapshot);
@@ -121,7 +126,11 @@ export default function StatePage({ stateId }) {
               loadingMessage={loadingMessage}
               key={latestSnapshot?.date}
             />
-            <HelpDialog />
+            <HelpDialog
+              state={state}
+              open={helpOpen}
+              onOpenChange={setHelpOpen}
+            />
           </div>
         </div>
 

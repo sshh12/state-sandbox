@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: 'State Sandbox AI',
   description: 'State Sandbox AI',
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({ children }) {

@@ -30,6 +30,7 @@ from model.actions import (
     generate_state_advice,
     generate_future_events,
     generate_future_policy_suggestion,
+    generate_state_description,
 )
 from model.parsing import parse_state
 from utils.event_stream import event_stream_response
@@ -131,13 +132,16 @@ async def create_state(
             date=date, name=request.name, questions=questions
         )
 
-        yield StateStatusEvent(message="Designing flag...").json_line()
-        svg_flag, random_events_md = await asyncio.gather(
+        yield StateStatusEvent(
+            message="Designing flag, events, and description..."
+        ).json_line()
+        svg_flag, random_events_md, state_description = await asyncio.gather(
             generate_state_flag(md_overview),
             generate_future_events(start_date, end_date, md_state, ""),
+            generate_state_description(md_overview),
         )
 
-        yield StateStatusEvent(message="Generating policy suggestion...").json_line()
+        yield StateStatusEvent(message="Generating policy suggestions...").json_line()
         policy_suggestion = await generate_future_policy_suggestion(
             start_date, end_date, md_state, random_events_md
         )
@@ -155,6 +159,7 @@ async def create_state(
         ]["value"]
         state.name = full_name
         state.flag_svg = svg_flag
+        state.description = state_description
         db.add(state_snapshot)
         db.commit()
         db.refresh(state)
@@ -252,7 +257,7 @@ async def create_state_snapshot(
             historical_events=historical_events,
         )
 
-        yield StateStatusEvent(message="Generating summary report...").json_line()
+        yield StateStatusEvent(message="Generating report and events...").json_line()
         next_state_report, next_events = await asyncio.gather(
             generate_diff_report(
                 start_date=current_date,

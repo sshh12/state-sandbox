@@ -379,7 +379,7 @@ DIMENSIONS = [
 """.strip(),
         seed_assumptions=[
             "Assume all real good types (e.g. electronics, rare metals, grain, oil, etc.)",
-            "Assume all real countries (e.g. USA, China, Russia, etc) for import and export partners",
+            "Assume all real countries (e.g. USA, China, Russia, etc) for import/export partners, allies, and rivals",
         ],
     ),
     StateDimension(

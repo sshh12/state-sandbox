@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, DateTime, ForeignKey
+from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -30,6 +30,7 @@ class State(TimestampMixin, Base):
     date = Column(String, nullable=False)  # Format: YYYY-MM
     flag_svg = Column(String, nullable=False)
     description = Column(String, nullable=False)
+    turn_in_progress = Column(Boolean, nullable=False, default=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
     # Relationships

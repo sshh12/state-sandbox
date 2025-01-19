@@ -67,6 +67,19 @@ Reply with:
     return extract_codeblock(output)
 
 
+async def generate_state_description(state: str) -> str:
+    provider = OpenAIProvider()
+    prompt = f"""
+Given this fictional state, generate a detailed technical ~4-sentence wikipedia-style description of the state.
+
+<state>
+{state}
+</state>
+""".strip()
+    output = await provider.generate_fast_reasoning(prompt)
+    return output
+
+
 async def _generate_state_dimension(
     date: str, overview: str, dimension: StateDimension
 ) -> str:
@@ -336,6 +349,7 @@ Government Events: <-- formatted policy events, State ... -->
 </output-format>
 
 <examples>
+- "Set GDP to $1 trillion" -> "State enacts a policy to attempt to target a GDP of $1 trillion over the next several years" (rephrased to be more reasonable)
 - "Make the GDP grow by 10%" -> "State enacts a program to attempt to grow GDP significantly" (we removed the outcome)
 - "A hurricane destroys the country" -> "State sets aside funds for disaster relief" (we completely changed it)
 - "Set a 90% tax on all imports" -> "State enacts a policy to set a 90% tax on all imports" (no change)
@@ -344,16 +358,16 @@ Government Events: <-- formatted policy events, State ... -->
 - "Add universal healthcare and make college free" -> "State enacts a policy to add universal healthcare and make college free" (no change)
 </examples>
 
-Rephrase <user-action> into a valid policy event and reply with their action formatted as <output-format> exactly with a markdown codeblock. It should start with "- Government Events:" and be in one line in paragraph format.
+Rephrase <user-action> into a valid policy event and reply with their action formatted as <output-format> exactly with a markdown codeblock. It should start with "Government Events:" and be in one line in paragraph format.
 """.strip()
     raw_output = await provider.generate_fast_reasoning(prompt)
     try:
         output = extract_codeblock(raw_output).replace('"', "")
     except Exception as e:
         print("Error parsing output", e)
-        return "- Government Events: None"
-    if not output.startswith("- Government Events:"):
-        return "- Government Events: None"
+        return "Government Events: None"
+    if not output.startswith("Government Events:"):
+        return "Government Events: None"
     return output
 
 
@@ -403,6 +417,7 @@ You must jointly consider:
 - Natural changes and variance in population and resource counts over the course of a year.
 - Natural random changes in production, distributions, infrastructure, facilities, and other metrics.
 - The assumption that all notable government actions in response to events (or lack thereof) are included in the events.
+- The actual ability of the government to enact change (e.g. if it's says something ridiculous, it might not fully materialize)
 
 Reply with:
 1. For each event, the high-level expected impacted on the <state>

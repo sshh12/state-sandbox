@@ -127,7 +127,7 @@ export default function NewState() {
             break;
           case 'complete':
             refreshStates().then(() => {
-              router.push(`/state/${stateId}`);
+              router.push(`/state/${stateId}?showHelp=true`);
             });
             break;
         }
