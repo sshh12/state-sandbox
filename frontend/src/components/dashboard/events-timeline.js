@@ -21,7 +21,7 @@ export default function EventsTimeline({ snapshots }) {
 
   // Get all events from all snapshots with their dates
   const allEvents = snapshots
-    .slice(0, -1)
+    .slice(1)
     .filter((snapshot) => snapshot.events?.length > 0)
     .map((snapshot) => ({
       date: snapshot.date,

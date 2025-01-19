@@ -80,12 +80,13 @@ IMPORTANT: Include flawed actions that will make the state worse.
 DIFF_EXECUTIVE_TEMPLATE = """
 <!--
 - This is a report to state leadership on the changes to the <state> over the last year.
+- Include both what happened, what changed, and how it was mitigated (if at all) by the state.
+- You should include what changes, why it changes, and notable metrics that will reflect the change.
+- Focus on the most important events, some might not be that important for the leadership.
+- Some sections may be empty if nothing relevant changed.
 - Do not add nested lists or headings not specified in the template.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
 - Do not include a greeting or a summary at the end.
-- You should include what changes, why it changes, and notable metrics that will reflect the change.
-- Focus on the most important events, some might not be that important for the leadership.
-- Some sections may be empty if nothing relevant changed. You can re-arrange the sections to focus on the most important updates.
 -->
 
 ### Executive Summary
