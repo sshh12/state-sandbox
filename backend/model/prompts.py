@@ -4,8 +4,8 @@ STATE_CONFIG_FORMAT_TEMPLATE = """
 - You are expected to fill out ALL the fields in the template and keep ALL default attributes.
 - Format {Number} like: 123, 123 million, 0.12. Do not use a percentage or relative values.
 - Format {Percentage} like: 12%, 0.01%.
-- Format {DetailedDescription} with 1-3 concise sentences. Use technical terms and avoid filler words.
-- Format {TotalAmountInUSD} monetary amounts in USD like $123, $123 million, $0.12.
+- Format {Description} with 1-3 concise sentences. Use technical terms and avoid filler words.
+- Format {AmountUSD} monetary amounts in USD like $123, $123 million, $0.12.
 - Do not use *italic* or **bold**. 
 - Do not add nested lists or headings not specified in the template.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
@@ -14,45 +14,42 @@ STATE_CONFIG_FORMAT_TEMPLATE = """
 
 RANDOM_TEMPLATE = """
 <!--
-- Event categories must be mutually exclusive and must include a first no-event category.
-- Events can be good, bad, or mixed.
-- Probabilities and events should be influenced and personalized by the <state>.
-- Probabilities must be as real-world realistic as possible.
-- Include varients and severity of events (e.g. Cat N Hurricane, etc.) and joint events (e.g. Hurricane + Earthquake).
-- Events should be UNRELATED to the government actions of the <state> (these will be determined by another system).
+These are random events the goverment will need to make decisions on.
+- Events are mutually exclusive within their category.
+- Event categories must include a first no-event category.
+- Events must start with a % probability.
+- Events can be controversial, bad, or mixed. All should be expected to invoke an opinionated response from the government.
 - Events should be consise and unambiguous (no "... changes", it should state what the change is).
 - Events that last longer than a year should be stated as "starts" (or "ends").
+- Event probabilities should be realistic and influenced by the <state>.
+- Include varients and severity of events (e.g. Cat N Hurricane, etc.) and joint events (e.g. Hurricane + Earthquake).
 - Do not add nested lists or headings not specified in the template.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
 - Do not use *italic* or **bold**. 
 -->
 
-# Environmental Events <!-- natural phenomena affecting environment/climate, at least 10 -->
-- {%} No notable environmental events
+# Environmental and Weather Events <!-- natural phenomena affecting environment/climate, at least 10 -->
+- x% No notable events
 ...
 
-# Defense & Military Events <!-- military/security incidents or developments, at least 10 -->
-- {%} No notable defense/military events
+# Defense and Military Events <!-- military/security incidents or developments, at least 10 -->
+- x% No notable events
 ...
 
-# Economic Events <!-- major financial/market/business developments, at least 10 -->
-- {%} No notable economic events
+# Economic and International Events <!-- major financial/market/international developments, at least 10 -->
+- x% No notable events
 ...
 
-# Heath Events <!-- public health/medical developments, at least 10 -->
-- {%} No notable health events
+# Health and Crime Events <!-- public health/medical developments, organized crime, at least 10 -->
+- x% No notable events
 ...
 
-# Cultural & Social Events <!-- societal/cultural developments, at least 10 -->
-- {%} No notable social events
+# Cultural and Social Events <!-- societal/cultural developments, at least 10 -->
+- x% No notable events
 ...
 
-# Infrastructure & Technology Events <!-- tech/scientific developments, at least 10 -->
-- {%} No notable infrastructure/technology events
-...
-
-# International Events <!-- foreign relations/global developments by OTHER nations, at least 10 -->
-- {%} No notable international events
+# Infrastructure and Technology Events <!-- tech/scientific developments, at least 10 -->
+- x% No notable events
 ...
 """.strip()
 

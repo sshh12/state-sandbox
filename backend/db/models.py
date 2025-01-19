@@ -29,6 +29,7 @@ class State(TimestampMixin, Base):
     name = Column(String, nullable=False)
     date = Column(String, nullable=False)  # Format: YYYY-MM
     flag_svg = Column(String, nullable=False)
+    description = Column(String, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
     # Relationships
@@ -44,8 +45,8 @@ class StateSnapshot(TimestampMixin, Base):
     state_id = Column(Integer, ForeignKey("states.id"), nullable=False)
 
     markdown_state = Column(String, nullable=False)
-    markdown_random_events = Column(String, nullable=True)
-    markdown_events = Column(String, nullable=True)
+    markdown_future_events = Column(String, nullable=False)
+    markdown_future_events_policy = Column(String, nullable=False)
     markdown_delta = Column(String, nullable=True)
     markdown_delta_report = Column(String, nullable=True)
 

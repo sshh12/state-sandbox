@@ -185,15 +185,11 @@ async def generate_random_events(
     end_date: datetime,
     prev_state: str,
     historical_events_str: str,
-) -> List[str]:
+) -> str:
     provider = OpenAIProvider()
     prompt = f"""
-Given this fictional state from {start_date} to {end_date}, provide a realistic list of potential random events that could occur within the next year in the correct format.
+Given this fictional <state> from {start_date} to {end_date}, provide a list of potential random events that could occur within the next year and will require the government to make decisions.
 
-<format>
-{RANDOM_TEMPLATE}
-</format>
-        
 <state>
 {prev_state}
 </state>
@@ -202,9 +198,14 @@ Given this fictional state from {start_date} to {end_date}, provide a realistic 
 {historical_events_str}
 </historical-events>
 
-Reply with <format> within a markdown codeblock. Do not include xml tags.
+<format>
+{RANDOM_TEMPLATE}
+</format>
+
+Reply with <format> as a markdown codeblock.
 """.strip()
     output = extract_markdown_codeblock(await provider.generate_fast_reasoning(prompt))
+    print(output)
 
     # Parse the output into categories and their events
     categories = parse_events_output(output)
@@ -215,7 +216,7 @@ Reply with <format> within a markdown codeblock. Do not include xml tags.
         event = _sample_event(events)
         sampled_events.append(f"{category}: {event}")
 
-    return sampled_events
+    return "\n".join(sampled_events)
 
 
 async def _generate_next_state_dimension(
@@ -322,9 +323,7 @@ async def generate_next_state(
             [f"{date}:\n" + "\n".join(events) for date, events in historical_events]
         )
 
-    events = await generate_random_events(
-        start_date, end_date, prev_state, historical_events_str
-    )
+    events = ""
     events_str = "\n".join([f"- {e}" for e in events])
     events_str = f"{await _generate_reasonable_policy_event(policy)}\n{events_str}"
     print("--- historical events ---")

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import asyncio
 
 from db.database import get_db
 from db.models import State, StateSnapshot, User
@@ -25,9 +26,10 @@ from model.actions import (
     generate_state_flag,
     generate_diff_report,
     generate_state_advice,
+    generate_random_events,
 )
 from model.parsing import parse_state
-from utils.event_stream import with_heartbeat, event_stream_response
+from utils.event_stream import event_stream_response
 
 router = APIRouter(prefix="/api/states", tags=["states"])
 
@@ -62,9 +64,12 @@ async def create_state(
 ):
     async def event_stream():
         date = START_DATE
+        start_date = datetime.strptime(date, "%Y-%m")
+        end_date = start_date + relativedelta(months=12)
         state = State(
             date=date,
             name="Developing Nation",
+            description="A developing nation.",
             flag_svg='<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600"></svg>',
             user_id=current_user.id,
         )
@@ -80,12 +85,16 @@ async def create_state(
         )
 
         yield StateStatusEvent(message="Designing flag...").json_line()
-        svg_flag = await generate_state_flag(md_overview)
+        svg_flag, random_events_md = await asyncio.gather(
+            generate_state_flag(md_overview),
+            generate_random_events(start_date, end_date, md_state, ""),
+        )
 
         state_snapshot = StateSnapshot(
             date=date,
             state_id=state.id,
             markdown_state=md_state,
+            markdown_future_events=random_events_md,
         )
         parsed_state = parse_state(state_snapshot.markdown_state)
         full_name = parsed_state["government"]["government_metadata"][

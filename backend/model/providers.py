@@ -9,14 +9,14 @@ class OpenAIProvider:
 
     async def generate_fast_reasoning(self, text: str) -> str:
         response = await self.client.chat.completions.create(
-            model="o1-mini",
+            model="o1-mini-2024-09-12",
             messages=[{"role": "user", "content": text}],
         )
         return response.choices[0].message.content
 
     async def generate_strong_reasoning(self, text: str) -> str:
         response = await self.client.chat.completions.create(
-            model="o1",
+            model="o1-2024-12-17",
             messages=[{"role": "user", "content": text}],
             reasoning_effort="high",
         )
@@ -24,7 +24,7 @@ class OpenAIProvider:
 
     async def generate_fast(self, text: str) -> str:
         response = await self.client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-2024-08-06",
             messages=[{"role": "user", "content": text}],
         )
         return response.choices[0].message.content
