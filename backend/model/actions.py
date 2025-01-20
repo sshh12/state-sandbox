@@ -413,14 +413,14 @@ Given this fictional state and the following events between {start_date} and {en
 
 You must jointly consider:
 - All recent <events> along with their impact on all aspects of the <state>.
-- The <historical-events> and their long-term effects on the <state>.
+- All <historical-events> and their long-term effects on the <state>.
 - The unique characteristics, systems, and values of the <state> and what this causes and how this is effected.
 - Natural changes and variance in population and resource counts over the course of a year.
 - Natural random changes in production, distributions, infrastructure, facilities, and other metrics.
 - The assumption that all notable government actions in response to events (or lack thereof) are included in the events.
 - The actual ability of the government to enact change (e.g. if it's says something ridiculous, it might not fully materialize)
 
-Reply with:
+Reply with (in plain text):
 1. For each event and state policy, the high-level expected impacted on the <state>
 - Consider that some events will be very impactful and others might have minimal change.
 - Consider the intersectionality of recent events, historical events, the <state>, and policies.
@@ -435,10 +435,6 @@ Reply with:
 - Noting how the top challenges in each dimension have evolved.
 - Noting how values might have grown relative to estimated growth rates and how the growth rates themselves might have changed.
 - Include changes to GDP, growth rates, population, and other metrics.
-
-Do not include:
-- A summary at the end
-- *italic* or **bold**
 """.strip()
     diff_output = await provider.generate_strong_reasoning(diff_prompt)
     print("---")
