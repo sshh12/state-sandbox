@@ -129,7 +129,7 @@ export default function NewState() {
             break;
           case 'complete':
             refreshStates().then(() => {
-              router.push(`/state/${stateId}?showHelp=true`);
+              router.push(`/state/${stateId}?showInfo=true`);
             });
             break;
         }

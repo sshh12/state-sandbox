@@ -163,7 +163,7 @@ export default function LeaderboardPage() {
                     </TableCell>
                     <TableCell>
                       <Link
-                        href={`/state/${state.id}`}
+                        href={`/state/${state.id}?showInfo=true`}
                         className="hover:underline"
                       >
                         {state.name}

@@ -9,7 +9,13 @@ import {
 import { HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export function HelpDialog({ state, open, onOpenChange }) {
+export function InfoDialog({
+  title,
+  state,
+  open,
+  onOpenChange,
+  includeInstructions,
+}) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -20,9 +26,9 @@ export function HelpDialog({ state, open, onOpenChange }) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>How to Play</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
           <div className="space-y-4">
-            {state?.name && (
+            {includeInstructions && state?.name && (
               <>
                 <DialogDescription>
                   You are the leader of <strong>{state.name}</strong> and are

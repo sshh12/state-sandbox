@@ -19,7 +19,7 @@ import MediaPage from '@/components/dashboard/media';
 import { api } from '@/lib/api';
 import { Badge } from '@/components/ui/badge';
 import { PlayDialog } from '@/components/dashboard/play-dialog';
-import { HelpDialog } from '@/components/help-dialog';
+import { InfoDialog } from '@/components/info-dialog';
 import { ReportDialog } from '@/components/dashboard/report-dialog';
 import { cn } from '@/lib/utils';
 import { FlagSVG } from '@/components/flag-svg';
@@ -35,7 +35,7 @@ function StatePageContent({ stateId }) {
   const [loadingMessage, setLoadingMessage] = useState('');
   const [reportOpen, setReportOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(
-    searchParams.get('showHelp') === 'true'
+    searchParams.get('showInfo') === 'true'
   );
   const [latestReport, setLatestReport] = useState('');
   const latestSnapshot = snapshots[0];
@@ -128,12 +128,23 @@ function StatePageContent({ stateId }) {
                 loadingMessage={loadingMessage}
                 key={latestSnapshot?.date}
               />
-              <HelpDialog
+              <InfoDialog
+                title="How to Play"
                 state={state}
                 open={helpOpen}
                 onOpenChange={setHelpOpen}
+                includeInstructions={true}
               />
             </div>
+          )}
+          {!isOwner && (
+            <InfoDialog
+              title={state?.name}
+              state={state}
+              open={helpOpen}
+              onOpenChange={setHelpOpen}
+              includeInstructions={false}
+            />
           )}
         </div>
 

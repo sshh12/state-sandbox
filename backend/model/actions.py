@@ -68,9 +68,12 @@ Reply with:
 
 
 async def generate_state_description(state: str) -> str:
+    dimensions = ", ".join([d.title for d in DIMENSIONS])
     provider = OpenAIProvider()
     prompt = f"""
 Given this fictional state, generate a detailed technical ~4-sentence wikipedia-style description of the state.
+- Do not include specific numerical values (lean towards qualitative descriptions)
+- Note unique aspects of the states dimensions ({dimensions})
 
 <state>
 {state}
