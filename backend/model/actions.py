@@ -220,7 +220,7 @@ Given this fictional <state> from {start_date} to {end_date} and the following e
 ```markdown
 {FUTURE_POLICY_TEMPLATE}
 
-# Government Actions <!-- at most 5 actions -->
+# Government Actions <!-- at most 3 actions -->
 - <-- action -->
 - <-- action -->
 ...
@@ -420,13 +420,14 @@ You must jointly consider:
 - The actual ability of the government to enact change (e.g. if it's says something ridiculous, it might not fully materialize)
 
 Reply with:
-1. For each event, the high-level expected impacted on the <state>
-- Some events will be very impactful and others might have minimal change.
+1. For each event and state policy, the high-level expected impacted on the <state>
+- Consider that some events will be very impactful and others might have minimal change.
 - Consider the intersectionality of recent events, historical events, the <state>, and policies.
 - Event impacts can span several state dimensions with complex higher-order consequences. 
   - State the 2nd order effects of the event on across all dimensions.
   - State the 3rd order effects of the event on across all dimensions.
 - Government actions should, no matter how positive, must include complex and thought provoking negative consequences.
+  - If the Government funds something, consider where is the money coming from (taxes, debt, etc)?
 2. For each dimension ({dimensions_str}) list out the explicit changes. 
 - Weave in the dimension specific 1st, 2nd, and 3rd order effects of the events.
 - Noting in great detail what changed (before/after) and why.

@@ -26,6 +26,7 @@ These are random events the goverment will need to make decisions on.
 - Event categories must include a first no-event category.
 - Event probabilities should be realistic (chance over the course of a year) and influenced by the <state> and known historical events.
 - Be specific with varients and severity of events (e.g. Cat N Hurricane, Cyberattack on N industrial facilities, etc.)
+- Do not re-use events that occured in the previous years.
 - Do not add nested lists or headings not specified in the template.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
 - Do not use *italic* or **bold**. 
@@ -62,7 +63,7 @@ These are random events the goverment will need to make decisions on.
 
 FUTURE_POLICY_TEMPLATE = """
 <!-- 
-Provide a list of at most 4 actions to respond to the events.
+Provide a list of at most 3 actions to respond to the events.
 - Action examples: "Ban the use of social media", "Increase funding for anti-cybercrime programs", etc.
 - Actions should be specific, realistic, and target the events.
 - Actions should have non-obvious negative consequences (don't state this explicitly).
@@ -75,7 +76,7 @@ Provide a list of at most 4 actions to respond to the events.
 - Do not include <!-- comments --> in the final output but use them as key guidance.
 - Do not use *italic* or **bold**. 
 
-IMPORTANT: Include flawed actions that will make the state worse.
+IMPORTANT: Include implicitly flawed actions that will make the state worse.
 -->
 """.strip()
 
