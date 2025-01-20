@@ -146,10 +146,14 @@ Build a realistic but fictional country that exists in {_format_month_date(date)
 Reply with (plain text):
 1. Pick the type of goverment that optimizes these values (like Republic, Democracy, Dictatorship, Oligarchy, Plutocracy, etc but more specific)
 2. State the full country name. It should be derived from {_simplify_user_input(name)}. Make it more realistic without changing it too much, e.g. Republic/Federation/Empire/Kingdom/Sultanate/Emirates/Commonwealth of, -ia/-istan/-onia, etc)
-3. A wikipedia-style summary of the state, how the <values> and time period above influence the dimensions of the state, how you will balance their strengths and flaws, and what makes them unique in the world.
-4. The influence of the <values> on the dimensions of the state ({dimensions}).
+3. A detailed wikipedia-style summary of the state.
+- Include how the <values> and time period above influence EACH of the dimensions ({dimensions}) of the state
+- Include balanced strengths and flaws and what makes them unique in the world.
 """.strip()
     overview_output = await provider.generate_strong_reasoning(prompt)
+    print("--- overview output ---")
+    print(overview_output)
+    print("--- ---")
 
     dimension_outputs = await asyncio.gather(
         *[
@@ -315,6 +319,7 @@ Reply with:
 (1) A list of the before/after changes in the dimension (mostly provided by <state-recent-changes>).
 - Expect natural changes in population and resource counts over the course of a year.
 - Expect natural random changes in production, distributions, infrastructure, facilities, and other metrics.
+- Compute the new values for things like GDP and population (specific to the dimension) using <state-recent-changes> and known growth rates.
 - Note that it's expected that all numerical fields should change at least slightly over the course of a year.
 - If a metric is not mentioned in <state-recent-changes>, it should still change at least slightly due to natural changes over a year.
 (2) The new <template> in a markdown codeblock.
@@ -398,6 +403,8 @@ async def generate_next_state(
 
     events_str = f"{await _generate_reasonable_policy_event(policy_input)}\n{events}"
     events_str = "\n".join(["- " + event for event in events_str.split("\n")])
+    print("--- prev state ---")
+    print(prev_state)
     print("--- policy input ---")
     print(policy_input)
     print("--- historical events ---")
@@ -445,7 +452,7 @@ Reply with (in plain text):
 - Noting in great detail what changed (before/after) and why.
 - Noting how the top challenges in each dimension have evolved.
 - Noting how values might have grown relative to estimated growth rates and how the growth rates themselves might have changed.
-- Include changes to GDP, growth rates, population, and other metrics.
+- Include relative changes to GDP, growth rates, population, and other metrics.
 """.strip()
     diff_output = await provider.generate_strong_reasoning(diff_prompt)
     print("---")

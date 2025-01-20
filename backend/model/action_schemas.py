@@ -2,7 +2,7 @@ STATE_CONFIG_FORMAT_TEMPLATE = """
 <!--
 - Follow the template exactly. Filling in {values}, keeping text outside of brackets, and replacing ...s.
 - You are expected to fill out ALL the fields in the template and keep ALL default attributes.
-- Format {Number} like: 123, 123 million, 0.12. Do not use a percentage or relative values.
+- Format {Number} like: 123, 123 million, 0.12. Do not use a percentage or relative values. Prefer "million" over several trailing zeros.
 - Format {Percentage} like: 12%, 0.01%.
 - Format {Description} with 1-3 concise sentences. Use technical terms and avoid filler words.
 - Format {AmountUSD} monetary amounts in USD like $123, $123 million, $0.12.
@@ -32,31 +32,31 @@ These are random events the goverment will need to make decisions on.
 - Do not use *italic* or **bold**. 
 -->
 
-# Environmental and Weather Events <!-- Examples: Natural disasters (hurricanes, floods), climate anomalies (record temperatures, droughts), environmental incidents (oil spills, forest fires), wildlife crises (invasive species, mass die-offs) -->
+# Environmental and Weather Events <!-- At least 10 events. Examples: Natural disasters (hurricanes, floods), climate anomalies (record temperatures, droughts), environmental incidents (oil spills, forest fires), wildlife crises (invasive species, mass die-offs) -->
 - x% No notable events
 ...
 
-# Economic Events <!-- Examples: Market crashes, major company bankruptcies, industry-wide strikes, commodity price shocks, foreign investment withdrawals, currency manipulation by foreign powers, trade embargo impacts -->
+# Economic Events <!-- At least 10 events. Examples: Market crashes, major company bankruptcies, industry-wide strikes, commodity price shocks, foreign investment withdrawals, currency manipulation by foreign powers, trade embargo impacts -->
 - x% No notable events
 ...
 
-# Defense and Military Events <!-- Examples: Cyber attacks on critical infrastructure, terrorist incidents, border incursions, military equipment failures, foreign spy networks discovered, military tech breaches, armed militia formations -->
+# Defense and Military Events <!-- At least 10 events. Examples: Cyber attacks on critical infrastructure, terrorist incidents, border incursions, military equipment failures, foreign spy networks discovered, military tech breaches, armed militia formations -->
 - x% No notable events
 ...
 
-# Health and Crime Events <!-- Examples: Disease outbreaks, drug-resistant infections, organized crime expansion, new synthetic drug epidemics, healthcare system breaches, mass poisoning incidents, bioterror threats -->
+# Health and Crime Events <!-- At least 10 events. Examples: Disease outbreaks, drug-resistant infections, organized crime expansion, new synthetic drug epidemics, healthcare system breaches, mass poisoning incidents, bioterror threats -->
 - x% No notable events
 ...
 
-# Cultural and People Events <!-- Examples: Mass protests, religious conflicts, demographic shifts, controversial media influence, education system crises, cultural heritage destruction, social movement radicalization -->
+# Cultural and People Events <!-- At least 10 events. Examples: Mass protests, religious conflicts, demographic shifts, controversial media influence, education system crises, cultural heritage destruction, social movement radicalization -->
 - x% No notable events
 ...
 
-# Infrastructure and Technology Events <!-- Examples: Critical infrastructure failures, AI system malfunctions, data center breaches, transportation system vulnerabilities, power grid instabilities, water system contamination -->
+# Infrastructure and Technology Events <!-- At least 10 events. Examples: Critical infrastructure failures, AI system malfunctions, data center breaches, transportation system vulnerabilities, power grid instabilities, water system contamination -->
 - x% No notable events
 ...
 
-# International Relations Events <!-- Examples: Diplomatic expulsions, trade agreement violations, foreign asset seizures, international sanctions threats, refugee crises, foreign interference in domestic affairs -->
+# International Relations Events <!-- At least 10 events. Examples: Diplomatic expulsions, trade agreement violations, foreign asset seizures, international sanctions threats, refugee crises, foreign interference in domestic affairs -->
 - x% No notable events
 ...
 """.strip()
