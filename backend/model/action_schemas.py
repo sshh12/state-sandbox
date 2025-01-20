@@ -95,28 +95,31 @@ DIFF_EXECUTIVE_TEMPLATE = """
 ### Executive Summary
 
 <!-- 
-- 1 - 2 sentence dense technical overview of what *important* happened, for the leadership of the <state>.
+Start with a 1 - 2 sentence dense technical overview of what *important* happened, for the leadership of the <state>.
 -->
 
-1. **Environment and Weather**:
+1. **Government**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-2. **Economy**:
+2. **Environment and Weather**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-3. **Defense**:
+3. **Economy**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-4. **Health and Crime**:
+4. **Defense**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-5. **Culture and People**:
+5. **Health and Crime**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-6. **Infrastructure and Technology**:
+6. **Culture and People**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
-7. **International Relations**:
+7. **Infrastructure and Technology**:
+  - <!-- *Title* -->: <!-- Description -->
+  - ...
+8. **International Relations**:
   - <!-- *Title* -->: <!-- Description -->
   - ...
 """.strip()
