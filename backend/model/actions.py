@@ -421,7 +421,7 @@ You must jointly consider:
 - The actual ability of the government to enact change (e.g. if it's says something ridiculous, it might not fully materialize)
 
 Reply with (in plain text):
-1. For each event and state policy, the high-level expected impacted on the <state>
+1. For each <event> and statement in state policy, the high-level expected impacted on the <state>
 - Consider that some events will be very impactful and others might have minimal change.
 - Consider the intersectionality of recent events, historical events, the <state>, and policies.
 - Event impacts can span several state dimensions with complex higher-order consequences. 
