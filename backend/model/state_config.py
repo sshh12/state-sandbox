@@ -516,7 +516,7 @@ DIMENSIONS = [
 - Total Land Area: {Number} sq km
 - CO2 Emissions: {Number} metric tons per capita
 - Particulate Matter (PM2.5): {Number} μg/m3
-- Air Quality Index: {Number} out of 500
+- Air Quality Index: {Number} out of 500 <!-- 0-50 good, 51-100 moderate, 101-200 unhealthy, 201-300 very unhealthy, 301-400 hazardous, 401-500 severe -->
 - Number of Endangered Species: {Number}
 
 ## Top Environmental Challenges <!-- e.g. pollution, deforestation, etc. Severity and detailed description. At least 2. -->

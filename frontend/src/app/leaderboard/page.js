@@ -27,47 +27,63 @@ const metrics = [
     id: 'gdp',
     name: 'GDP',
     valueKey: 'economy.economic_metrics.gross_domestic_product_gdp',
+    order: 'desc',
   },
   {
     id: 'population',
     name: 'Population',
     valueKey: 'people.people_metrics.total_population',
+    order: 'desc',
   },
   {
     id: 'approval',
     name: 'Approval Rating',
     valueKey:
       'government.government_metrics.overall_head_of_stategovernment_approval_rating',
+    order: 'desc',
   },
   {
     id: 'hdi',
     name: 'Human Development Index',
     valueKey: 'people.people_metrics.human_development_index_hdi',
+    order: 'desc',
   },
   {
     id: 'happiness',
     name: 'World Happiness Score',
     valueKey: 'people.people_metrics.gallup_world_happiness_score',
+    order: 'desc',
   },
   {
     id: 'social_mobility',
     name: 'Social Mobility Index',
     valueKey: 'people.people_metrics.social_mobility_index',
+    order: 'desc',
   },
   {
     id: 'corruption',
     name: 'Corruption Index',
     valueKey: 'government.government_metrics.corruption_perception_index_cpi',
+    order: 'asc',
   },
   {
     id: 'life_expectancy',
     name: 'Life Expectancy',
     valueKey: 'health.life_expectancy.average_life_expectancy_at_birth',
+    order: 'desc',
   },
   {
     id: 'unemployment',
     name: 'Unemployment Rate',
     valueKey: 'economy.economic_metrics.unemployment_rate',
+    order: 'asc',
+  },
+  {
+    id: 'air_quality',
+    name: 'Air Quality Index',
+    valueKey:
+      'geography_and_environment.environmental_metrics.air_quality_index',
+    order: 'asc',
   },
 ];
 
@@ -92,7 +108,9 @@ export default function LeaderboardPage() {
       getValue(a.latest_snapshot.json_state, selectedMetricKey)?.value || 0;
     const valueB =
       getValue(b.latest_snapshot.json_state, selectedMetricKey)?.value || 0;
-    return valueB - valueA;
+    const order =
+      metrics.find((m) => m.id === selectedMetric)?.order === 'desc' ? 1 : -1;
+    return (valueB - valueA) * order;
   });
 
   return (
