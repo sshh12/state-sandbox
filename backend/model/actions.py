@@ -316,7 +316,8 @@ Reply with:
 - If a metric is not mentioned in <state-recent-changes>, it should still change at least slightly due to natural changes over a year.
 (2) The new <template> in a markdown codeblock.
 - ALL numerical fields should change
-- For dimension challenges, lean towards adding a challenge and only remove a challenge if it's no longer relevant.
+- Systems, features, and policies should update as needed to reflect any updated policies.
+- For challenges, lean towards adding a challenge and only remove a challenge if it's no longer relevant.
 - For policies (if any), lean towards adding a policy and only remove a policy if it's no longer relevant.
 """.strip()
     raw_output = await provider.generate_fast_reasoning(new_state_dimension_prompt)
