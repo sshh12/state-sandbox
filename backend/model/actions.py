@@ -298,9 +298,9 @@ async def _generate_next_state_dimension(
     prev_state_dimension = extract_markdown_section(prev_state, dimension.title)
     provider = OpenAIProvider()
     new_state_dimension_prompt = f"""
-Given this fictional state and the following events between {start_date} and {end_date}, provide an updated <dimension-template> for {dimension.title} with the changes from <state-recent-changes> applied.
+Given this fictional state and the following events between {start_date} and {end_date}, provide an updated <dimension-template> for {dimension.title} in {end_date} with the changes from <state-recent-changes> applied.
 
-<prev-state-dimension on="{start_date}">
+<prev-state-dimension on="{start_date}" name="{dimension.title}">
 ```markdown
 {prev_state_dimension}
 ```
@@ -319,12 +319,11 @@ Given this fictional state and the following events between {start_date} and {en
 </template>
 
 Reply with:
-(1) A list of the before/after changes in the dimension (mostly provided by <state-recent-changes>).
-- Expect natural changes in population and resource counts over the course of a year.
-- Expect natural random changes in production, distributions, infrastructure, facilities, and other metrics.
+(1) A list of the before/after changes in the dimension.
+- Minmally expect natural changes in population and resource counts over the course of a year and natural random changes in production, distributions, infrastructure, facilities, and other metrics.
 - Compute the new values for things like GDP and population (specific to the dimension) using <state-recent-changes> and known growth rates.
-- Note that it's expected that all numerical fields should change at least slightly over the course of a year.
-- If a metric is not mentioned in <state-recent-changes>, it should still change at least slightly due to natural changes over a year.
+- Note that it's expected that ALL numerical fields should change at least slightly over the course of a year.
+- If a metric is not mentioned in <state-recent-changes>, carefully consider both the recent events mentioned and year-over-year variance to compute to new values.
 (2) The new <template> in a markdown codeblock.
 - ALL numerical fields should change
 - Systems, features, and policies should update as needed to reflect any updated policies.
