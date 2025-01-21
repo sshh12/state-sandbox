@@ -121,7 +121,7 @@ export function PlayDialog({
             <>
               <ProgressTimer
                 isRunning={turnLoading}
-                duration={170000}
+                duration={200000}
                 className="w-full"
               />
               <p className="text-sm text-muted-foreground text-center">
