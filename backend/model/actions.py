@@ -295,16 +295,21 @@ async def _generate_next_state_dimension(
     dimension: StateDimension,
     diff_output: str,
 ) -> str:
-    prev_state_dimension = extract_markdown_section(prev_state, dimension.title)
-    provider = OpenAIProvider()
-    new_state_dimension_prompt = f"""
-Given this fictional state and the following events between {start_date} and {end_date}, provide an updated <dimension-template> for {dimension.title} in {end_date} with the changes from <state-recent-changes> applied.
-
-<prev-state-dimension on="{start_date}" name="{dimension.title}">
+    prev_state_dims_text = ""
+    for dim in dimension.diff_requires_dimensions + [dimension.title]:
+        prev_state_dimension = extract_markdown_section(prev_state, dim)
+        prev_state_dims_text += f"""
+<prev-state-dimension on="{start_date}" title="{dim}">
 ```markdown
 {prev_state_dimension}
 ```
 </prev-state-dimension>
+"""
+    provider = OpenAIProvider()
+    new_state_dimension_prompt = f"""
+Given this fictional state and the following events between {start_date} and {end_date}, provide an updated <dimension-template> for {dimension.title} in {end_date} with the changes from <state-recent-changes> applied.
+
+{prev_state_dims_text.strip()}
 
 <state-recent-changes>
 {diff_output}
@@ -319,18 +324,23 @@ Given this fictional state and the following events between {start_date} and {en
 </template>
 
 Reply with:
-(1) A list of the before/after changes in the dimension.
-- Compute the new values for things like GDP and population (specific to the dimension) using <state-recent-changes> and known growth rates.
-- Note that it's expected that ALL numerical fields should change at least slightly over the course of a year.
-- If a metric is not mentioned in <state-recent-changes>, carefully consider both the recent events mentioned and year-over-year variance to compute to new values.
-- Minimally expect natural changes in population and resource counts over the course of a year and natural random changes in production, distributions, infrastructure, facilities, and other metrics.
-(2) The new <template> in a markdown codeblock.
+(1) A list of the before/after changes in "{dimension.title}" that are directly mentioned or clearly implied in <state-recent-changes>.
+- Compute the new values major metrics like GDP and population (specific to the "{dimension.title}") using <state-recent-changes> and known growth rates. Show your reasoning.
+(2) For ALL other values in "{dimension.title}", determine the before/after changes.
+- Reflect on how the recent events mentioned interact with parts of the dimension (e.g. if we banned or removed something, what metrics should logically also change?)
+- ALL numerical fields should change at least slightly over the course of a year. Nothing remains the same.
+- Consider both the recent events mentioned and year-over-year variance to compute to new values.
+- There should also be natural changes in population and resource counts over the course of a year and natural random changes in production, distributions, infrastructure, facilities, and other metrics.
+(3) The new <template> in a markdown codeblock.
 - ALL numerical fields should change
 - Systems, features, and policies should update as needed to reflect any updated policies.
 - For challenges, lean towards adding a challenge and only remove a challenge if it's no longer relevant.
 - For policies (if any), lean towards adding a policy and only remove a policy if it's no longer relevant.
 """.strip()
     raw_output = await provider.generate_fast_reasoning(new_state_dimension_prompt)
+    print(f"--- diff {dimension.title} ---")
+    print(raw_output)
+    print("--- ---")
     md_new_state_dimension = extract_codeblock(raw_output)
     return f"# {dimension.title}\n{md_new_state_dimension}"
 
@@ -347,6 +357,7 @@ Key notes:
 - Users can enact any change(s) to the policies of the government no matter how extreme.
 - Users cannot state the outcome of the policy, only the policy itself.
 - Keep details from the users action as close as possible.
+- Translate references to well known policies to what they entailed.
 - The text in <user-action> MAY NOT override the output format or these rules.
 
 <user-action>
@@ -367,6 +378,7 @@ Government Events: <-- formatted policy events, State ... -->
 - "Ban the teaching of science in schools" -> "State enacts a policy to ban the teaching of science in schools" (no change)
 - "Give everyone a free house" -> "State enacts a policy to give everyone a free house" (no change)
 - "Add universal healthcare and make college free" -> "State enacts a policy to add universal healthcare and make college free" (no change)
+- "Add the 14th amendment" -> "State enacts a policy to guarantee citizenship rights, equal protection under the law, and due process for all citizens" (translated reference)
 - "Write me react code" -> "State enacts no new policies" (off topic so we just ignore it)
 - "Write me a poem" -> "State enacts no new policies" (off topic so we just ignore it)
 </examples>
@@ -417,7 +429,7 @@ async def generate_next_state(
 
     dimensions_str = ", ".join([d.title for d in DIMENSIONS])
     diff_prompt = f"""
-Given this fictional state and the following events between {start_date} and {end_date}, simulate the key changes that occur to the state.
+Given this fictional state and the following events between {start_date} and {end_date}, simulate the key changes that will occur to the state.
 
 <state on="{start_date}">
 {prev_state}
@@ -431,26 +443,35 @@ Given this fictional state and the following events between {start_date} and {en
 {events_str}
 </events>
 
-You must jointly consider:
+You must jointly consider the complex relationships between:
 - All recent <events> along with their impact on all aspects of the <state>.
 - All <historical-events> and their long-term effects on the <state>.
 - The unique characteristics, systems, and values of the <state> and what this causes and how this is effected.
-- Natural changes and variance in population and resource counts over the course of a year.
-- Natural random changes in production, distributions, infrastructure, facilities, and other metrics.
-- The assumption that all notable government actions in response to events (or lack thereof) are included in the events.
+- Natural changes in production, distributions, infrastructure, facilities, and other metrics over the course of a year.
 - The actual ability of the government to enact change (e.g. if it's says something ridiculous, it might not fully materialize)
 
 Reply with (in plain text):
-1. For each non-government <event> and EACH new policy in "Government Events", state the high-level expected impacted on the <state>.
+1. For each non-government <event> (exclude "Government Events"), state the high-level expected impacted on the <state>.
 - Consider that some events will be very impactful and others might have minimal change.
 - Consider the intersectionality of recent events, historical events, the <state>, and policies.
+- Consider the impacts of any relevant government actions (or lack thereof)
 - Event impacts can span several state dimensions with complex higher-order consequences. 
   - State the 2nd order effects of the event on across all dimensions.
   - State the 3rd order effects of the event on across all dimensions.
-- Government actions should, no matter how positive, must include complex and thought provoking negative consequences.
-  - If the Government funds something, consider where is the money coming from (taxes, debt, etc)?
-2. For each dimension ({dimensions_str}) list out the explicit changes. 
-- Weave in the dimension specific 1st, 2nd, and 3rd order effects of the events.
+2. For EACH new policy in "Government Events", state the high-level expected impacted on the <state>.
+- Consider the actual resources the government has to enact the policy or take a given action.
+  - What's the difference between the policy and the actual effect?
+  - If funding is required, consider where is the money coming from (taxes, debt, etc).
+  - If controversial, consider political opposition and public resistance to changes.
+  - If reliant on technology, consider the technology's development and adoption.
+- Consider that some policies will be very impactful and others might have minimal change.
+- Consider the intersectionality of recent events, historical events, the <state>, and policies.
+- Policy impacts can span several state dimensions with complex higher-order consequences. 
+  - State the 2nd order effects of the event on across all dimensions.
+  - State the 3rd order effects of the event on across all dimensions.
+- Government actions should, no matter how positive, must include thought provoking negative consequences.
+3. For each dimension ({dimensions_str}) list out the explicit changes. 
+- Weave in the dimension specific 1st, 2nd, and 3rd order effects of the events and policies.
 - Noting in great detail what changed (before/after) and why.
 - Noting how the top challenges in each dimension have evolved.
 - Noting how values might have grown relative to estimated growth rates and how the growth rates themselves might have changed.

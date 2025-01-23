@@ -7,6 +7,7 @@ class StateDimension:
     title: str
     template: str
     seed_assumptions: List[str] = field(default_factory=list)
+    diff_requires_dimensions: List[str] = field(default_factory=list)
 
 
 DIMENSIONS = [
@@ -416,6 +417,9 @@ DIMENSIONS = [
 - Satellite Systems: {Number}
 - Cyber/Electronic Warfare Units: {Number}
 - Special Forces Units: {Number}
+- Strategic Nuclear Warheads: {Number}
+- Tactical Nuclear Warheads: {Number}
+- Nuclear Delivery Systems: {Number} <!-- e.g. ICBMs, SLBMs, strategic bombers -->
 
 ## Top Defense Challenges <!-- e.g. terrorism, cyber threats, organized crime, etc. Include risk level and detailed description. At least 2. -->
 - {Challenge}: {Description}
@@ -660,5 +664,6 @@ DIMENSIONS = [
 - "{Headline}"
 ...
 """.strip(),
+        diff_requires_dimensions=["People"],
     ),
 ]
