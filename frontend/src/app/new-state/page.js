@@ -9,6 +9,7 @@ import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { ProgressTimer } from '@/components/ui/progress-timer';
 import { useUser } from '@/context/user-context';
+import Image from 'next/image';
 
 const questions = [
   'Individual rights should take precedence over collective needs',
@@ -260,7 +261,15 @@ export default function NewState() {
       </div>
 
       {/* Right Panel */}
-      <div className="hidden lg:block flex-1 bg-black" />
+      <div className="hidden lg:block flex-1 bg-black relative">
+        <Image
+          src="/greece.jpg"
+          alt="https://unsplash.com/photos/low-angle-photography-of-the-parthenon-greece-DELDTYAjPrg"
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
     </div>
   );
 }

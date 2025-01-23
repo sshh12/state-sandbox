@@ -3,14 +3,15 @@ import markdown_to_json
 from typing import Any, List, Tuple, Dict
 
 
-def extract_codeblock(text: str, strip_styles: bool = True) -> str:
+def extract_codeblock(text: str, fix_markdown: bool = True) -> str:
     match = re.search(r"```[a-zA-Z]+\n(.*?)```", text, re.DOTALL)
     out = match.group(1).strip()
-    if strip_styles:
+    if fix_markdown:
         # remove italic, bold, etc.
         out = re.sub(r"_(.*?)_", r"\1", out)
         out = re.sub(r"\*(.*?)\*", r"\1", out)
         out = out.replace("\\$", "$")
+        out = _fix_compositions(out)
     return out
 
 
@@ -125,6 +126,7 @@ _PARAGRAPH_SUFFIXES = [
     " Identity",
     " Features",
     " Participation",
+    "Technologies",
 ]
 
 _LIST_PARAGRAPH_SUFFIXES = [" Headlines", " Quotes"]
@@ -188,7 +190,7 @@ def parse_state(state_markdown: str) -> dict:
     return data
 
 
-def parse_events_section(section: str) -> List[Tuple[float, str]]:
+def _parse_events_section(section: str) -> List[Tuple[float, str]]:
     """Parse a section of events into a list of (probability, event) tuples."""
     events = []
     for line in section.strip().split("\n"):
@@ -216,7 +218,7 @@ def parse_events_output(output: str) -> Dict[str, List[Tuple[float, str]]]:
 
         if line.startswith("# "):
             if current_category and current_events:
-                categories[current_category] = parse_events_section(
+                categories[current_category] = _parse_events_section(
                     "\n".join(current_events)
                 )
             current_category = line[2:]
@@ -225,6 +227,93 @@ def parse_events_output(output: str) -> Dict[str, List[Tuple[float, str]]]:
             current_events.append(line)
 
     if current_category and current_events:
-        categories[current_category] = parse_events_section("\n".join(current_events))
+        categories[current_category] = _parse_events_section("\n".join(current_events))
 
     return categories
+
+
+def _fix_compositions(markdown: str) -> str:
+    """Find sections with "Composition" in their headers and normalize the percentages to sum to 100%."""
+    lines = markdown.split("\n")
+    output_lines = []
+
+    in_composition = False
+    composition_items = []
+    composition_start_index = -1
+
+    for i, line in enumerate(lines):
+        # Check for composition section headers
+        if line.startswith(("#", "###", "####")) and "Composition" in line:
+            # If we were already in a composition section, normalize and add it
+            if in_composition:
+                normalized_lines = _normalize_percentages(composition_items)
+                output_lines.extend(normalized_lines)
+                composition_items = []
+
+            in_composition = True
+            composition_start_index = i
+            output_lines.append(line)
+            continue
+
+        # Check for end of composition section (next header or blank line after items)
+        if in_composition and (
+            line.startswith("#") or (line.strip() == "" and composition_items)
+        ):
+            normalized_lines = _normalize_percentages(composition_items)
+            output_lines.extend(normalized_lines)
+            composition_items = []
+            in_composition = False
+            if line.strip():  # Only add non-empty lines
+                output_lines.append(line)
+            continue
+
+        # Collect composition items
+        if in_composition and line.startswith("- ") and "%" in line:
+            composition_items.append(line)
+        else:
+            output_lines.append(line)
+
+    # Handle case where composition section is at end of file
+    if in_composition and composition_items:
+        normalized_lines = _normalize_percentages(composition_items)
+        output_lines.extend(normalized_lines)
+
+    return "\n".join(output_lines)
+
+
+def _normalize_percentages(items: list[str]) -> list[str]:
+    """Helper function to normalize percentages in a list of items to sum to 100%."""
+    if not items:
+        return []
+
+    # Extract values and labels
+    parsed_items = []
+    total = 0
+
+    for item in items:
+        try:
+            # Extract percentage value
+            label, value = item[2:].rsplit(":", 1)
+            value = float(value.strip().rstrip("%"))
+            total += value
+            parsed_items.append((label, value))
+        except (ValueError, IndexError):
+            continue
+
+    if not parsed_items or total == 0:
+        return items
+
+    # Normalize values to sum to 100%
+    scale_factor = 100.0 / total
+    normalized_items = []
+
+    for label, value in parsed_items:
+        new_value = value * scale_factor
+        # Format with 1 decimal place if needed, otherwise as integer
+        if new_value == int(new_value):
+            value_str = f"{int(new_value)}%"
+        else:
+            value_str = f"{new_value:.1f}%"
+        normalized_items.append(f"- {label}: {value_str}")
+
+    return normalized_items
