@@ -85,6 +85,7 @@ DIMENSIONS = [
 - The types of people migrating (e.g. refugees, economic migrants, etc.) and ethnicity
 - The sources of migrants (e.g. neighboring countries, distant regions, etc.)
 - The destinations of migrants (e.g. urban areas, rural areas, etc.)
+- Emigration (e.g. people leaving the country)
 - The jobs and industries -->
 
 ## People Metrics
@@ -424,6 +425,7 @@ DIMENSIONS = [
 ## Top Defense Challenges <!-- e.g. terrorism, cyber threats, organized crime, etc. Include risk level and detailed description. At least 2. -->
 - {Challenge}: {Description}
 """.strip(),
+        seed_assumptions=["Assume no current nuclear weapons"],
     ),
     StateDimension(
         title="Media",
@@ -504,10 +506,11 @@ DIMENSIONS = [
         template="""
 ## Geographic Features
 <!-- describe the geographic features in detail, including:
-- mountains, rivers, lakes, deserts, forests, etc.
-- level of pollution
-- infrastructure/population near coastlines
-- natural resources (and scarcity) -->
+- Mountains, rivers, lakes, deserts, forests, etc.
+- The actual names of major geographic landmarks.
+- Level of pollution
+- Infrastructure/population near coastlines
+- Natural resources (and scarcity) -->
 
 ## Natural Resource Production
 - Oil and Gas: {Number} barrels of oil equivalent per day

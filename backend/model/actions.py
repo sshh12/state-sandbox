@@ -88,8 +88,13 @@ async def _generate_state_dimension(
 ) -> str:
     provider = OpenAIProvider()
     seed_assumptions = "\n".join([f"- {s}" for s in dimension.seed_assumptions])
+    other_dimensions = ", ".join(
+        [d.title for d in DIMENSIONS if d.title != dimension.title]
+    )
     prompt = f"""
 Given this fictional but realistic country, generate a detailed description of the {dimension.title} dimension in {_format_month_date(date)}.
+
+You are defining specifically {dimension.title}, other experts will define {other_dimensions}.
 
 <state-overview>
 {overview}
@@ -254,10 +259,11 @@ async def generate_future_events(
         ]
     )
     provider = OpenAIProvider()
+    dimensions = ", ".join([d.title for d in DIMENSIONS])
     prompt = f"""
 Given this fictional <state> from {start_date} to {end_date}, provide a list of potential random events that could occur within the next year and will require the government to make decisions.
 
-<state>
+<state on="{start_date}">
 {prev_state}
 </state>
 
@@ -271,10 +277,15 @@ Given this fictional <state> from {start_date} to {end_date}, provide a list of 
 ```
 </format>
 
-Reply with <format> as a markdown codeblock.
+Reply with:
+1. How the dimensions of the state ({dimensions}) impact the likelihood of the different event types.
+2. <format> as a markdown codeblock. Be sure to include "No notable events" as the first event in each category.
 """.strip()
-    output = extract_codeblock(await provider.generate_fast_reasoning(prompt))
-    print(output)
+    raw_output = await provider.generate_fast_reasoning(prompt)
+    print("--- future events output ---")
+    print(raw_output)
+    print("--- ---")
+    output = extract_codeblock(raw_output)
 
     # Parse the output into categories and their events
     categories = parse_events_output(output)
@@ -328,11 +339,11 @@ Reply with:
 - Compute the new values major metrics like GDP and population (specific to the "{dimension.title}") using <state-recent-changes> and known growth rates. Show your reasoning.
 (2) For ALL other values in "{dimension.title}", determine the before/after changes.
 - Reflect on how the recent events mentioned interact with parts of the dimension (e.g. if we banned or removed something, what metrics should logically also change?)
-- ALL numerical fields should change at least slightly over the course of a year. Nothing remains the same.
+- ALL non-zero numerical fields should change at least slightly over the course of a year. Nothing remains the same.
 - Consider both the recent events mentioned and year-over-year variance to compute to new values.
 - There should also be natural changes in population and resource counts over the course of a year and natural random changes in production, distributions, infrastructure, facilities, and other metrics.
 (3) The new <template> in a markdown codeblock.
-- ALL numerical fields should change
+- ALL non-zero numerical fields should change
 - Systems, features, and policies should update as needed to reflect any updated policies.
 - For challenges, lean towards adding a challenge and only remove a challenge if it's no longer relevant.
 - For policies (if any), lean towards adding a policy and only remove a policy if it's no longer relevant.

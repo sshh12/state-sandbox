@@ -2,7 +2,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import MetricCard from './metric-card';
 import ChallengesCard from './challenges-card';
-import { Users, Plane, Anchor, Truck, Laptop, UserCog } from 'lucide-react';
+import {
+  Users,
+  Plane,
+  Anchor,
+  Truck,
+  Laptop,
+  UserCog,
+  Zap,
+} from 'lucide-react';
 
 export default function MilitaryPage({ snapshots }) {
   const latestSnapshot = snapshots[0];
@@ -41,6 +49,13 @@ export default function MilitaryPage({ snapshots }) {
     'Satellite Systems': military_assets.satellite_systems,
     'Cyber/Electronic Units': military_assets.cyberelectronic_warfare_units,
     'Special Forces': military_assets.special_forces_units,
+  };
+
+  const nuclearAssets = {
+    'Strategic Nuclear Warheads': military_assets.strategic_nuclear_warheads,
+    'Tactical Nuclear Warheads': military_assets.tactical_nuclear_warheads,
+    'Nuclear Delivery Systems': military_assets.nuclear_delivery_systems,
+    'Ballistic Missile Systems': military_assets.ballistic_missile_systems,
   };
 
   return (
@@ -137,6 +152,30 @@ export default function MilitaryPage({ snapshots }) {
             <ScrollArea className="h-[200px]">
               <div className="space-y-2">
                 {Object.entries(groundAssets).map(([name, asset]) => (
+                  <div key={name} className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">
+                      {name}
+                    </span>
+                    <span className="font-medium">{asset.raw}</span>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+
+        {/* Nuclear Assets */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-base font-medium">
+              Nuclear Assets
+            </CardTitle>
+            <Zap className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-[200px]">
+              <div className="space-y-2">
+                {Object.entries(nuclearAssets).map(([name, asset]) => (
                   <div key={name} className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">
                       {name}

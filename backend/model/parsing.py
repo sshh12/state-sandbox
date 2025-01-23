@@ -10,6 +10,7 @@ def extract_codeblock(text: str, strip_styles: bool = True) -> str:
         # remove italic, bold, etc.
         out = re.sub(r"_(.*?)_", r"\1", out)
         out = re.sub(r"\*(.*?)\*", r"\1", out)
+        out = out.replace("\\$", "$")
     return out
 
 
