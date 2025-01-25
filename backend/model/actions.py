@@ -338,14 +338,15 @@ Given this fictional state and the following events between {start_date} and {en
 </template>
 
 Reply with:
-(1) A list of the before/after changes in "{dimension.title}" that are directly mentioned or clearly implied in <state-recent-changes>.
+(1) Brief discussion for how <state-recent-changes> impacted "{dimension.title}" at a high level and how for aspects not mentioned in the update, natural changes you would expect based on the state's previous values.
+(2) For all values directly mentioned or clearly implied in <state-recent-changes>, list before/after changes in "{dimension.title}".
 - Compute the new values major metrics like GDP and population (specific to the "{dimension.title}") using <state-recent-changes> and known growth rates. Show your reasoning.
-(2) For ALL other values in "{dimension.title}", determine the before/after changes.
+(3) For ALL OTHER values in "{dimension.title}", determine the before/after changes.
 - Reflect on how the recent events mentioned interact with parts of the dimension (e.g. if we banned or removed something, what metrics should logically also change?)
 - ALL non-zero numerical fields should change at least slightly over the course of a year. Nothing remains the same.
 - Consider both the recent events mentioned and year-over-year variance to compute to new values.
 - There should also be natural changes in population and resource counts over the course of a year and natural random changes in production, distributions, infrastructure, facilities, and other metrics.
-(3) The new <template> in a markdown codeblock.
+(4) The new <template> in a markdown codeblock.
 - ALL non-zero numerical fields should change
 - Systems, features, and policies should update as needed to reflect any updated policies.
 - For challenges, lean towards adding a challenge and only remove a challenge if it's no longer relevant.

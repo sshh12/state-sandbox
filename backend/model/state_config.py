@@ -248,8 +248,8 @@ DIMENSIONS = [
 - {Sector}: {Description}
 ...
 
-### Sector Contributions to GDP
-- Agriculture: {Percentage} <!-- percentage of GDP -->
+### Sector Contributions to GDP Composition <!-- percentage of GDP -->
+- Agriculture: {Percentage}
 - Services: {Percentage}
 - Manufacturing: {Percentage}
 - Construction: {Percentage}
@@ -263,7 +263,7 @@ DIMENSIONS = [
 - {Sector}: {Percentage}
 ...
 
-### Employment by Sector <!-- percentage of workforce -->
+### Employment by Sector Composition <!-- percentage of workforce -->
 - Agriculture: {Percentage}
 - Services: {Percentage}
 - Manufacturing: {Percentage}
@@ -464,7 +464,7 @@ DIMENSIONS = [
         title="Culture",
         template="""
 ## Cultural Identity
-<!-- describe the cultural identity of the state in detail, including:
+<!-- describe, in paragraphs, the cultural identity of the state in detail, including:
 - Traditional Values
 - Family Values
 - Work Values
@@ -478,7 +478,7 @@ DIMENSIONS = [
 - Individualism vs Collectivism -->
 
 ## Cultural Practices
-<!-- describe the cultural practices in detail, including:
+<!-- describe, in paragraphs, the cultural practices in detail, including:
 - Cusine: traditional dishes, popular dishes, etc.
 - Music: traditional music, popular music, etc.
 - Art: traditional art, popular art, etc.
@@ -505,7 +505,7 @@ DIMENSIONS = [
         title="Geography and Environment",
         template="""
 ## Geographic Features
-<!-- describe the geographic features in detail, including:
+<!-- describe, in paragraphs, the geographic features in detail, including:
 - Mountains, rivers, lakes, deserts, forests, etc.
 - The actual names of major geographic landmarks.
 - Level of pollution

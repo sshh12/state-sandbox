@@ -85,6 +85,18 @@ const metrics = [
       'geography_and_environment.environmental_metrics.air_quality_index',
     order: 'asc',
   },
+  {
+    id: 'poverty_rate',
+    name: 'Poverty Rate',
+    valueKey: 'economy.economic_metrics.poverty_rate',
+    order: 'asc',
+  },
+  {
+    id: 'gini',
+    name: 'Gini Coefficient',
+    valueKey: 'economy.economic_metrics.gini_coefficient',
+    order: 'asc',
+  },
 ];
 
 export default function LeaderboardPage() {

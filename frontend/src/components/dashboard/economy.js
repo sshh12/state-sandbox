@@ -149,16 +149,16 @@ export default function EconomyPage({ snapshots }) {
       <div className="grid gap-4 md:grid-cols-2">
         <PieChartCard
           title="GDP by Sector"
-          data={Object.values(sectors.sector_contributions_to_gdp)}
+          data={Object.values(sectors.sector_contributions_to_gdp_composition)}
           snapshots={snapshots}
-          valueKeyPrefix="economy.sectors.sector_contributions_to_gdp"
+          valueKeyPrefix="economy.sectors.sector_contributions_to_gdp_composition"
           span={1}
         />
         <PieChartCard
           title="Employment by Sector"
-          data={Object.values(sectors.employment_by_sector)}
+          data={Object.values(sectors.employment_by_sector_composition)}
           snapshots={snapshots}
-          valueKeyPrefix="economy.sectors.employment_by_sector"
+          valueKeyPrefix="economy.sectors.employment_by_sector_composition"
           span={1}
         />
       </div>

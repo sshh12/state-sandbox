@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 import { DashboardNav } from '@/components/nav';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import OverviewPage from '@/components/dashboard/overview';
@@ -27,6 +27,27 @@ import { useUser } from '@/context/user-context';
 import { useSearchParams } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { Toaster } from '@/components/ui/toaster';
+import { withErrorBoundary } from '@/components/error-boundary';
+
+const SafeOverviewPage = withErrorBoundary(OverviewPage, 'Overview');
+const SafePeoplePage = withErrorBoundary(PeoplePage, 'People');
+const SafeEducationPage = withErrorBoundary(EducationPage, 'Education');
+const SafeHealthPage = withErrorBoundary(HealthPage, 'Health');
+const SafeCrimePage = withErrorBoundary(CrimePage, 'Crime');
+const SafeGovernmentPage = withErrorBoundary(GovernmentPage, 'Government');
+const SafeEconomyPage = withErrorBoundary(EconomyPage, 'Economy');
+const SafeMilitaryPage = withErrorBoundary(MilitaryPage, 'Military');
+const SafeCulturePage = withErrorBoundary(CulturePage, 'Culture');
+const SafeGeographyPage = withErrorBoundary(GeographyPage, 'Geography');
+const SafeInfrastructurePage = withErrorBoundary(
+  InfrastructurePage,
+  'Infrastructure'
+);
+const SafeInternationalRelationsPage = withErrorBoundary(
+  InternationalRelationsPage,
+  'International Relations'
+);
+const SafeMediaPage = withErrorBoundary(MediaPage, 'Media');
 
 function StatePageContent({ stateId }) {
   const { toast } = useToast();
@@ -43,19 +64,27 @@ function StatePageContent({ stateId }) {
   const [latestReport, setLatestReport] = useState('');
   const latestSnapshot = snapshots[0];
   const isOwner = state?.user_id === user?.id;
-  console.log('latest', snapshots, latestSnapshot);
 
   useEffect(() => {
-    api.getStateSnapshots(stateId).then((snaps) => {
-      setSnapshots(snaps.map((snap) => snap.json_state));
-    });
-  }, [stateId]);
-
-  useEffect(() => {
-    api.getState(stateId).then((state) => {
-      setState(state);
-    });
-  }, [stateId]);
+    const fetchData = async () => {
+      try {
+        const [stateData, snapsData] = await Promise.all([
+          api.getState(stateId),
+          api.getStateSnapshots(stateId),
+        ]);
+        setState(stateData);
+        setSnapshots(snapsData.map((snap) => snap.json_state));
+      } catch (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Error loading state',
+          description: error.message,
+        });
+        throw error;
+      }
+    };
+    fetchData();
+  }, [stateId, toast]);
 
   const handlePlay = (policy) => {
     setTurnLoading(true);
@@ -190,55 +219,55 @@ function StatePageContent({ stateId }) {
           </div>
 
           <TabsContent value="overview" className="space-y-4">
-            <OverviewPage snapshots={snapshots} />
+            <SafeOverviewPage snapshots={snapshots} />
           </TabsContent>
 
           <TabsContent value="people" className="space-y-4">
-            <PeoplePage snapshots={snapshots} />
+            <SafePeoplePage snapshots={snapshots} />
           </TabsContent>
 
           <TabsContent value="education" className="space-y-4">
-            <EducationPage snapshots={snapshots} />
+            <SafeEducationPage snapshots={snapshots} />
           </TabsContent>
 
           <TabsContent value="health" className="space-y-4">
-            <HealthPage snapshots={snapshots} />
+            <SafeHealthPage snapshots={snapshots} />
           </TabsContent>
 
           <TabsContent value="crime" className="space-y-4">
-            <CrimePage snapshots={snapshots} />
+            <SafeCrimePage snapshots={snapshots} />
           </TabsContent>
 
           <TabsContent value="media" className="space-y-4">
-            <MediaPage snapshots={snapshots} />
+            <SafeMediaPage snapshots={snapshots} />
           </TabsContent>
 
           <TabsContent value="economy" className="space-y-4">
-            <EconomyPage snapshots={snapshots} />
+            <SafeEconomyPage snapshots={snapshots} />
           </TabsContent>
 
           <TabsContent value="government" className="space-y-4">
-            <GovernmentPage snapshots={snapshots} />
+            <SafeGovernmentPage snapshots={snapshots} />
           </TabsContent>
 
           <TabsContent value="military" className="space-y-4">
-            <MilitaryPage snapshots={snapshots} />
+            <SafeMilitaryPage snapshots={snapshots} />
           </TabsContent>
 
           <TabsContent value="culture" className="space-y-4">
-            <CulturePage snapshots={snapshots} />
+            <SafeCulturePage snapshots={snapshots} />
           </TabsContent>
 
           <TabsContent value="geography" className="space-y-4">
-            <GeographyPage snapshots={snapshots} />
+            <SafeGeographyPage snapshots={snapshots} />
           </TabsContent>
 
           <TabsContent value="infrastructure" className="space-y-4">
-            <InfrastructurePage snapshots={snapshots} />
+            <SafeInfrastructurePage snapshots={snapshots} />
           </TabsContent>
 
           <TabsContent value="international-relations" className="space-y-4">
-            <InternationalRelationsPage snapshots={snapshots} />
+            <SafeInternationalRelationsPage snapshots={snapshots} />
           </TabsContent>
         </Tabs>
       </div>
@@ -248,9 +277,5 @@ function StatePageContent({ stateId }) {
 }
 
 export default function StatePage({ stateId }) {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <StatePageContent stateId={stateId} />
-    </Suspense>
-  );
+  return <StatePageContent stateId={stateId} />;
 }
