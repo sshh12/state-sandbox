@@ -96,6 +96,11 @@ class StateStatusEvent(BaseEvent):
     message: str
 
 
+class StateErrorEvent(BaseEvent):
+    type: str = "error"
+    message: str
+
+
 class StateCompleteEvent(BaseEvent):
     type: str = "complete"
     state: StateResponse

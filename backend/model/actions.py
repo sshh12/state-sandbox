@@ -60,10 +60,13 @@ Design a unique flag integrating vexillology principles and the unique values of
 
 Reply with:
 (1) A brief summary of how the <state>'s unique values, culture, and systems are will be represented in the flag.
-(2) The flag in an SVG codeblock.
+(2) The flag in an SVG codeblock. This be fully valid SVG syntax.
 - You must make the width = 900 and height = 600
 """.strip()
     output = await provider.generate_fast_reasoning(prompt)
+    print("--- flag output ---")
+    print(output)
+    print("--- ---")
     return extract_codeblock(output)
 
 

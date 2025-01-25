@@ -20,12 +20,19 @@ export function FlagSVG({
   const width = widthMatch ? parseInt(widthMatch[1]) : 24;
   const height = heightMatch ? parseInt(heightMatch[1]) : 24;
 
-  // Add or replace viewBox while preserving other attributes and formatting
-  const modifiedSvgString = svgString.replace(/(<svg[^>]*)>/, (match, p1) => {
-    // Remove existing viewBox if present
-    const cleanedAttributes = p1.replace(/viewBox="[^"]*"/, '');
-    return `${cleanedAttributes} viewBox="0 0 ${width} ${height}">`;
-  });
+  const modifiedSvgString = svgString
+    .replace(/x2="([\-\w]+) y1="([\-\w]+)"/g, 'x2="$1" y2="$2"')
+    .replace(/<!-- ([\w\s]+) \*\//g, '<!-- $1 -->')
+    .replace(/(<svg[^>]*)>/, (match, p1) => {
+      const cleanedAttributes = p1.replace(/viewBox="[^"]*"/, '');
+      return `${cleanedAttributes} viewBox="0 0 ${width} ${height}">`;
+    });
+
+  // Add safety check before creating Blob
+  if (!modifiedSvgString.includes('</svg>')) {
+    console.warn('Invalid SVG string detected');
+    return null;
+  }
 
   const svgBlob = new Blob([modifiedSvgString], { type: 'image/svg+xml' });
   const url = URL.createObjectURL(svgBlob);

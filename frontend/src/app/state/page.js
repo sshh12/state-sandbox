@@ -25,8 +25,11 @@ import { cn } from '@/lib/utils';
 import { FlagSVG } from '@/components/flag-svg';
 import { useUser } from '@/context/user-context';
 import { useSearchParams } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+import { Toaster } from '@/components/ui/toaster';
 
 function StatePageContent({ stateId }) {
+  const { toast } = useToast();
   const searchParams = useSearchParams();
   const { refreshStates, user } = useUser();
   const [state, setState] = useState(null);
@@ -61,6 +64,17 @@ function StatePageContent({ stateId }) {
       switch (event.type) {
         case 'status':
           setLoadingMessage(event.message);
+          break;
+        case 'error':
+          console.log('error', event);
+          setLoadingMessage('');
+          setTurnLoading(false);
+          toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: event.message,
+            duration: 10_000,
+          });
           break;
         case 'state_snapshot_complete':
           setSnapshots((prevSnapshots) => [
@@ -228,6 +242,7 @@ function StatePageContent({ stateId }) {
           </TabsContent>
         </Tabs>
       </div>
+      <Toaster />
     </div>
   );
 }

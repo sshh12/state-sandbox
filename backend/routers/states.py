@@ -4,6 +4,7 @@ from sqlalchemy import func, and_
 from typing import List, Optional
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import traceback
 import asyncio
 
 from db.database import get_db
@@ -20,6 +21,7 @@ from routers.schemas import (
     StateCompleteEvent,
     StateSnapshotCompleteEvent,
     StateWithLatestSnapshotResponse,
+    StateErrorEvent,
 )
 from routers.auth import get_current_user_from_token
 from model.actions import (
@@ -235,10 +237,10 @@ async def create_state_snapshot(
             raise HTTPException(status_code=404, detail="No previous snapshots found")
 
         if state.turn_in_progress:
-            raise HTTPException(
-                status_code=400,
-                detail="Turn already in progress, refresh after a few minutes",
-            )
+            yield StateErrorEvent(
+                message="Turn already in progress, refresh after a few minutes"
+            ).json_line()
+            return
 
         state.turn_in_progress = True
         db.add(state)
@@ -258,39 +260,53 @@ async def create_state_snapshot(
             if snapshot.markdown_future_events
         ]
 
-        yield StateStatusEvent(message="Simulating next year...").json_line()
-        diff, next_state, simulated_events = await generate_next_state(
-            start_date=current_date,
-            end_date=next_date,
-            prev_state=latest_snapshot.markdown_state,
-            events=latest_snapshot.markdown_future_events,
-            policy_input=request.policy,
-            historical_events=historical_events,
-        )
-
-        yield StateStatusEvent(message="Generating report and events...").json_line()
-        next_state_report, next_events = await asyncio.gather(
-            generate_diff_report(
+        try:
+            yield StateStatusEvent(message="Simulating next year...").json_line()
+            diff, next_state, simulated_events = await generate_next_state(
                 start_date=current_date,
                 end_date=next_date,
                 prev_state=latest_snapshot.markdown_state,
-                diff_output=diff,
-            ),
-            generate_future_events(
+                events=latest_snapshot.markdown_future_events,
+                policy_input=request.policy,
+                historical_events=historical_events,
+            )
+
+            yield StateStatusEvent(
+                message="Generating report and events..."
+            ).json_line()
+            next_state_report, next_events = await asyncio.gather(
+                generate_diff_report(
+                    start_date=current_date,
+                    end_date=next_date,
+                    prev_state=latest_snapshot.markdown_state,
+                    diff_output=diff,
+                ),
+                generate_future_events(
+                    start_date=next_date,
+                    end_date=next_date + relativedelta(months=12),
+                    prev_state=next_state,
+                    historical_events=historical_events,
+                ),
+            )
+
+            yield StateStatusEvent(
+                message="Generating policy suggestions..."
+            ).json_line()
+            next_events_policy = await generate_future_policy_suggestion(
                 start_date=next_date,
                 end_date=next_date + relativedelta(months=12),
                 prev_state=next_state,
-                historical_events=historical_events,
-            ),
-        )
-
-        yield StateStatusEvent(message="Generating policy suggestions...").json_line()
-        next_events_policy = await generate_future_policy_suggestion(
-            start_date=next_date,
-            end_date=next_date + relativedelta(months=12),
-            prev_state=next_state,
-            events=next_events,
-        )
+                events=next_events,
+            )
+        except Exception:
+            print(traceback.format_exc())
+            state.turn_in_progress = False
+            db.add(state)
+            db.commit()
+            yield StateErrorEvent(
+                message="Failed to simulate the changes. Try again. If issues persist, reduce policy actions."
+            ).json_line()
+            return
 
         # patch in the policy events selected by the user
         latest_snapshot.markdown_future_events = simulated_events
