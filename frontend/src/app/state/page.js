@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { DashboardNav } from '@/components/nav';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import OverviewPage from '@/components/dashboard/overview';
@@ -277,5 +277,9 @@ function StatePageContent({ stateId }) {
 }
 
 export default function StatePage({ stateId }) {
-  return <StatePageContent stateId={stateId} />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <StatePageContent stateId={stateId} />
+    </Suspense>
+  );
 }
