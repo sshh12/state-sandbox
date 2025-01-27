@@ -19,6 +19,12 @@ const links = [
   { name: 'Leaderboard', href: '/leaderboard' },
   { name: 'Account', href: '/account' },
   {
+    name: 'Dev Blog',
+    href: 'https://open.substack.com/pub/shrivu/p/socioeconomic-modeling-with-reasoning?r=1g8kq6&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    target: '_blank',
+    rel: 'noopener noreferrer',
+  },
+  {
     name: 'Feedback',
     href: 'https://forms.gle/KDbeBvVLnj2sNaHeA',
     target: '_blank',

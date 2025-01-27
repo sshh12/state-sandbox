@@ -21,6 +21,7 @@ import {
 import { formatValue, getValue } from '@/lib/utils';
 import { DashboardNav } from '@/components/nav';
 import Link from 'next/link';
+import { Spinner } from '@/components/ui/spinner';
 
 const metrics = [
   {
@@ -102,11 +103,16 @@ const metrics = [
 export default function LeaderboardPage() {
   const [states, setStates] = useState([]);
   const [selectedMetric, setSelectedMetric] = useState(metrics[0].id);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
-      const latestSnapshots = await api._get('/api/states/latest');
-      setStates(latestSnapshots);
+      try {
+        const latestSnapshots = await api._get('/api/states/latest');
+        setStates(latestSnapshots);
+      } finally {
+        setIsLoading(false);
+      }
     }
     fetchData();
   }, []);
@@ -150,47 +156,53 @@ export default function LeaderboardPage() {
           </div>
 
           <div className="rounded-md border p-4">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-12">Rank</TableHead>
-                  <TableHead className="w-8"></TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead className="text-right">
-                    {metrics.find((m) => m.id === selectedMetric)?.name}
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sortedStates.map((state, index) => (
-                  <TableRow key={state.id}>
-                    <TableCell className="font-medium">{index + 1}</TableCell>
-                    <TableCell>
-                      <FlagSVG
-                        allowExpand={true}
-                        svgString={state.flag_svg}
-                        size="1.5rem"
-                        className="w-6"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Link
-                        href={`/state/${state.id}?showInfo=true`}
-                        className="hover:underline"
-                      >
-                        {state.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {formatValue(
-                        state.latest_snapshot.json_state,
-                        metrics.find((m) => m.id === selectedMetric)?.valueKey
-                      )}
-                    </TableCell>
+            {isLoading ? (
+              <div className="flex justify-center items-center py-8">
+                <Spinner className="w-8 h-8" />
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-12">Rank</TableHead>
+                    <TableHead className="w-8"></TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead className="text-right">
+                      {metrics.find((m) => m.id === selectedMetric)?.name}
+                    </TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {sortedStates.map((state, index) => (
+                    <TableRow key={state.id}>
+                      <TableCell className="font-medium">{index + 1}</TableCell>
+                      <TableCell>
+                        <FlagSVG
+                          allowExpand={true}
+                          svgString={state.flag_svg}
+                          size="1.5rem"
+                          className="w-6"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Link
+                          href={`/state/${state.id}?showInfo=true`}
+                          className="hover:underline"
+                        >
+                          {state.name}
+                        </Link>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {formatValue(
+                          state.latest_snapshot.json_state,
+                          metrics.find((m) => m.id === selectedMetric)?.valueKey
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </div>
         </div>
       </main>
