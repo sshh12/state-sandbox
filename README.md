@@ -2,6 +2,8 @@
 
 > State Sandbox is an experimental game for socioeconomic simulation. It uses Large Language Models to simulate the world and complex policy impacts.
 
+[Blog Post](https://blog.sshh.io/p/socioeconomic-modeling-with-reasoning)
+
 <img width="800" alt="chrome_GiI1Dyai3B" src="https://github.com/user-attachments/assets/6f2be284-c10e-4d5f-b3fa-5b62a575c47c" />
 
 ## Features
