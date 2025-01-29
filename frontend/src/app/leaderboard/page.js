@@ -31,6 +31,43 @@ const metrics = [
     order: 'desc',
   },
   {
+    id: 'gdp_per_capita',
+    name: 'GDP per Capita',
+    derived: true,
+    getValue: (state) => {
+      const gdpMetric = getValue(
+        state,
+        'economy.economic_metrics.gross_domestic_product_gdp'
+      );
+      const populationMetric = getValue(
+        state,
+        'people.people_metrics.total_population'
+      );
+
+      if (
+        !gdpMetric?.value ||
+        !populationMetric?.value ||
+        populationMetric.value < 1000000
+      ) {
+        return {
+          value: 0,
+          unit: 'USD',
+          raw: '$0',
+          key: 'GDP per Capita',
+        };
+      }
+
+      const value = gdpMetric.value / populationMetric.value;
+      return {
+        value,
+        unit: 'USD',
+        raw: `$${new Intl.NumberFormat('en-US').format(Math.round(value))}`,
+        key: 'GDP per Capita',
+      };
+    },
+    order: 'desc',
+  },
+  {
     id: 'population',
     name: 'Population',
     valueKey: 'people.people_metrics.total_population',
@@ -117,17 +154,21 @@ export default function LeaderboardPage() {
     fetchData();
   }, []);
 
-  const selectedMetricKey = metrics.find(
-    (m) => m.id === selectedMetric
-  )?.valueKey;
-
   const sortedStates = [...states].sort((a, b) => {
-    const valueA =
-      getValue(a.latest_snapshot.json_state, selectedMetricKey)?.value || 0;
-    const valueB =
-      getValue(b.latest_snapshot.json_state, selectedMetricKey)?.value || 0;
-    const order =
-      metrics.find((m) => m.id === selectedMetric)?.order === 'desc' ? 1 : -1;
+    const metric = metrics.find((m) => m.id === selectedMetric);
+    let valueA, valueB;
+
+    if (metric.derived) {
+      valueA = metric.getValue(a.latest_snapshot.json_state)?.value || 0;
+      valueB = metric.getValue(b.latest_snapshot.json_state)?.value || 0;
+    } else {
+      valueA =
+        getValue(a.latest_snapshot.json_state, metric.valueKey)?.value || 0;
+      valueB =
+        getValue(b.latest_snapshot.json_state, metric.valueKey)?.value || 0;
+    }
+
+    const order = metric.order === 'desc' ? 1 : -1;
     return (valueB - valueA) * order;
   });
 
@@ -202,11 +243,21 @@ export default function LeaderboardPage() {
                           </Link>
                         </TableCell>
                         <TableCell className="text-right">
-                          {formatValue(
-                            state.latest_snapshot.json_state,
-                            metrics.find((m) => m.id === selectedMetric)
-                              ?.valueKey
-                          )}
+                          {(() => {
+                            const metric = metrics.find(
+                              (m) => m.id === selectedMetric
+                            );
+                            if (metric.derived) {
+                              const result = metric.getValue(
+                                state.latest_snapshot.json_state
+                              );
+                              return result?.raw || '$0';
+                            }
+                            return formatValue(
+                              state.latest_snapshot.json_state,
+                              metric.valueKey
+                            );
+                          })()}
                         </TableCell>
                       </TableRow>
                     ))}
