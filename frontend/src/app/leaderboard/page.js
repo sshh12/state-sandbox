@@ -215,6 +215,7 @@ export default function LeaderboardPage() {
                       <TableHead className="w-12">Rank</TableHead>
                       <TableHead className="w-8"></TableHead>
                       <TableHead>Name</TableHead>
+                      <TableHead>Year</TableHead>
                       <TableHead className="text-right">
                         {metrics.find((m) => m.id === selectedMetric)?.name}
                       </TableHead>
@@ -241,6 +242,9 @@ export default function LeaderboardPage() {
                           >
                             {state.name}
                           </Link>
+                        </TableCell>
+                        <TableCell>
+                          {new Date(state.latest_snapshot.date).getFullYear()}
                         </TableCell>
                         <TableCell className="text-right">
                           {(() => {
