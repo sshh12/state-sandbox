@@ -206,7 +206,13 @@ export default function LeaderboardPage() {
                 {states.length > 0 && states[0].cache_updated_at && (
                   <div className="text-sm text-muted-foreground mb-4">
                     Last updated:{' '}
-                    {new Date(states[0].cache_updated_at).toLocaleString()}
+                    {new Date(states[0].cache_updated_at).toLocaleString(
+                      undefined,
+                      {
+                        dateStyle: 'medium',
+                        timeStyle: 'medium',
+                      }
+                    )}
                   </div>
                 )}
                 <Table>
