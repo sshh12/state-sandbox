@@ -24,35 +24,38 @@ export function InfoDialog({
           Help
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <div className="space-y-4">
-            {includeInstructions && state?.name && (
-              <>
-                <DialogDescription>
-                  You are the leader of <strong>{state.name}</strong> and are
-                  tasked with running the country. Click "play" to see the
-                  upcoming challenges your nation will face over the next year
-                  and define arbitrary policy decisions to handle them. Explore
-                  the dashboard to learn about <strong>{state.name}</strong> and
-                  how to act effectively.
-                </DialogDescription>
-                <DialogDescription>
-                  Policies should handle upcoming events (suggested policies are
-                  also included) but you can also pass other laws to see how
-                  they will play out. Compete on the leaderboard by enacting
-                  policies that optimize for GDP, population, and other metrics.
-                </DialogDescription>
-              </>
-            )}
-            {state?.description && (
-              <div className="bg-muted rounded-lg p-4">
-                <DialogDescription>{state.description}</DialogDescription>
-              </div>
-            )}
-          </div>
+          <DialogDescription>
+            Learn more about your state and how to play the game effectively.
+          </DialogDescription>
         </DialogHeader>
+        <div className="grid gap-4 py-4">
+          {includeInstructions && state?.name && (
+            <div className="space-y-4">
+              <DialogDescription>
+                You are the leader of <strong>{state.name}</strong> and are
+                tasked with running the country. Click "play" to see the
+                upcoming challenges your nation will face over the next year and
+                define arbitrary policy decisions to handle them. Explore the
+                dashboard to learn about <strong>{state.name}</strong> and how
+                to act effectively.
+              </DialogDescription>
+              <DialogDescription>
+                Policies should handle upcoming events (suggested policies are
+                also included) but you can also pass other laws to see how they
+                will play out. Compete on the leaderboard by enacting policies
+                that optimize for GDP, population, and other metrics.
+              </DialogDescription>
+            </div>
+          )}
+          {state?.description && (
+            <div className="bg-muted rounded-lg p-4">
+              <DialogDescription>{state.description}</DialogDescription>
+            </div>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );
