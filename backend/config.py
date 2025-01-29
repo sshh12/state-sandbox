@@ -20,3 +20,8 @@ JWT_EXPIRATION_DAYS = _int_env(
 
 # OpenAI configuration
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# Cache configuration
+CACHE_TTL_STATES_LEADERBOARD = _int_env(
+    "CACHE_TTL_STATES_LEADERBOARD", 60 * 3
+)  # 3 minutes in seconds

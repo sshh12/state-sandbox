@@ -6,6 +6,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import traceback
 import asyncio
+from fastapi_cache.decorator import cache
 
 from db.database import get_db
 from db.models import State, StateSnapshot, User
@@ -36,6 +37,7 @@ from model.actions import (
 )
 from model.parsing import parse_state
 from utils.event_stream import event_stream_response
+from config import CACHE_TTL_STATES_LEADERBOARD
 
 router = APIRouter(prefix="/api/states", tags=["states"])
 
@@ -52,6 +54,7 @@ async def get_states(
 
 
 @router.get("/latest", response_model=List[StateWithLatestSnapshotResponse])
+@cache(expire=CACHE_TTL_STATES_LEADERBOARD)
 async def get_latest_state_snapshots(
     db: Session = Depends(get_db),
 ):
@@ -78,18 +81,20 @@ async def get_latest_state_snapshots(
     )
 
     result = []
+    current_time = datetime.now()
     for state, snapshot in latest_states:
         _fix_snapshot_json(snapshot)
         result.append(
-            {
-                "id": state.id,
-                "name": state.name,
-                "description": state.description,
-                "flag_svg": state.flag_svg,
-                "created_at": state.created_at,
-                "updated_at": state.updated_at,
-                "latest_snapshot": snapshot,
-            }
+            StateWithLatestSnapshotResponse(
+                id=state.id,
+                name=state.name,
+                description=state.description,
+                flag_svg=state.flag_svg,
+                created_at=state.created_at,
+                updated_at=state.updated_at,
+                latest_snapshot=snapshot,
+                cache_updated_at=current_time,
+            )
         )
 
     return result

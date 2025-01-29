@@ -123,6 +123,7 @@ class StateWithLatestSnapshotResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
     latest_snapshot: StateSnapshotResponse
+    cache_updated_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True

@@ -1,10 +1,21 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.inmemory import InMemoryBackend
 
 from db.database import init_db
 from routers import auth, states
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Initialize in-memory cache
+    FastAPICache.init(InMemoryBackend(), prefix="fastapi-cache")
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 # Configure CORS
 app.add_middleware(
@@ -28,5 +39,4 @@ if __name__ == "__main__":
     import uvicorn
 
     init_db()
-
     uvicorn.run(app, host="0.0.0.0", port=8000)
