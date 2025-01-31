@@ -18,8 +18,8 @@ export function WhatIsThisModal({ isOpen, onClose }) {
           <DialogDescription className="space-y-4 pt-4">
             <p>
               State Sandbox is an experimental game for socioeconomic
-              simulation, powered by Large Language Models to simulate complex
-              policy impacts on a virtual society.
+              simulation, powered by Large Language Models (o3-mini) to simulate
+              complex policy impacts on a virtual society.
             </p>
             <p>
               As a leader, you'll navigate high-dimensional gameplay across

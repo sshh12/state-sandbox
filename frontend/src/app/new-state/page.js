@@ -163,7 +163,7 @@ export default function NewState() {
             <i>anything</i> by passing new laws and policies.
           </p>
           <p className="text-sm text-muted-foreground mb-8 italic">
-            Disclaimer: States Sandbox is a Large Language Model-based
+            Disclaimer: States Sandbox is a Large Language Model-based (o3-mini)
             simulation and does not reflect real-world governance. The outcomes
             are influenced by the biases present in our prompts and underlying
             AI models, and should not be taken as realistic predictions. The

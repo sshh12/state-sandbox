@@ -15,7 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: 'State Sandbox AI',
-  description: 'State Sandbox AI',
+  description:
+    'State Sandbox AI is a political simulation game powered by o3-mini',
   manifest: '/manifest.json',
 };
 
