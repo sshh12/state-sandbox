@@ -18,7 +18,7 @@ class OpenAIProvider:
         response = await self.client.chat.completions.create(
             model="o3-mini-2025-01-31",
             messages=[{"role": "user", "content": text}],
-            reasoning_effort="high",
+            reasoning_effort="medium",
         )
         return response.choices[0].message.content
 
