@@ -47,7 +47,7 @@ COPY backend/nginx.conf /etc/nginx/nginx.conf
 RUN echo '#!/bin/bash\n\
     service nginx start\n\
     cd /app/frontend && npm start & \n\
-    cd /app && uvicorn main:app --host 0.0.0.0 --port 8000 --ws auto\n\
+    cd /app && uvicorn main:app --host 0.0.0.0 --port 8000 --ws auto --workers 10\n\
     wait' > /app/start.sh && chmod +x /app/start.sh
 
 # Expose port 80 for Nginx
