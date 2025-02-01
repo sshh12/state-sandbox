@@ -34,6 +34,7 @@ from model.actions import (
     generate_future_events,
     generate_future_policy_suggestion,
     generate_state_description,
+    generate_reasonable_policy_event,
 )
 from model.parsing import parse_state
 from utils.event_stream import event_stream_response
@@ -107,7 +108,6 @@ async def get_latest_state_snapshots(
 @router.get("/{state_id}", response_model=StateResponse)
 async def get_state(
     state_id: int,
-    current_user: Optional[User] = Depends(get_current_user_from_token),
     db: Session = Depends(get_db),
 ):
     state = db.query(State).filter(State.id == state_id).first()
@@ -270,13 +270,16 @@ async def create_state_snapshot(
         ]
 
         try:
+            yield StateStatusEvent(message="Drafting your policies...").json_line()
+            reasonable_policy = await generate_reasonable_policy_event(request.policy)
+
             yield StateStatusEvent(message="Simulating next year...").json_line()
             diff, next_state, simulated_events = await generate_next_state(
                 start_date=current_date,
                 end_date=next_date,
                 prev_state=latest_snapshot.markdown_state,
                 events=latest_snapshot.markdown_future_events,
-                policy_input=request.policy,
+                reasonable_policy=reasonable_policy,
                 historical_events=historical_events,
             )
 

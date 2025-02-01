@@ -21,5 +21,4 @@ async def reset_stuck_states():
             print(f"Error resetting stuck states: {e}")
         finally:
             db.close()
-        # Run every 5 minutes
-        await asyncio.sleep(300)
+        await asyncio.sleep(600)

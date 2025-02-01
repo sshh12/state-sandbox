@@ -198,10 +198,17 @@ Given this fictional state and the following events between {start_date} and {en
 
 Reply with a markdown codeblock containing the report. Do not include xml tags.
 """.strip()
-    new_state_report = extract_codeblock(
-        await provider.generate_low_reasoning(new_state_report_prompt),
-        fix_markdown=False,
-    )
+    try:
+        new_state_report = extract_codeblock(
+            await provider.generate_low_reasoning(new_state_report_prompt),
+            fix_markdown=False,
+        )
+    except Exception as e:
+        return """
+### Executive Summary
+
+The report failed to generate.
+"""
     return new_state_report
 
 
@@ -361,7 +368,7 @@ Reply with:
     return f"# {dimension.title}\n{md_new_state_dimension}"
 
 
-async def _generate_reasonable_policy_event(raw_policy: str) -> str:
+async def generate_reasonable_policy_event(raw_policy: str) -> str:
     if not raw_policy:
         return "Government Events: None"
     provider = OpenAIProvider()
@@ -417,7 +424,7 @@ async def generate_next_state(
     end_date: datetime,
     prev_state: str,
     events: str,
-    policy_input: str,
+    reasonable_policy: str,
     historical_events: List[Tuple[str, List[str]]] = None,
 ) -> Tuple[str, str, str]:
     provider = OpenAIProvider()
@@ -431,12 +438,10 @@ async def generate_next_state(
             ]
         )
 
-    events_str = f"{await _generate_reasonable_policy_event(policy_input)}\n{events}"
+    events_str = f"{reasonable_policy}\n{events}"
     events_str = "\n".join(["- " + event for event in events_str.split("\n")])
     print("--- prev state ---")
     print(prev_state)
-    print("--- policy input ---")
-    print(policy_input)
     print("--- historical events ---")
     print(historical_events_str)
     print("--- latest events ---")
