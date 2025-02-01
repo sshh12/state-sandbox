@@ -3,13 +3,13 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
-import { useState, useMemo, useEffect } from 'react';
-import { api } from '@/lib/api';
-import { useRouter } from 'next/navigation';
 import { ProgressTimer } from '@/components/ui/progress-timer';
 import { useUser } from '@/context/user-context';
+import { api } from '@/lib/api';
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
 const questions = [
   'Individual rights should take precedence over collective needs',
@@ -173,10 +173,10 @@ export default function NewState() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-3">
-              <Label htmlFor="country">Country Name</Label>
+              <Label htmlFor="country">Suggested Country Name</Label>
               <Input
                 id="country"
-                placeholder="Enter suggested country name"
+                placeholder="Enter a name for your country (AI may modify it)"
                 className="w-full"
                 value={countryName}
                 onChange={(e) => setCountryName(e.target.value)}
