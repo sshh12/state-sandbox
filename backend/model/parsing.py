@@ -1,6 +1,6 @@
 import re
 import markdown_to_json
-from typing import Any, List, Tuple, Dict
+from typing import Any, List, Tuple, Dict, Optional
 
 
 def extract_codeblock(text: str, fix_markdown: bool = True) -> str:
@@ -184,9 +184,39 @@ def _parse_kv(data: Any, parent_key: str = "") -> Any:
     return data
 
 
-def parse_state(state_markdown: str) -> dict:
+def _get_nested_value(data: dict, key_path: str):
+    """Helper function to get nested dictionary value using dot notation."""
+    keys = key_path.split(".")
+    current = data
+    for key in keys:
+        if not isinstance(current, dict):
+            return None
+        if key not in current:
+            return None
+        current = current[key]
+    return current
+
+
+def _filter_dict_by_keys(data: dict, only_keys: List[str]) -> dict:
+    """Filter dictionary to only include specified nested keys."""
+    result = {}
+    for key_path in only_keys:
+        keys = key_path.split(".")
+        current = result
+        value = _get_nested_value(data, key_path)
+        if value is not None:
+            # Build nested structure
+            for key in keys[:-1]:
+                current = current.setdefault(key, {})
+            current[keys[-1]] = value
+    return result
+
+
+def parse_state(state_markdown: str, only_keys: Optional[List[str]] = None) -> dict:
     data = _md_to_json(state_markdown)
     data = _parse_kv(data)
+    if only_keys:
+        data = _filter_dict_by_keys(data, only_keys)
     return data
 
 

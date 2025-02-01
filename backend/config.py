@@ -25,9 +25,7 @@ MODEL_MEDIUM_REASONING = os.getenv("MODEL_MEDIUM_REASONING", "o3-mini-2025-01-31
 MODEL_LOW_REASONING = os.getenv("MODEL_LOW_REASONING", "o3-mini-2025-01-31")
 
 # Cache configuration
-CACHE_TTL_STATES_LEADERBOARD = _int_env(
-    "CACHE_TTL_STATES_LEADERBOARD", 60 * 10
-)  # 10 minutes in seconds
+CACHE_TTL_STATES_LEADERBOARD = _int_env("CACHE_TTL_STATES_LEADERBOARD", 60 * 60 * 6)
 
 # Misc configuration
 FRONTEND_URL = os.getenv("FRONTEND_URL", "https://state.sshh.io")

@@ -56,9 +56,13 @@ async def get_states(
 @router.get("/latest", response_model=List[StateWithLatestSnapshotResponse])
 @cache(expire=CACHE_TTL_STATES_LEADERBOARD)
 async def get_latest_state_snapshots(
+    valueKeys: Optional[str] = None,
     db: Session = Depends(get_db),
 ):
     """Get the latest snapshot from all states along with state data. This endpoint is unauthenticated."""
+    if valueKeys:
+        valueKeys = valueKeys.split(",")
+
     # Subquery to get the latest snapshot date for each state
     latest_dates = (
         db.query(StateSnapshot.state_id, func.max(StateSnapshot.date).label("max_date"))
@@ -83,7 +87,7 @@ async def get_latest_state_snapshots(
     result = []
     current_time = datetime.now()
     for state, snapshot in latest_states:
-        _fix_snapshot_json(snapshot)
+        _fix_snapshot_json(snapshot, only_keys=valueKeys)
         result.append(
             StateWithLatestSnapshotResponse(
                 id=state.id,
@@ -177,8 +181,8 @@ async def create_state(
     return event_stream_response(event_stream())
 
 
-def _fix_snapshot_json(snapshot: StateSnapshot):
-    snapshot.json_state = parse_state(snapshot.markdown_state)
+def _fix_snapshot_json(snapshot: StateSnapshot, only_keys: Optional[List[str]] = None):
+    snapshot.json_state = parse_state(snapshot.markdown_state, only_keys=only_keys)
     snapshot.json_state["date"] = snapshot.date
     if snapshot.markdown_future_events:
         snapshot.json_state["events"] = snapshot.markdown_future_events.split("\n")

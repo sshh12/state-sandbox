@@ -63,8 +63,17 @@ class ApiClient {
     }
   }
 
-  async _get(endpoint) {
-    const res = await fetch(`${API_URL}${endpoint}`, {
+  async _get(endpoint, params) {
+    const url = new URL(`${API_URL}${endpoint}`);
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          url.searchParams.append(key, value);
+        }
+      });
+    }
+
+    const res = await fetch(url, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
       },
@@ -110,6 +119,10 @@ class ApiClient {
     }
 
     return res.json();
+  }
+
+  async getLatestSnapshots(valueKeys) {
+    return this._get('/api/states/latest', { valueKeys: valueKeys.join(',') });
   }
 
   async createAccount(username, email) {
