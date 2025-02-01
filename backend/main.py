@@ -3,8 +3,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.inmemory import InMemoryBackend
+import asyncio
 
 from db.database import init_db
+from tasks.tasks import reset_stuck_states
 from routers import auth, states
 
 
@@ -12,7 +14,18 @@ from routers import auth, states
 async def lifespan(app: FastAPI):
     # Initialize in-memory cache
     FastAPICache.init(InMemoryBackend(), prefix="fastapi-cache")
+
+    # Start background task to reset stuck states
+    reset_task = asyncio.create_task(reset_stuck_states())
+
     yield
+
+    # Cleanup background task
+    reset_task.cancel()
+    try:
+        await reset_task
+    except asyncio.CancelledError:
+        pass
 
 
 app = FastAPI(lifespan=lifespan)

@@ -243,7 +243,7 @@ async def create_state_snapshot(
 
         if state.turn_in_progress:
             yield StateErrorEvent(
-                message="Turn already in progress, refresh after a few minutes"
+                message="Turn already in progress, refresh and try again after a few minutes"
             ).json_line()
             return
 
