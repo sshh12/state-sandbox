@@ -63,7 +63,7 @@ Reply with:
 (2) The flag in an SVG codeblock. This be fully valid SVG syntax.
 - You must make the width = 900 and height = 600
 """.strip()
-    output = await provider.generate_fast_reasoning(prompt)
+    output = await provider.generate_medium_reasoning(prompt)
     print("--- flag output ---")
     print(output)
     print("--- ---")
@@ -82,7 +82,7 @@ Given this fictional state, generate a detailed technical ~4-sentence wikipedia-
 {state}
 </state>
 """.strip()
-    output = await provider.generate_fast_reasoning(prompt)
+    output = await provider.generate_medium_reasoning(prompt)
     return output
 
 
@@ -120,7 +120,7 @@ You are defining specifically {dimension.title}, other experts will define {othe
 
 Reply with the <dimension-template> in a markdown codeblock. Carefully consider the <state-overview> and <assumptions> to provide a highly accurate response.
 """.strip()
-    output = await provider.generate_fast_reasoning(prompt)
+    output = await provider.generate_medium_reasoning(prompt)
     md_output = extract_codeblock(output)
     return f"# {dimension.title}\n{md_output}"
 
@@ -161,7 +161,7 @@ Reply with (plain text):
 - Include how the <values> and time period above influence EACH of the dimensions ({dimensions}) of the state
 - Include balanced strengths and flaws and what makes them unique in the world.
 """.strip()
-    overview_output = await provider.generate_strong_reasoning(prompt)
+    overview_output = await provider.generate_high_reasoning(prompt)
     print("--- overview output ---")
     print(overview_output)
     print("--- ---")
@@ -199,7 +199,8 @@ Given this fictional state and the following events between {start_date} and {en
 Reply with a markdown codeblock containing the report. Do not include xml tags.
 """.strip()
     new_state_report = extract_codeblock(
-        await provider.generate_fast(new_state_report_prompt), fix_markdown=False
+        await provider.generate_low_reasoning(new_state_report_prompt),
+        fix_markdown=False,
     )
     return new_state_report
 
@@ -244,7 +245,7 @@ Given this fictional <state> from {start_date} to {end_date} and the following e
 
 Reply with <format> as a markdown codeblock.
 """.strip()
-    output = await provider.generate_fast_reasoning(prompt)
+    output = await provider.generate_medium_reasoning(prompt)
     lines = extract_codeblock(output).split("\n")
     return "\n".join([line for line in lines if line.strip().startswith("-")])
 
@@ -284,7 +285,7 @@ Reply with:
 1. How the dimensions of the state ({dimensions}) impact the likelihood of the different event types.
 2. <format> as a markdown codeblock. Be sure to include "No notable events" as the first event in each category.
 """.strip()
-    raw_output = await provider.generate_fast_reasoning(prompt)
+    raw_output = await provider.generate_medium_reasoning(prompt)
     print("--- future events output ---")
     print(raw_output)
     print("--- ---")
@@ -352,7 +353,7 @@ Reply with:
 - For challenges, lean towards adding a challenge and only remove a challenge if it's no longer relevant.
 - For policies (if any), lean towards adding a policy and only remove a policy if it's no longer relevant.
 """.strip()
-    raw_output = await provider.generate_fast_reasoning(new_state_dimension_prompt)
+    raw_output = await provider.generate_medium_reasoning(new_state_dimension_prompt)
     print(f"--- diff {dimension.title} ---")
     print(raw_output)
     print("--- ---")
@@ -400,7 +401,7 @@ Government Events: <-- formatted policy events, State ... -->
 
 Rephrase <user-action> into a valid policy event and reply with their action formatted as <output-format> exactly with a markdown codeblock. It should start with "Government Events:" and be in one line in paragraph format.
 """.strip()
-    raw_output = await provider.generate_fast_reasoning(prompt)
+    raw_output = await provider.generate_medium_reasoning(prompt)
     try:
         output = extract_codeblock(raw_output).replace('"', "")
     except Exception as e:
@@ -492,7 +493,7 @@ Reply with (in plain text):
 - Noting how values might have grown relative to estimated growth rates and how the growth rates themselves might have changed.
 - Include relative changes to GDP, growth rates, population, and other metrics.
 """.strip()
-    diff_output = await provider.generate_strong_reasoning(diff_prompt)
+    diff_output = await provider.generate_high_reasoning(diff_prompt)
     print("---")
     print(diff_output)
     print("---")
@@ -536,5 +537,5 @@ Format policy advice in an imperative format:
 
 Be brief, technical, and concise. If writing out suggested policies, limit it to the top 3 most effective ones.
 """.strip()
-    output = await provider.generate_fast(prompt)
+    output = await provider.generate_low_reasoning(prompt)
     return extract_codeblock(output, fix_markdown=False)

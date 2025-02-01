@@ -152,6 +152,12 @@ class ApiClient {
       events: events?.join('\n') || '',
     });
   }
+
+  async emailLogin(token) {
+    const res = await this._get(`/api/auth/email-login/${token}`);
+    localStorage.setItem(TOKEN_KEY, res.token);
+    return res.user;
+  }
 }
 
 // Export singleton instance

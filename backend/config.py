@@ -20,8 +20,19 @@ JWT_EXPIRATION_DAYS = _int_env(
 
 # OpenAI configuration
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+MODEL_HIGH_REASONING = os.getenv("MODEL_HIGH_REASONING", "o3-mini-2025-01-31")
+MODEL_MEDIUM_REASONING = os.getenv("MODEL_MEDIUM_REASONING", "o3-mini-2025-01-31")
+MODEL_LOW_REASONING = os.getenv("MODEL_LOW_REASONING", "o3-mini-2025-01-31")
 
 # Cache configuration
 CACHE_TTL_STATES_LEADERBOARD = _int_env(
     "CACHE_TTL_STATES_LEADERBOARD", 60 * 10
 )  # 10 minutes in seconds
+
+# Misc configuration
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://state.sshh.io")
+
+# Email configuration
+POSTMARK_API_KEY = os.environ.get("POSTMARK_API_KEY")
+EMAIL_FROM = os.environ.get("EMAIL_FROM", "no-reply@state.sshh.io")
+EMAIL_LOGIN_JWT_EXPIRATION_DAYS = _int_env("EMAIL_LOGIN_JWT_EXPIRATION_DAYS", 1)
