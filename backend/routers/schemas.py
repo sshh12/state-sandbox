@@ -55,10 +55,6 @@ class CreateStateRequest(BaseModel):
 class StateSnapshotResponse(BaseModel):
     id: int
     date: str
-    markdown_state: str
-    markdown_future_events: str
-    markdown_future_events_policy: str
-    markdown_delta: Optional[str]
     markdown_delta_report: Optional[str]
     json_state: dict
     state_id: int
