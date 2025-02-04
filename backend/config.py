@@ -32,6 +32,15 @@ CACHE_TTL_STATES_LEADERBOARD = _int_env("CACHE_TTL_STATES_LEADERBOARD", 60 * 60 
 # Misc configuration
 FRONTEND_URL = os.getenv("FRONTEND_URL", "https://state.sshh.io")
 
+# Credits config
+CREDITS_DEFAULT = _int_env("CREDITS_DEFAULT", 10)
+CREDITS_NEW_STATE_COST = _int_env("CREDITS_NEW_STATE_COST", 1)
+CREDITS_NEXT_YEAR_COST = _int_env("CREDITS_NEXT_YEAR_COST", 1)
+
+# Stripe configuration
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
+
 # Email configuration
 POSTMARK_API_KEY = os.environ.get("POSTMARK_API_KEY")
 EMAIL_FROM = os.environ.get("EMAIL_FROM", "no-reply@state.sshh.io")

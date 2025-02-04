@@ -2,6 +2,7 @@ from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
+from config import CREDITS_DEFAULT
 from db.database import Base
 
 
@@ -18,7 +19,7 @@ class User(TimestampMixin, Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True, nullable=False)
     email = Column(String, unique=True, nullable=True)
-    credits = Column(Integer, nullable=False, default=0)
+    credits = Column(Integer, nullable=False, default=CREDITS_DEFAULT)
     states = relationship("State", back_populates="user")
 
 

@@ -7,7 +7,7 @@ import asyncio
 
 from db.database import init_db
 from tasks.tasks import reset_stuck_states
-from routers import auth, states
+from routers import auth, states, stripe
 
 
 @asynccontextmanager
@@ -47,6 +47,7 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(states.router)
+app.include_router(stripe.router)
 
 if __name__ == "__main__":
     import uvicorn
