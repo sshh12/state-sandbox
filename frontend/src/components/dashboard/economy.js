@@ -1,9 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import MetricCard from './metric-card';
-import PieChartCard from './pie-chart-card';
+import {
+  DollarSign,
+  LineChart,
+  Percent,
+  TrendingUp,
+  Users,
+} from 'lucide-react';
+import { useState } from 'react';
 import ChallengesCard from './challenges-card';
-import { DollarSign, TrendingUp, Users, Percent } from 'lucide-react';
+import MetricCard from './metric-card';
+import { MetricLineChartDialog } from './metric-line-chart-dialog';
+import PieChartCard from './pie-chart-card';
 
 export default function EconomyPage({ snapshots }) {
   const latestSnapshot = snapshots[0];
@@ -110,39 +118,7 @@ export default function EconomyPage({ snapshots }) {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Social Metrics</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <h4 className="font-medium mb-2">Labor Force Participation</h4>
-                <p className="text-sm text-muted-foreground">
-                  {economic_metrics.labor_force_participation_rate.raw}
-                </p>
-              </div>
-              <div>
-                <h4 className="font-medium mb-2">Poverty Rate</h4>
-                <p className="text-sm text-muted-foreground">
-                  {economic_metrics.poverty_rate.raw}
-                </p>
-              </div>
-              <div>
-                <h4 className="font-medium mb-2">Gini Coefficient</h4>
-                <p className="text-sm text-muted-foreground">
-                  {economic_metrics.gini_coefficient.raw}
-                </p>
-              </div>
-              <div>
-                <h4 className="font-medium mb-2">Average Annual Income</h4>
-                <p className="text-sm text-muted-foreground">
-                  {economic_metrics.average_annual_income.raw}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <SocialMetricsCard metrics={economic_metrics} snapshots={snapshots} />
       </div>
 
       {/* Sector Distribution */}
@@ -204,5 +180,73 @@ export default function EconomyPage({ snapshots }) {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+function SocialMetricsCard({ metrics, snapshots }) {
+  const [showChart, setShowChart] = useState(false);
+  const [selectedMetric, setSelectedMetric] = useState(null);
+
+  const metricsConfig = {
+    'Labor Force Participation': {
+      value: metrics.labor_force_participation_rate.raw,
+      key: 'economy.economic_metrics.labor_force_participation_rate',
+    },
+    'Poverty Rate': {
+      value: metrics.poverty_rate.raw,
+      key: 'economy.economic_metrics.poverty_rate',
+    },
+    'Gini Coefficient': {
+      value: metrics.gini_coefficient.raw,
+      key: 'economy.economic_metrics.gini_coefficient',
+    },
+    'Average Annual Income': {
+      value: metrics.average_annual_income.raw,
+      key: 'economy.economic_metrics.average_annual_income',
+    },
+  };
+
+  return (
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle>Social Metrics</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {Object.entries(metricsConfig).map(([name, metric]) => (
+              <div
+                key={name}
+                className="flex justify-between items-center group cursor-pointer hover:bg-muted/50 rounded-md p-1 transition-colors"
+                onClick={() => {
+                  setSelectedMetric({
+                    name,
+                    valueKey: metric.key,
+                  });
+                  setShowChart(true);
+                }}
+              >
+                <h4 className="font-medium text-sm">{name}</h4>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm text-muted-foreground">
+                    {metric.value}
+                  </p>
+                  <LineChart className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+      {snapshots && selectedMetric && (
+        <MetricLineChartDialog
+          isOpen={showChart}
+          onOpenChange={setShowChart}
+          title={selectedMetric.name}
+          snapshots={snapshots}
+          valueKey={selectedMetric.valueKey}
+        />
+      )}
+    </>
   );
 }

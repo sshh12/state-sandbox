@@ -15,7 +15,14 @@ export function getValue(snapshot, metric) {
 export function formatValue(snapshot, metric) {
   if (!snapshot || !metric) return '';
   const metricValue = getValue(snapshot, metric);
-  const { value, unit } = metricValue;
+  let value;
+  let unit;
+  try {
+    ({ value, unit } = metricValue);
+  } catch (e) {
+    console.warn(`Error formatting value for metric ${metric}:`, e);
+    return 'N/A';
+  }
   if (unit === 'USD') {
     return value.toLocaleString(undefined, {
       style: 'currency',
