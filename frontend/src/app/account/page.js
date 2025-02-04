@@ -16,9 +16,9 @@ import { useToast } from '@/hooks/use-toast';
 import { api } from '@/lib/api';
 import { PlusCircleIcon } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
-export default function AccountPage() {
+function AccountContent() {
   const { user, refreshUser } = useUser();
   const searchParams = useSearchParams();
   const showBuyTooltip = searchParams.get('buy') === 'true';
@@ -79,106 +79,114 @@ export default function AccountPage() {
   };
 
   return (
+    <div className="container py-8 space-y-8">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Account</h1>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Profile</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="flex items-center space-x-4">
+            <Avatar>
+              <AvatarFallback>
+                {user.username.slice(0, 2).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="space-y-1">
+              <p className="text-sm font-medium leading-none">
+                {user.username}
+              </p>
+              {isEditingEmail ? (
+                <div className="flex gap-2 items-center mt-2">
+                  <Input
+                    type="email"
+                    value={newEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
+                    className="h-8"
+                  />
+                  <Button size="sm" onClick={handleUpdateEmail}>
+                    Save
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setIsEditingEmail(false);
+                      setNewEmail(user.email || '');
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <p className="text-sm text-muted-foreground">
+                    {user.email || 'No email set'}
+                  </p>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => {
+                      setIsEditingEmail(true);
+                      setNewEmail(user.email || '');
+                    }}
+                  >
+                    Edit
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Credits</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="flex items-center gap-4">
+            <div className="space-y-1">
+              <p className="text-sm font-medium leading-none">
+                Available Credits
+              </p>
+              <p className="text-2xl font-bold">{user?.credits || 0}</p>
+            </div>
+            <TooltipProvider>
+              <Tooltip open={showBuyTooltip}>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="secondary"
+                    size="default"
+                    onClick={handleBuyCredits}
+                  >
+                    <PlusCircleIcon className="h-4 w-4 mr-2" />
+                    Buy More Credits
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>You need credits to proceed.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+export default function AccountPage() {
+  return (
     <div className="flex min-h-screen flex-col">
       <DashboardNav />
       <main className="flex-1 px-4">
-        <div className="container py-8 space-y-8">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold">Account</h1>
-          </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Profile</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <Avatar>
-                  <AvatarFallback>
-                    {user.username.slice(0, 2).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    {user.username}
-                  </p>
-                  {isEditingEmail ? (
-                    <div className="flex gap-2 items-center mt-2">
-                      <Input
-                        type="email"
-                        value={newEmail}
-                        onChange={(e) => setNewEmail(e.target.value)}
-                        className="h-8"
-                      />
-                      <Button size="sm" onClick={handleUpdateEmail}>
-                        Save
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => {
-                          setIsEditingEmail(false);
-                          setNewEmail(user.email || '');
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm text-muted-foreground">
-                        {user.email || 'No email set'}
-                      </p>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => {
-                          setIsEditingEmail(true);
-                          setNewEmail(user.email || '');
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Credits</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center gap-4">
-                <div className="space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    Available Credits
-                  </p>
-                  <p className="text-2xl font-bold">{user?.credits || 0}</p>
-                </div>
-                <TooltipProvider>
-                  <Tooltip open={showBuyTooltip}>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="secondary"
-                        size="default"
-                        onClick={handleBuyCredits}
-                      >
-                        <PlusCircleIcon className="h-4 w-4 mr-2" />
-                        Buy More Credits
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>You need credits to proceed.</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <Suspense fallback={<div>Loading...</div>}>
+          <AccountContent />
+        </Suspense>
       </main>
     </div>
   );
