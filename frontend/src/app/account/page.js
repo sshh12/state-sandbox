@@ -12,9 +12,12 @@ import {
 } from '@/components/ui/tooltip';
 import { useUser } from '@/context/user-context';
 import { PlusCircleIcon } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
 export default function AccountPage() {
   const { user } = useUser();
+  const searchParams = useSearchParams();
+  const showBuyTooltip = searchParams.get('buy') === 'true';
 
   if (!user) return null;
 
@@ -77,7 +80,7 @@ export default function AccountPage() {
                   <p className="text-2xl font-bold">{user?.credits || 0}</p>
                 </div>
                 <TooltipProvider>
-                  <Tooltip>
+                  <Tooltip open={showBuyTooltip}>
                     <TooltipTrigger asChild>
                       <Button
                         variant="secondary"
@@ -89,7 +92,7 @@ export default function AccountPage() {
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Click here to purchase more credits!</p>
+                      <p>You need credits to proceed.</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>

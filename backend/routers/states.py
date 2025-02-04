@@ -38,7 +38,11 @@ from model.actions import (
 )
 from model.parsing import parse_state
 from utils.event_stream import event_stream_response
-from config import CACHE_TTL_STATES_LEADERBOARD
+from config import (
+    CACHE_TTL_STATES_LEADERBOARD,
+    CREDITS_NEW_STATE_COST,
+    CREDITS_NEXT_YEAR_COST,
+)
 
 router = APIRouter(prefix="/api/states", tags=["states"])
 
@@ -123,6 +127,12 @@ async def create_state(
     db: Session = Depends(get_db),
 ):
     async def event_stream():
+        if current_user.credits < CREDITS_NEW_STATE_COST:
+            yield StateErrorEvent(
+                message=f"Not enough credits ({current_user.credits} vs {CREDITS_NEW_STATE_COST}) to create a new state."
+            ).json_line()
+            return
+
         date = START_DATE
         start_date = datetime.strptime(date, "%Y-%m")
         end_date = start_date + relativedelta(months=12)
@@ -178,6 +188,10 @@ async def create_state(
 
         yield StateCompleteEvent(state=state).json_line()
 
+        current_user.credits -= CREDITS_NEW_STATE_COST
+        db.add(current_user)
+        db.commit()
+
     return event_stream_response(event_stream())
 
 
@@ -226,6 +240,12 @@ async def create_state_snapshot(
     db: Session = Depends(get_db),
 ):
     async def event_stream():
+        if current_user.credits < CREDITS_NEXT_YEAR_COST:
+            yield StateErrorEvent(
+                message=f"Not enough credits ({current_user.credits} vs {CREDITS_NEXT_YEAR_COST}) to create a new state."
+            ).json_line()
+            return
+
         state = (
             db.query(State)
             .filter(State.id == state_id, State.user_id == current_user.id)
@@ -310,6 +330,10 @@ async def create_state_snapshot(
                 prev_state=next_state,
                 events=next_events,
             )
+
+            current_user.credits -= CREDITS_NEXT_YEAR_COST
+            db.add(current_user)
+            db.commit()
         except Exception:
             print(traceback.format_exc())
             state.turn_in_progress = False

@@ -11,6 +11,7 @@ class UserResponse(UserBase):
     id: int
     username: str
     email: str
+    credits: int
     created_at: datetime
     updated_at: Optional[datetime]
 

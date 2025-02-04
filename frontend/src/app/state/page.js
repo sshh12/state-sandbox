@@ -1,33 +1,33 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
-import { DashboardNav } from '@/components/nav';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import OverviewPage from '@/components/dashboard/overview';
-import PeoplePage from '@/components/dashboard/people';
-import EducationPage from '@/components/dashboard/education';
-import HealthPage from '@/components/dashboard/health';
 import CrimePage from '@/components/dashboard/crime';
-import GovernmentPage from '@/components/dashboard/government';
-import EconomyPage from '@/components/dashboard/economy';
-import MilitaryPage from '@/components/dashboard/military';
 import CulturePage from '@/components/dashboard/culture';
+import EconomyPage from '@/components/dashboard/economy';
+import EducationPage from '@/components/dashboard/education';
 import GeographyPage from '@/components/dashboard/geography';
+import GovernmentPage from '@/components/dashboard/government';
+import HealthPage from '@/components/dashboard/health';
 import InfrastructurePage from '@/components/dashboard/infrastructure';
 import InternationalRelationsPage from '@/components/dashboard/international-relations';
 import MediaPage from '@/components/dashboard/media';
-import { api } from '@/lib/api';
-import { Badge } from '@/components/ui/badge';
+import MilitaryPage from '@/components/dashboard/military';
+import OverviewPage from '@/components/dashboard/overview';
+import PeoplePage from '@/components/dashboard/people';
 import { PlayDialog } from '@/components/dashboard/play-dialog';
-import { InfoDialog } from '@/components/info-dialog';
 import { ReportDialog } from '@/components/dashboard/report-dialog';
-import { cn } from '@/lib/utils';
-import { FlagSVG } from '@/components/flag-svg';
-import { useUser } from '@/context/user-context';
-import { useSearchParams } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
-import { Toaster } from '@/components/ui/toaster';
 import { withErrorBoundary } from '@/components/error-boundary';
+import { FlagSVG } from '@/components/flag-svg';
+import { InfoDialog } from '@/components/info-dialog';
+import { DashboardNav } from '@/components/nav';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Toaster } from '@/components/ui/toaster';
+import { useUser } from '@/context/user-context';
+import { useToast } from '@/hooks/use-toast';
+import { api } from '@/lib/api';
+import { cn } from '@/lib/utils';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
 const SafeOverviewPage = withErrorBoundary(OverviewPage, 'Overview');
 const SafePeoplePage = withErrorBoundary(PeoplePage, 'People');
@@ -51,6 +51,7 @@ const SafeMediaPage = withErrorBoundary(MediaPage, 'Media');
 
 function StatePageContent({ stateId }) {
   const { toast } = useToast();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const { refreshStates, user } = useUser();
   const [state, setState] = useState(null);
@@ -104,6 +105,11 @@ function StatePageContent({ stateId }) {
             description: event.message,
             duration: 10_000,
           });
+          if (event?.message.includes('credits')) {
+            setTimeout(() => {
+              router.push('/account?buy=true');
+            }, 2000);
+          }
           break;
         case 'state_snapshot_complete':
           setSnapshots((prevSnapshots) => [

@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ProgressTimer } from '@/components/ui/progress-timer';
 import { useUser } from '@/context/user-context';
+import { useToast } from '@/hooks/use-toast';
 import { api } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
@@ -75,6 +76,7 @@ const loadingMessages = [
 
 export default function NewState() {
   const { refreshStates } = useUser();
+  const { toast } = useToast();
   const [ratings, setRatings] = useState({});
   const [countryName, setCountryName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -128,6 +130,19 @@ export default function NewState() {
             break;
           case 'status':
             break;
+          case 'error':
+            toast({
+              variant: 'destructive',
+              title: 'Error',
+              description:
+                event.message || 'Failed to create state. Please try again.',
+            });
+            if (event?.message.includes('credits')) {
+              setTimeout(() => {
+                router.push('/account?buy=true');
+              }, 2000);
+            }
+            break;
           case 'complete':
             refreshStates().then(() => {
               router.push(`/state/${stateId}?showInfo=true`);
@@ -137,6 +152,14 @@ export default function NewState() {
       });
     } catch (error) {
       console.error('Failed to create state:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to create state. Please try again.',
+      });
+      setTimeout(() => {
+        router.push('/account?buy=true');
+      }, 2000);
     } finally {
       setIsLoading(false);
     }
