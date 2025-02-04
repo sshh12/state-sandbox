@@ -19,6 +19,10 @@ CREDITS_PER_PURCHASE = 60
 async def on_session_completed(session: stripe.checkout.Session, db: Session):
     """Handle successful checkout session completion"""
     try:
+        if "statesandbox" not in session.client_reference_id:
+            print(f"stripe: Skipping purchase for {session.client_reference_id}")
+            return
+
         user_id = int(
             session.client_reference_id.split("___")[1].replace("ssuser_", "")
         )
