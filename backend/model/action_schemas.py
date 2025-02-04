@@ -32,7 +32,7 @@ These are random events the goverment will need to make decisions on.
 - Do not use *italic* or **bold**. 
 -->
 
-# Environmental and Weather Events <!-- At least 10 events. Examples: Natural disasters (hurricanes, floods), climate anomalies (record temperatures, droughts), environmental incidents (oil spills, forest fires), wildlife crises (invasive species, mass die-offs) -->
+# Environmental and Weather Events <!-- At least 10 events. Examples: Natural disasters (hurricanes, floods), climate anomalies (record temperatures, droughts), environmental incidents (oil spills, forest fires), environmental improvements (recovery, restoration), environmental discoveries (new resources, natural phenomena), wildlife crises (invasive species, mass die-offs) -->
 - x% No notable events
 ...
 

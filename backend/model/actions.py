@@ -347,12 +347,12 @@ Given this fictional state and the following events between {start_date} and {en
 
 Reply with:
 (1) Brief discussion for how <state-recent-changes> impacted "{dimension.title}" at a high level and how for aspects not mentioned in the update, natural changes you would expect based on the state's previous values.
-(2) For all values directly mentioned or clearly implied in <state-recent-changes>, list before/after changes in "{dimension.title}".
-- Compute the new values major metrics like GDP and population (specific to the "{dimension.title}") using <state-recent-changes> and known growth rates. Show your reasoning.
-(3) For ALL OTHER values in "{dimension.title}", determine the before/after changes.
+(2) For ALL OTHER values in "{dimension.title}", determine the before/after changes.
+- For all values directly mentioned or clearly implied in <state-recent-changes>, use those values for the after values.
 - Reflect on how the recent events mentioned interact with parts of the dimension (e.g. if we banned or removed something, what metrics should logically also change?)
 - ALL non-zero numerical fields should change at least slightly over the course of a year. Nothing remains the same.
 - Consider both the recent events mentioned and year-over-year variance to compute to new values.
+- Compute the new values major metrics like GDP and population (specific to the "{dimension.title}") using <state-recent-changes> and known growth rates. Show your reasoning.
 - There should also be natural changes in population and resource counts over the course of a year and natural random changes in production, distributions, infrastructure, facilities, and other metrics.
 (4) The new <template> in a markdown codeblock.
 - ALL non-zero numerical fields should change
@@ -396,6 +396,8 @@ Government Events: <-- formatted policy events, State ... -->
 <examples>
 - "Set GDP to $1 trillion" -> "State enacts a policy to attempt to target a GDP of $1 trillion over the next several years" (rephrased to be more reasonable)
 - "Make the GDP grow by 10%" -> "State enacts a program to attempt to grow GDP significantly" (we removed the outcome)
+- "Require investments in data centers following discovering AGI and a GDP increase of 10%" -> "State requires investments in data centers" (we removed the outcomes and discovery)
+- "Ban the use of computers following discovering superintelligence" -> "State bans the use of computers" (we removed the outcomes and discovery)
 - "A hurricane destroys the country" -> "State sets aside funds for disaster relief" (we completely changed it)
 - "Set a 90% tax on all imports" -> "State enacts a policy to set a 90% tax on all imports" (no change)
 - "Ban the teaching of science in schools" -> "State enacts a policy to ban the teaching of science in schools" (no change)
