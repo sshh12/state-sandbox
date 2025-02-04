@@ -7,6 +7,7 @@ Frontend (/frontend):
 - Use frontend/src/lib/api.js for all API calls
 - Prefer shadcn/ui for components
 - `DialogContent` requires a `DialogTitle` for the component to be accessible for screen reader users.
+- It's `import { useToast } from '@/hooks/use-toast';` for toasts
 
 Backend (/backend):
 

@@ -124,3 +124,7 @@ class StateWithLatestSnapshotResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UpdateEmailRequest(BaseModel):
+    email: str

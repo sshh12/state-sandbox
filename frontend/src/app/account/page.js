@@ -4,6 +4,7 @@ import { DashboardNav } from '@/components/nav';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Tooltip,
   TooltipContent,
@@ -11,13 +12,24 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useUser } from '@/context/user-context';
+import { useToast } from '@/hooks/use-toast';
+import { api } from '@/lib/api';
 import { PlusCircleIcon } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 
 export default function AccountPage() {
-  const { user } = useUser();
+  const { user, refreshUser } = useUser();
   const searchParams = useSearchParams();
   const showBuyTooltip = searchParams.get('buy') === 'true';
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const [newEmail, setNewEmail] = useState('');
+  const { toast } = useToast();
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   if (!user) return null;
 
@@ -25,7 +37,7 @@ export default function AccountPage() {
     if (!user?.email || user?.email.startsWith('user')) {
       if (
         !confirm(
-          'It is strongly recommended to set an email address for account recovery before making purchases. Click OK to proceed anyway, or Cancel to create a new account with your email.'
+          'It is strongly recommended to set an email address for account recovery before making purchases. Click OK to proceed anyway, or Cancel to update your email.'
         )
       ) {
         return;
@@ -35,6 +47,35 @@ export default function AccountPage() {
       process.env.NEXT_PUBLIC_STRIPE_LINK ||
       'https://buy.stripe.com/cN23fLbJ7gWk4ww28c'
     }?client_reference_id=statesandbox___ssuser_${user.id}`;
+  };
+
+  const handleUpdateEmail = async () => {
+    if (!newEmail.trim() || !isValidEmail(newEmail)) {
+      toast({
+        title: 'Invalid Input',
+        description: 'Please enter a valid email address',
+        variant: 'destructive',
+        duration: 3000,
+      });
+      return;
+    }
+
+    try {
+      await api.updateEmail(newEmail);
+      await refreshUser();
+      setIsEditingEmail(false);
+      toast({
+        title: 'Email updated successfully',
+        duration: 3000,
+      });
+    } catch (error) {
+      toast({
+        title: 'Failed to update email',
+        description: error.message,
+        variant: 'destructive',
+        duration: 3000,
+      });
+    }
   };
 
   return (
@@ -61,7 +102,45 @@ export default function AccountPage() {
                   <p className="text-sm font-medium leading-none">
                     {user.username}
                   </p>
-                  <p className="text-sm text-muted-foreground">{user.email}</p>
+                  {isEditingEmail ? (
+                    <div className="flex gap-2 items-center mt-2">
+                      <Input
+                        type="email"
+                        value={newEmail}
+                        onChange={(e) => setNewEmail(e.target.value)}
+                        className="h-8"
+                      />
+                      <Button size="sm" onClick={handleUpdateEmail}>
+                        Save
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          setIsEditingEmail(false);
+                          setNewEmail(user.email || '');
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm text-muted-foreground">
+                        {user.email || 'No email set'}
+                      </p>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => {
+                          setIsEditingEmail(true);
+                          setNewEmail(user.email || '');
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             </CardContent>

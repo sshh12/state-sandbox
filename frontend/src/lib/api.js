@@ -121,6 +121,24 @@ class ApiClient {
     return res.json();
   }
 
+  async _put(endpoint, data) {
+    const res = await fetch(`${API_URL}${endpoint}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.detail || `API error: ${res.statusText}`);
+    }
+
+    return res.json();
+  }
+
   async getLatestSnapshots(valueKeys) {
     return this._get('/api/states/latest', { valueKeys: valueKeys.join(',') });
   }
@@ -170,6 +188,10 @@ class ApiClient {
     const res = await this._get(`/api/auth/email-login/${token}`);
     localStorage.setItem(TOKEN_KEY, res.token);
     return res.user;
+  }
+
+  async updateEmail(email) {
+    return this._put('/api/auth/update-email', { email });
   }
 }
 

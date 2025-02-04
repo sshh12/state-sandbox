@@ -7,7 +7,12 @@ from jose import jwt, JWTError
 from utils.emails import send_login_link
 from db.database import get_db
 from db.models import User
-from routers.schemas import UserResponse, AuthResponse, CreateUserRequest
+from routers.schemas import (
+    UserResponse,
+    AuthResponse,
+    CreateUserRequest,
+    UpdateEmailRequest,
+)
 from config import JWT_SECRET_KEY, JWT_EXPIRATION_DAYS
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
@@ -103,3 +108,27 @@ async def email_login(token: str, db: Session = Depends(get_db)):
 
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
+
+
+@router.put("/update-email", response_model=UserResponse)
+async def update_email(
+    request: UpdateEmailRequest,
+    current_user: User = Depends(get_current_user_from_token),
+    db: Session = Depends(get_db),
+):
+    existing_user = (
+        db.query(User)
+        .filter(User.email == request.email, User.id != current_user.id)
+        .first()
+    )
+
+    if existing_user:
+        raise HTTPException(
+            status_code=409, detail="Email already in use by another account"
+        )
+
+    current_user.email = request.email
+    db.commit()
+    db.refresh(current_user)
+
+    return current_user
